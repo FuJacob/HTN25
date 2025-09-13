@@ -1,7 +1,12 @@
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
+import { Button } from "../shadcn-components/ui/button";
 import ProfileSection from "./components/ProfileSection";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "../shadcn-components/ui/card";
 
 export default function HomePage() {
   return (

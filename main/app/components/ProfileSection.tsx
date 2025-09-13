@@ -1,7 +1,7 @@
 "use client";
 import { useUser } from "@auth0/nextjs-auth0";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
+import { Button } from "../../shadcn-components/ui/button";
 
 export default function ProfileSection() {
   const { user, isLoading } = useUser();

@@ -1,6 +1,6 @@
 "use client";
 import { useUser } from "@auth0/nextjs-auth0";
-import { Button } from "@/components/ui/button";
+import { Button } from "../../shadcn-components/ui/button";
 import Link from "next/link";
 import ProblemStatsCircle from "../components/ProblemStatsCircle";
 

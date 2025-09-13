@@ -3,3 +3,9 @@ uvicorn[standard]
 pydantic-settings
 python-dotenv
 httpx
+python-multipart
+google-generativeai
+opencv-python
+mediapipe
+numpy
+Pillow

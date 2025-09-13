@@ -5,23 +5,27 @@ FastAPI backend server for the HTN25 project.
 ## Setup
 
 1. Create and activate a virtual environment:
+
 ```bash
 python3 -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
 ```
 
 2. Install dependencies:
+
 ```bash
 pip install -r requirements.txt
 ```
 
 3. Set up environment variables:
+
 ```bash
 cp .env.example .env
 # Edit .env with your configuration
 ```
 
 4. Run the development server:
+
 ```bash
 # Option 1: Use the startup script
 ./start-dev.sh
@@ -70,6 +74,7 @@ backend/
 ## Development
 
 The server runs with auto-reload enabled during development. The API documentation is available at:
+
 - Swagger UI: http://localhost:8000/docs
 - ReDoc: http://localhost:8000/redoc
 

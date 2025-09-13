@@ -5,8 +5,8 @@ export default function Header() {
 		<header className="w-full flex items-center justify-between px-6 py-4 border-b bg-background">
 			{/* Left: Navigation */}
 			<nav className="flex items-center gap-6">
-				{/* TODO: Replace # with actual route */}
-				<a href="#" className="text-lg font-semibold hover:underline">
+				{/* Home links to root route */}
+				<a href="/" className="text-lg font-semibold hover:underline">
 					Home
 				</a>
 				{/* TODO: Replace # with actual route */}

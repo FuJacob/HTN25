@@ -1,31 +1,33 @@
-import Image from "next/image";
+"use client";
+
+import Link from "next/link";
+import ProfileSection from "./ProfileSection";
 
 export default function Header() {
-	return (
-		<header className="w-full flex items-center justify-between px-6 py-4 border-b bg-background">
-			{/* Left: Navigation */}
-			<nav className="flex items-center gap-6">
-				{/* Home links to root route */}
-				<a href="/" className="text-lg font-semibold hover:underline">
-					Home
-				</a>
-				{/* TODO: Replace # with actual route */}
-				<a href="#" className="text-lg font-semibold hover:underline">
-					Problems
-				</a>
-			</nav>
-
-			{/* Right: Profile Picture */}
-			<div className="flex items-center">
-				{/* TODO: Replace src with user's profile picture from Auth0 */}
-				<Image
-					src="/default-profile.png" // Place a default-profile.png in your public folder
-					alt="Profile"
-					width={36}
-					height={36}
-					className="rounded-full border shadow-sm"
-				/>
-			</div>
-		</header>
-	);
+  return (
+    <nav className="bg-gray-800 text-white">
+      <div className="flex justify-between items-center px-6 py-4 max-w-7xl mx-auto">
+        <div className="flex items-center space-x-8">
+          <Link href="/" className="text-xl font-bold text-orange-400">
+            LeetCode
+          </Link>
+          <div className="hidden md:flex space-x-6">
+            <Link href="#" className="text-orange-400 hover:text-orange-300">
+              Premium
+            </Link>
+            <Link href="/home" className="hover:text-gray-300">
+              Home
+            </Link>
+            <Link href="#" className="hover:text-gray-300">
+              Product
+            </Link>
+            <Link href="/profile" className="hover:text-gray-300">
+              Profile
+            </Link>
+          </div>
+        </div>
+        <ProfileSection />
+      </div>
+    </nav>
+  );
 }

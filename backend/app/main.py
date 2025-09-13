@@ -557,45 +557,35 @@ def create_app() -> FastAPI:
                 # Display moment-specific feedback at bottom
                 if current_feedback and current_moment:
                     feedback_font = cv2.FONT_HERSHEY_SIMPLEX
-                    feedback_scale = 1.8
+                    feedback_scale = 0.7  # ~20px font size for most videos
                     feedback_color = (255, 255, 255)
                     feedback_border = (0, 0, 0)
-                    feedback_thickness = 4
-                    feedback_border_thickness = 8
-                    feedback_spacing = 60
+                    feedback_thickness = 2
+                    feedback_border_thickness = 4
+                    feedback_spacing = 28
 
                     # Add moment header to feedback
                     moment_header = f"Moment {current_moment_number}: {current_moment['move_type']}"
-                    
-                    # Combine header with feedback
                     full_feedback_text = f"{moment_header} - {current_feedback}"
 
-                    max_width = int(display_width * 0.8)
+                    max_width = int(display_width * 0.9)
                     wrapped_lines = wrap_text(full_feedback_text, feedback_font, feedback_scale,
                                             feedback_thickness, max_width)
 
                     total_height = len(wrapped_lines) * feedback_spacing
-                    start_y = display_height - 120 - total_height  # More space for moment info
+                    # Position feedback at the very bottom of the video
+                    start_y = display_height - total_height - 20
 
                     for i, line in enumerate(wrapped_lines):
                         text_size = cv2.getTextSize(line, feedback_font, feedback_scale, feedback_thickness)[0]
                         feedback_x = (display_width - text_size[0]) // 2
                         feedback_y = start_y + (i * feedback_spacing)
-
-                        # Special styling for the first line (moment header)
-                        if i == 0 and moment_header in line:
-                            # Use the animation color for the moment header
-                            header_color = current_color if last_move_time is not None else (100, 255, 255)  # Yellow
-                            cv2.putText(display_frame, line, (feedback_x, feedback_y), feedback_font, feedback_scale,
-                                       feedback_border, feedback_border_thickness, cv2.LINE_AA)
-                            cv2.putText(display_frame, line, (feedback_x, feedback_y), feedback_font, feedback_scale,
-                                       header_color, feedback_thickness, cv2.LINE_AA)
-                        else:
-                            # Regular white feedback text
-                            cv2.putText(display_frame, line, (feedback_x, feedback_y), feedback_font, feedback_scale,
-                                       feedback_border, feedback_border_thickness, cv2.LINE_AA)
-                            cv2.putText(display_frame, line, (feedback_x, feedback_y), feedback_font, feedback_scale,
-                                       feedback_color, feedback_thickness, cv2.LINE_AA)
+                        # Draw border
+                        cv2.putText(display_frame, line, (feedback_x, feedback_y), feedback_font, feedback_scale,
+                                   feedback_border, feedback_border_thickness, cv2.LINE_AA)
+                        # Draw main text
+                        cv2.putText(display_frame, line, (feedback_x, feedback_y), feedback_font, feedback_scale,
+                                   feedback_color, feedback_thickness, cv2.LINE_AA)
 
                 # Store the processed frame like working example
                 processed_frames.append(display_frame.copy())

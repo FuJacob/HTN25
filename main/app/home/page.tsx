@@ -1,15 +1,15 @@
 "use client";
 import { useRef, useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/shadcn-components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
+} from "@/shadcn-components/ui/card";
+import { Label } from "@/shadcn-components/ui/label";
+import { Input } from "@/shadcn-components/ui/input";
 
 export default function Home() {
   const [video1, setVideo1] = useState<File | null>(null);

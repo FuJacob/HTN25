@@ -4,6 +4,7 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import Header from "../components/Header";
 
 const problems = [
 	{
@@ -64,52 +65,55 @@ export default function DanceProblemsPage() {
 	);
 
 	return (
-		<div className="max-w-3xl mx-auto py-10 px-4">
-			<div className="mb-8 text-center">
-				<h1 className="text-3xl font-bold mb-2">Dance Problemset</h1>
-				<p className="text-muted-foreground mb-4">
-					Practice dance algorithm problems. Filter by title or tag.
-				</p>
-				<Input
-					placeholder="Search problems..."
-					value={search}
-					onChange={(e) => setSearch(e.target.value)}
-					className="max-w-sm mx-auto"
-				/>
-			</div>
-			<div className="grid gap-6">
-				{filtered.length === 0 && (
-					<div className="text-center text-muted-foreground">No problems found.</div>
-				)}
-				{filtered.map((problem) => (
-					<Card key={problem.id} className="hover:shadow-lg transition-shadow">
-						<CardHeader className="flex flex-row items-center justify-between gap-4 pb-2">
-							<div>
-								<CardTitle className="text-lg">{problem.title}</CardTitle>
-								<CardDescription>{problem.description}</CardDescription>
-							</div>
-							<Badge
-								className={
-									"border " +
-									(difficultyColors[problem.difficulty as keyof typeof difficultyColors] || "")
-								}
-							>
-								{problem.difficulty}
-							</Badge>
-						</CardHeader>
-						<CardContent className="flex flex-wrap items-center gap-2 pt-0">
-							{problem.tags.map((tag) => (
-								<Badge key={tag} variant="secondary">
-									{tag}
-								</Badge>
-							))}
-							<span className="ml-auto text-xs text-muted-foreground">
-								{problem.status}
-							</span>
-						</CardContent>
-					</Card>
-				))}
-			</div>
-		</div>
+        <div>
+            <Header/>
+            <div className="max-w-3xl mx-auto py-10 px-4">
+                <div className="mb-8 text-center">
+                    <h1 className="text-3xl font-bold mb-2">Dance Problemset</h1>
+                    <p className="text-muted-foreground mb-4">
+                        Practice dance algorithm problems. Filter by title or tag.
+                    </p>
+                    <Input
+                        placeholder="Search problems..."
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                        className="max-w-sm mx-auto"
+                    />
+                </div>
+                <div className="grid gap-6">
+                    {filtered.length === 0 && (
+                        <div className="text-center text-muted-foreground">No problems found.</div>
+                    )}
+                    {filtered.map((problem) => (
+                        <Card key={problem.id} className="hover:shadow-lg transition-shadow">
+                            <CardHeader className="flex flex-row items-center justify-between gap-4 pb-2">
+                                <div>
+                                    <CardTitle className="text-lg">{problem.title}</CardTitle>
+                                    <CardDescription>{problem.description}</CardDescription>
+                                </div>
+                                <Badge
+                                    className={
+                                        "border " +
+                                        (difficultyColors[problem.difficulty as keyof typeof difficultyColors] || "")
+                                    }
+                                >
+                                    {problem.difficulty}
+                                </Badge>
+                            </CardHeader>
+                            <CardContent className="flex flex-wrap items-center gap-2 pt-0">
+                                {problem.tags.map((tag) => (
+                                    <Badge key={tag} variant="secondary">
+                                        {tag}
+                                    </Badge>
+                                ))}
+                                <span className="ml-auto text-xs text-muted-foreground">
+                                    {problem.status}
+                                </span>
+                            </CardContent>
+                        </Card>
+                    ))}
+                </div>
+            </div>
+        </div>
 	);
 }

@@ -507,29 +507,27 @@ def create_app() -> FastAPI:
                     # White fill
                     cv2.putText(display_frame, text, (text_x, text_y), font, 2.5, (255, 255, 255), 6, cv2.LINE_AA)
 
-                # Check for dance events and display stats
-                current_moves_completed = 0
-                current_avg_score = 0
+                # Check for dance events and display moment-based feedback
+                total_moments = len(dance_events)
+                current_moment = None
+                current_moment_number = 0
                 current_feedback = None
-                total_score = 0
 
-                for event in dance_events:
+                for i, event in enumerate(dance_events):
                     if event['frame_number'] <= frame_count:
                         if event['frame_number'] == frame_count:
-                            # New move detected
+                            # New moment detected
                             last_move_time = time.time()
                             last_move_result = event['score'] >= 70  # Good performance if score >= 70
-                        current_moves_completed += 1
-                        total_score += event['score']
+                            current_moment = event
+                        current_moment_number = i + 1
 
-                        # Check if we should show feedback
+                        # Check if we should show feedback for this moment
                         if event['frame_number'] <= frame_count <= event['feedback_end_frame']:
                             current_feedback = event['feedback']
+                            current_moment = event
 
-                if current_moves_completed > 0:
-                    current_avg_score = int(total_score / current_moves_completed)
-
-                # Display dance statistics
+                # Display moment statistics (instead of moves completed/average score)
                 stats_font = cv2.FONT_HERSHEY_SIMPLEX
                 stats_border = (0, 0, 0)
                 stats_scale = 2.1
@@ -550,22 +548,23 @@ def create_app() -> FastAPI:
                         current_color = white_color
                         last_move_time = None
 
-                # Draw moves completed like working example
-                moves_text = f"Moves Completed: {current_moves_completed}"
-                cv2.putText(display_frame, moves_text, (stats_x, stats_y), stats_font, stats_scale,
+                # Draw total moments count
+                moments_text = f"Dance Moments: {current_moment_number}/{total_moments}"
+                cv2.putText(display_frame, moments_text, (stats_x, stats_y), stats_font, stats_scale,
                            stats_border, stats_border_thickness, cv2.LINE_AA)
-                cv2.putText(display_frame, moves_text, (stats_x, stats_y), stats_font, stats_scale,
+                cv2.putText(display_frame, moments_text, (stats_x, stats_y), stats_font, stats_scale,
                            current_color, stats_thickness, cv2.LINE_AA)
 
-                # Draw average score like working example
-                score_text = f"Average Score: {current_avg_score}%"
-                cv2.putText(display_frame, score_text, (stats_x, stats_y + stats_spacing), stats_font, stats_scale,
-                           stats_border, stats_border_thickness, cv2.LINE_AA)
-                cv2.putText(display_frame, score_text, (stats_x, stats_y + stats_spacing), stats_font, stats_scale,
-                           current_color, stats_thickness, cv2.LINE_AA)
+                # Draw current moment type if we have one
+                if current_moment:
+                    moment_type_text = f"Current: {current_moment['move_type']}"
+                    cv2.putText(display_frame, moment_type_text, (stats_x, stats_y + stats_spacing), stats_font, stats_scale,
+                               stats_border, stats_border_thickness, cv2.LINE_AA)
+                    cv2.putText(display_frame, moment_type_text, (stats_x, stats_y + stats_spacing), stats_font, stats_scale,
+                               current_color, stats_thickness, cv2.LINE_AA)
 
-                # Display feedback if available
-                if current_feedback:
+                # Display moment-specific feedback at bottom
+                if current_feedback and current_moment:
                     feedback_font = cv2.FONT_HERSHEY_SIMPLEX
                     feedback_scale = 1.8
                     feedback_color = (255, 255, 255)
@@ -574,22 +573,38 @@ def create_app() -> FastAPI:
                     feedback_border_thickness = 8
                     feedback_spacing = 60
 
+                    # Add moment header to feedback
+                    moment_header = f"Moment {current_moment_number}: {current_moment['move_type']}"
+                    
+                    # Combine header with feedback
+                    full_feedback_text = f"{moment_header} - {current_feedback}"
+
                     max_width = int(display_width * 0.8)
-                    wrapped_lines = wrap_text(current_feedback, feedback_font, feedback_scale,
+                    wrapped_lines = wrap_text(full_feedback_text, feedback_font, feedback_scale,
                                             feedback_thickness, max_width)
 
                     total_height = len(wrapped_lines) * feedback_spacing
-                    start_y = display_height - 90 - total_height
+                    start_y = display_height - 120 - total_height  # More space for moment info
 
                     for i, line in enumerate(wrapped_lines):
                         text_size = cv2.getTextSize(line, feedback_font, feedback_scale, feedback_thickness)[0]
                         feedback_x = (display_width - text_size[0]) // 2
                         feedback_y = start_y + (i * feedback_spacing)
 
-                        cv2.putText(display_frame, line, (feedback_x, feedback_y), feedback_font, feedback_scale,
-                                   feedback_border, feedback_border_thickness, cv2.LINE_AA)
-                        cv2.putText(display_frame, line, (feedback_x, feedback_y), feedback_font, feedback_scale,
-                                   feedback_color, feedback_thickness, cv2.LINE_AA)
+                        # Special styling for the first line (moment header)
+                        if i == 0 and moment_header in line:
+                            # Use the animation color for the moment header
+                            header_color = current_color if last_move_time is not None else (100, 255, 255)  # Yellow
+                            cv2.putText(display_frame, line, (feedback_x, feedback_y), feedback_font, feedback_scale,
+                                       feedback_border, feedback_border_thickness, cv2.LINE_AA)
+                            cv2.putText(display_frame, line, (feedback_x, feedback_y), feedback_font, feedback_scale,
+                                       header_color, feedback_thickness, cv2.LINE_AA)
+                        else:
+                            # Regular white feedback text
+                            cv2.putText(display_frame, line, (feedback_x, feedback_y), feedback_font, feedback_scale,
+                                       feedback_border, feedback_border_thickness, cv2.LINE_AA)
+                            cv2.putText(display_frame, line, (feedback_x, feedback_y), feedback_font, feedback_scale,
+                                       feedback_color, feedback_thickness, cv2.LINE_AA)
 
                 # Store the processed frame like working example
                 processed_frames.append(display_frame.copy())

@@ -5,6 +5,8 @@ from app.routers import users
 from app.config.settings import settings
 from google import genai
 from google.genai import types
+from pydantic import BaseModel
+from typing import List, Literal
 import tempfile
 import os
 import time
@@ -12,6 +14,18 @@ import json
 import cv2
 import mediapipe as mp
 import numpy as np
+
+
+# Pydantic models for structured output
+class DanceAnalysisItem(BaseModel):
+    timestamp_of_outcome: str
+    result: Literal["reference", "recording"]
+    move_type: str
+    feedback: str
+
+
+class DanceAnalysisResponse(BaseModel):
+    dance_analysis: List[DanceAnalysisItem]
 
 
 def create_app() -> FastAPI:
@@ -88,116 +102,60 @@ def create_app() -> FastAPI:
             recording_active = wait_for_file_active(recording)
 
             prompt = (
-                "Analyze the dance movements in the reference video and compare them to the recording. "
-                "Output a JSON object with a 'dance_analysis' array, where each item includes: "
-                "timestamp_of_outcome, result (reference or recording), move_type, and feedback. "
-                "Format the output exactly like this example: "
-                '{"dance_analysis": [{"timestamp_of_outcome": "0:05.0", "result": "reference", "move_type": "Spin", "feedback": "Reference spin is smooth and centered."}, {"timestamp_of_outcome": "0:05.0", "result": "recording", "move_type": "Spin", "feedback": "Recording spin is slightly off-balance, try to keep your core engaged."}]}'
+                "Analyze the dance movements in the reference video and compare them to the user's recording. "
+                "For each significant dance moment/move, provide both reference and recording feedback. "
+                "Focus on timing, technique, and execution. "
+                "Provide timestamps in MM:SS.F format (e.g., '0:05.0', '1:23.5'). "
+                "Give specific, actionable feedback for improvements."
             )
 
-            # Generate content using the new API
+            # Generate content using structured output
             response = client.models.generate_content(
                 model="gemini-2.0-flash-001",
-                contents=[prompt, referencefile_active, recording_active]
+                contents=[prompt, referencefile_active, recording_active],
+                config={
+                    "response_mime_type": "application/json",
+                    "response_schema": DanceAnalysisResponse,
+                }
             )
-            return {"response": response.text}
-        finally:
-            # Clean up temporary files
-            os.unlink(temp_video1_path)
-            os.unlink(temp_video2_path)
-
-    @app.post("/compare-performance")
-    async def compare_performance(
-        dance_analysis: str = Form(...),
-        user_video: UploadFile = File(...)
-    ):
-        print("Received user video:", user_video.filename)
-        print("Received dance analysis:", dance_analysis[:200] + "..." if len(dance_analysis) > 200 else dance_analysis)
-
-        # Parse the dance analysis JSON - handle multiple formats
-        try:
-            # First try to parse as JSON directly
-            analysis_data = json.loads(dance_analysis)
-        except json.JSONDecodeError:
-            try:
-                # If that fails, it might be raw Gemini response - try to extract JSON
-                import re
-                json_match = re.search(r'\{.*"dance_analysis".*\}|\{.*"performance_comparison".*\}', dance_analysis, re.DOTALL)
-                if json_match:
-                    analysis_data = json.loads(json_match.group())
-                else:
-                    # Create a mock analysis structure if no valid JSON found
-                    print("Warning: Could not parse dance analysis, creating mock structure")
-                    analysis_data = {
+            
+            print("Structured output received successfully!")
+            print(f"Raw response text: {response.text[:200]}...")
+            
+            # Parse the structured response
+            analysis_data = response.parsed
+            if analysis_data and hasattr(analysis_data, 'dance_analysis'):
+                print(f"Successfully parsed {len(analysis_data.dance_analysis)} dance analysis items")
+                # Convert back to dict format for compatibility with processing endpoint
+                return {
+                    "response": response.text,
+                    "parsed_data": {
                         "dance_analysis": [
                             {
-                                "timestamp_of_outcome": "0:05.0",
-                                "result": "reference",
-                                "move_type": "Dance Move",
-                                "feedback": "Based on uploaded analysis"
+                                "timestamp_of_outcome": item.timestamp_of_outcome,
+                                "result": item.result,
+                                "move_type": item.move_type,
+                                "feedback": item.feedback
                             }
+                            for item in analysis_data.dance_analysis
                         ]
                     }
-            except Exception as e:
-                print(f"Could not parse analysis data: {e}")
-                return {"error": f"Unable to parse dance analysis data: {str(e)}"}
-
-        # Create temporary file for user video
-        with tempfile.NamedTemporaryFile(delete=False, suffix=".mp4") as temp_user_video:
-            user_content = await user_video.read()
-            temp_user_video.write(user_content)
-            temp_user_video_path = temp_user_video.name
-
-        def wait_for_file_active_compare(uploaded_file, timeout=30, poll_interval=2):
-            start = time.time()
-            while time.time() - start < timeout:
-                if hasattr(uploaded_file, 'state') and uploaded_file.state == "ACTIVE":
-                    return uploaded_file
-                time.sleep(poll_interval)
-                # Re-fetch file status if needed
-                try:
-                    uploaded_file = client.files.get(name=uploaded_file.name)
-                except:
-                    pass
-            raise RuntimeError(f"File did not become ACTIVE in time")
-
-        try:
-            gemini_key = os.getenv("GEMINI_KEY", getattr(settings, "gemini_key", None))
-            if not gemini_key:
-                raise ValueError("GEMINI_KEY not set in environment or settings")
-
-            # Create client with API key
-            client = genai.Client(api_key=gemini_key)
-
-            # Upload user video
-            user_video_file = client.files.upload(file=temp_user_video_path)
-            print("User video upload result:", user_video_file)
-
-            # Wait for file to become ACTIVE
-            user_video_active = wait_for_file_active_compare(user_video_file)
-
-            # Create comprehensive prompt that includes the dance analysis format
-            prompt = (
-                "You are analyzing a user's dance performance against an established dance analysis. "
-                "The dance analysis contains detailed breakdowns of proper dance movements with timestamps, move types, and feedback. "
-                f"Here is the reference dance analysis: {json.dumps(analysis_data, indent=2)}\n\n"
-                "Now analyze the user's video and compare their performance to the expected movements described in the analysis above. "
-                "For each move type and timestamp mentioned in the reference analysis, evaluate how well the user performed that specific movement. "
-                "Output a JSON object with a 'performance_comparison' array, where each item includes: "
-                "timestamp, move_type (matching the reference analysis), user_performance_score (0-100), "
-                "expected_technique (from reference analysis), user_execution, and improvement_suggestions. "
-                "Format the output exactly like this example: "
-                '{"performance_comparison": [{"timestamp": "0:05.0", "move_type": "Spin", "user_performance_score": 75, "expected_technique": "Smooth and centered spin with engaged core", "user_execution": "Spin was mostly centered but slightly wobbly", "improvement_suggestions": "Focus on keeping your core engaged throughout the spin and maintain a fixed spotting point"}]}'
-            )
-
-            response = client.models.generate_content(
-                model="gemini-2.0-flash-001",
-                contents=[prompt, user_video_active]
-            )
-            return {"response": response.text}
+                }
+            else:
+                print("Warning: No parsed data available, falling back to raw response")
+                return {"response": response.text}
+                
+        except Exception as e:
+            print(f"Error in upload_and_analyze: {str(e)}")
+            import traceback
+            traceback.print_exc()
+            return {"error": f"Error analyzing videos: {str(e)}"}
         finally:
-            # Clean up temporary file
-            os.unlink(temp_user_video_path)
+            # Clean up temporary files
+            if os.path.exists(temp_video1_path):
+                os.unlink(temp_video1_path)
+            if os.path.exists(temp_video2_path):
+                os.unlink(temp_video2_path)
 
     @app.post("/process-dance-video")
     async def process_dance_video(
@@ -207,12 +165,39 @@ def create_app() -> FastAPI:
         print("Received video file:", video_file.filename)
         print("Received dance analysis:", dance_analysis[:200] + "..." if len(dance_analysis) > 200 else dance_analysis)
 
-        # Parse the dance analysis JSON - handle multiple formats including raw Gemini responses
+        # Parse the dance analysis JSON - now with structured output support
+        analysis_data = None
+        
         try:
-            # First try to parse as JSON directly
-            analysis_data = json.loads(dance_analysis)
+            # First try to parse as JSON directly (could be structured output or manual JSON)
+            parsed_json = json.loads(dance_analysis)
             print("Successfully parsed JSON directly")
+            
+            # Check if it's the new format with parsed_data
+            if 'parsed_data' in parsed_json and 'dance_analysis' in parsed_json['parsed_data']:
+                analysis_data = parsed_json['parsed_data']
+                print("Using structured output data from parsed_data")
+            elif 'dance_analysis' in parsed_json:
+                analysis_data = parsed_json
+                print("Using dance_analysis from direct JSON")
+            elif 'response' in parsed_json:
+                # Try to parse the response field as JSON
+                try:
+                    response_data = json.loads(parsed_json['response'])
+                    if 'dance_analysis' in response_data:
+                        analysis_data = response_data
+                        print("Using dance_analysis from response field")
+                except:
+                    pass
+            
+            if not analysis_data:
+                # Fallback to treating the whole thing as analysis data
+                analysis_data = parsed_json
+                print("Using entire JSON as analysis data")
+                
         except json.JSONDecodeError:
+            print("JSON parsing failed, attempting fallback parsing...")
+            # Keep existing fallback parsing logic for backward compatibility
             try:
                 print("Direct JSON parsing failed, trying to extract JSON from text...")
                 print(f"Raw response first 500 chars: {dance_analysis[:500]}")
@@ -233,7 +218,7 @@ def create_app() -> FastAPI:
                     matches = re.findall(pattern, dance_analysis, re.DOTALL)
                     if matches:
                         extracted_json = matches[0] if isinstance(matches[0], str) else matches[0]
-                        print(f"Found JSON with pattern {i+1}")
+                        print(f"Found JSON with pattern {i+1}: {extracted_json[:100]}...")
                         break
 
                 if extracted_json:
@@ -278,37 +263,45 @@ def create_app() -> FastAPI:
 
             except Exception as e:
                 print(f"All JSON parsing failed: {e}, using fallback mock data")
-                # Create comprehensive mock data as fallback - like working example
+                # Create comprehensive mock data as fallback - matching the dance_analysis structure
                 analysis_data = {
-                    "performance_comparison": [
+                    "dance_analysis": [
                         {
-                            "timestamp": "0:02.0",
+                            "timestamp_of_outcome": "0:02.0",
+                            "result": "recording",
                             "move_type": "Opening Move",
-                            "user_performance_score": 85,
-                            "expected_technique": "Strong opening stance",
-                            "user_execution": "Good energy and positioning",
-                            "improvement_suggestions": "Great start! Keep that energy up"
+                            "feedback": "Great start! Keep that energy up throughout the performance."
                         },
                         {
-                            "timestamp": "0:05.0", 
+                            "timestamp_of_outcome": "0:05.0",
+                            "result": "recording", 
                             "move_type": "Core Movement",
-                            "user_performance_score": 75,
-                            "expected_technique": "Smooth transitions and rhythm",
-                            "user_execution": "Good rhythm, minor timing issues",
-                            "improvement_suggestions": "Focus on staying with the beat"
+                            "feedback": "Good rhythm, but focus on staying with the beat more consistently."
                         },
                         {
-                            "timestamp": "0:08.0",
+                            "timestamp_of_outcome": "0:08.0",
+                            "result": "recording",
                             "move_type": "Dynamic Section",
-                            "user_performance_score": 80,
-                            "expected_technique": "High energy with control",
-                            "user_execution": "Great energy, good control",
-                            "improvement_suggestions": "Excellent power and control!"
+                            "feedback": "Excellent power and control! This section looks great."
                         }
                     ]
                 }
                 
-        print(f"Final analysis data structure: {len(analysis_data.get('performance_comparison', []))} performance points")
+        # Log the final parsed structure
+        if analysis_data:
+            performance_points = len(analysis_data.get('performance_comparison', []))
+            dance_analysis_points = len(analysis_data.get('dance_analysis', []))
+            print(f"Final analysis data structure:")
+            print(f"  - performance_comparison: {performance_points} items")
+            print(f"  - dance_analysis: {dance_analysis_points} items")
+            print(f"  - Keys in analysis_data: {list(analysis_data.keys())}")
+            if analysis_data.get('dance_analysis'):
+                print(f"  - First dance_analysis item: {analysis_data['dance_analysis'][0]}")
+            elif analysis_data.get('performance_comparison'):
+                print(f"  - First performance_comparison item: {analysis_data['performance_comparison'][0]}")
+        else:
+            print("ERROR: No analysis_data could be parsed!")
+            return {"error": "Failed to parse dance analysis data"}
 
         # Create temporary file for input video
         with tempfile.NamedTemporaryFile(delete=False, suffix=".mp4") as temp_input_video:
@@ -435,17 +428,65 @@ def create_app() -> FastAPI:
                             255                                 # R
                         )
 
-            # Process dance analysis data like working example
+            # Process dance analysis data - handle both structures
             dance_events = []
+            
+            # Handle different JSON structures from Gemini analysis
+            analysis_items = []
             if 'performance_comparison' in analysis_data:
-                for item in analysis_data['performance_comparison']:
-                    dance_events.append({
-                        'frame_number': timestamp_to_frame(item['timestamp'], process_fps),
-                        'move_type': item['move_type'],
-                        'score': item.get('user_performance_score', 0),
-                        'feedback': item.get('improvement_suggestions', ''),
-                        'feedback_end_frame': timestamp_to_frame(item['timestamp'], process_fps) + (4 * process_fps)
-                    })
+                analysis_items = analysis_data['performance_comparison']
+                print("Using 'performance_comparison' structure")
+            elif 'dance_analysis' in analysis_data:
+                analysis_items = analysis_data['dance_analysis']
+                print("Using 'dance_analysis' structure")
+                
+            print(f"Found {len(analysis_items)} analysis items to process")
+            
+            # Group by timestamp and combine reference/recording feedback
+            timestamp_groups = {}
+            for item in analysis_items:
+                timestamp = item.get('timestamp_of_outcome', item.get('timestamp', '0:00.0'))
+                if timestamp not in timestamp_groups:
+                    timestamp_groups[timestamp] = {
+                        'timestamp': timestamp,
+                        'move_type': item.get('move_type', 'Dance Move'),
+                        'reference_feedback': '',
+                        'recording_feedback': '',
+                        'score': 75  # Default score
+                    }
+                
+                # Assign feedback based on result type
+                result_type = item.get('result', 'recording')
+                feedback = item.get('feedback', item.get('improvement_suggestions', ''))
+                
+                if result_type == 'reference':
+                    timestamp_groups[timestamp]['reference_feedback'] = feedback
+                elif result_type == 'recording':
+                    timestamp_groups[timestamp]['recording_feedback'] = feedback
+                    # Try to derive a score from the feedback (simple heuristic)
+                    if any(word in feedback.lower() for word in ['good', 'great', 'excellent', 'smooth', 'nice']):
+                        timestamp_groups[timestamp]['score'] = 85
+                    elif any(word in feedback.lower() for word in ['needs', 'stiff', 'improve', 'focus']):
+                        timestamp_groups[timestamp]['score'] = 60
+                    else:
+                        timestamp_groups[timestamp]['score'] = 75
+            
+            # Convert to dance_events format
+            for timestamp, group in timestamp_groups.items():
+                # Combine feedback from both reference and recording
+                combined_feedback = group['recording_feedback']
+                if group['reference_feedback']:
+                    combined_feedback = f"Reference: {group['reference_feedback']} | Your performance: {combined_feedback}"
+                
+                dance_events.append({
+                    'frame_number': timestamp_to_frame(timestamp, process_fps),
+                    'move_type': group['move_type'],
+                    'score': group['score'],
+                    'feedback': combined_feedback,
+                    'feedback_end_frame': timestamp_to_frame(timestamp, process_fps) + (4 * process_fps)
+                })
+            
+            print(f"Created {len(dance_events)} dance events for annotation")
 
             # Animation variables
             last_move_time = None
@@ -470,42 +511,7 @@ def create_app() -> FastAPI:
 
                 frame_count += 1
 
-                # Only process every nth frame like working example
-                if frame_count % process_every_n_frames == 0:
-                    # Convert the BGR image to RGB
-                    rgb_frame = cv2.cvtColor(process_frame, cv2.COLOR_BGR2RGB)
-                    results = pose.process(rgb_frame)
 
-                    if results.pose_landmarks:
-                        # Get the head landmark (landmark 0 is the top of the head)
-                        head = results.pose_landmarks.landmark[0]
-                        # Scale coordinates to display resolution like working example
-                        head_x = int(head.x * display_width)
-                        head_y = int(head.y * display_height)
-                        last_head = (head_x, head_y)
-
-                # Draw the arrow and name if we have a head position like working example
-                if last_head is not None:
-                    head_x, head_y = last_head
-                    arrow_height = 30  # Like working example
-                    arrow_width = 45   # Like working example
-                    arrow_tip_y = max(0, head_y - 110)  # Like working example
-                    # Triangle points for the arrow
-                    pt1 = (head_x, arrow_tip_y + arrow_height)  # tip
-                    pt2 = (head_x - arrow_width // 2, arrow_tip_y)  # left
-                    pt3 = (head_x + arrow_width // 2, arrow_tip_y)  # right
-                    pts = np.array([pt1, pt2, pt3], np.int32).reshape((-1, 1, 2))
-                    cv2.fillPoly(display_frame, [pts], (0, 0, 255))  # Red arrow like working example
-                    # Draw the name above the arrow with black border
-                    font = cv2.FONT_HERSHEY_SIMPLEX
-                    text = "Dancer"
-                    text_size = cv2.getTextSize(text, font, 2.5, 6)[0]  # Like working example
-                    text_x = head_x - text_size[0] // 2
-                    text_y = arrow_tip_y - 10
-                    # Black border
-                    cv2.putText(display_frame, text, (text_x, text_y), font, 2.5, (0, 0, 0), 15, cv2.LINE_AA)
-                    # White fill
-                    cv2.putText(display_frame, text, (text_x, text_y), font, 2.5, (255, 255, 255), 6, cv2.LINE_AA)
 
                 # Check for dance events and display moment-based feedback
                 total_moments = len(dance_events)
@@ -547,22 +553,7 @@ def create_app() -> FastAPI:
                     else:
                         current_color = white_color
                         last_move_time = None
-
-                # Draw total moments count
-                moments_text = f"Dance Moments: {current_moment_number}/{total_moments}"
-                cv2.putText(display_frame, moments_text, (stats_x, stats_y), stats_font, stats_scale,
-                           stats_border, stats_border_thickness, cv2.LINE_AA)
-                cv2.putText(display_frame, moments_text, (stats_x, stats_y), stats_font, stats_scale,
-                           current_color, stats_thickness, cv2.LINE_AA)
-
-                # Draw current moment type if we have one
-                if current_moment:
-                    moment_type_text = f"Current: {current_moment['move_type']}"
-                    cv2.putText(display_frame, moment_type_text, (stats_x, stats_y + stats_spacing), stats_font, stats_scale,
-                               stats_border, stats_border_thickness, cv2.LINE_AA)
-                    cv2.putText(display_frame, moment_type_text, (stats_x, stats_y + stats_spacing), stats_font, stats_scale,
-                               current_color, stats_thickness, cv2.LINE_AA)
-
+                
                 # Display moment-specific feedback at bottom
                 if current_feedback and current_moment:
                     feedback_font = cv2.FONT_HERSHEY_SIMPLEX
@@ -732,6 +723,58 @@ def create_app() -> FastAPI:
     @app.get("/health")
     def health_check():
         return {"status": "healthy"}
+
+    @app.post("/test-structured-output")
+    async def test_structured_output():
+        """Test endpoint to verify structured output is working"""
+        try:
+            gemini_key = os.getenv("GEMINI_KEY", getattr(settings, "gemini_key", None))
+            if not gemini_key:
+                raise ValueError("GEMINI_KEY not set in environment or settings")
+
+            # Create client with API key
+            client = genai.Client(api_key=gemini_key)
+
+            prompt = "Generate sample dance analysis data for testing purposes"
+
+            # Generate content using structured output
+            response = client.models.generate_content(
+                model="gemini-2.0-flash-001",
+                contents=prompt,
+                config={
+                    "response_mime_type": "application/json",
+                    "response_schema": DanceAnalysisResponse,
+                }
+            )
+            
+            print("Test structured output received successfully!")
+            analysis_data = response.parsed
+            
+            return {
+                "status": "success",
+                "raw_response": response.text,
+                "parsed_available": analysis_data is not None,
+                "parsed_count": len(analysis_data.dance_analysis) if analysis_data else 0,
+                "sample_data": {
+                    "dance_analysis": [
+                        {
+                            "timestamp_of_outcome": item.timestamp_of_outcome,
+                            "result": item.result,
+                            "move_type": item.move_type,
+                            "feedback": item.feedback
+                        }
+                        for item in analysis_data.dance_analysis[:2]  # Just first 2 items
+                    ]
+                } if analysis_data else None
+            }
+            
+        except Exception as e:
+            import traceback
+            return {
+                "status": "error",
+                "error": str(e),
+                "traceback": traceback.format_exc()
+            }
 
     return app
 

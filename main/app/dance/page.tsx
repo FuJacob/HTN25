@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Header from "../components/Header";
+import Link from "next/link";
 
 const problems = [
 	{
@@ -85,32 +86,34 @@ export default function DanceProblemsPage() {
                         <div className="text-center text-muted-foreground">No problems found.</div>
                     )}
                     {filtered.map((problem) => (
-                        <Card key={problem.id} className="hover:shadow-lg transition-shadow">
-                            <CardHeader className="flex flex-row items-center justify-between gap-4 pb-2">
-                                <div>
-                                    <CardTitle className="text-lg">{problem.title}</CardTitle>
-                                    <CardDescription>{problem.description}</CardDescription>
-                                </div>
-                                <Badge
-                                    className={
-                                        "border " +
-                                        (difficultyColors[problem.difficulty as keyof typeof difficultyColors] || "")
-                                    }
-                                >
-                                    {problem.difficulty}
-                                </Badge>
-                            </CardHeader>
-                            <CardContent className="flex flex-wrap items-center gap-2 pt-0">
-                                {problem.tags.map((tag) => (
-                                    <Badge key={tag} variant="secondary">
-                                        {tag}
+                        <Link key={problem.id} href={`/problem/${problem.id}`}>
+                            <Card className="hover:shadow-lg transition-shadow cursor-pointer">
+                                <CardHeader className="flex flex-row items-center justify-between gap-4 pb-2">
+                                    <div>
+                                        <CardTitle className="text-lg">{problem.title}</CardTitle>
+                                        <CardDescription>{problem.description}</CardDescription>
+                                    </div>
+                                    <Badge
+                                        className={
+                                            "border " +
+                                            (difficultyColors[problem.difficulty as keyof typeof difficultyColors] || "")
+                                        }
+                                    >
+                                        {problem.difficulty}
                                     </Badge>
-                                ))}
-                                <span className="ml-auto text-xs text-muted-foreground">
-                                    {problem.status}
-                                </span>
-                            </CardContent>
-                        </Card>
+                                </CardHeader>
+                                <CardContent className="flex flex-wrap items-center gap-2 pt-0">
+                                    {problem.tags.map((tag) => (
+                                        <Badge key={tag} variant="secondary">
+                                            {tag}
+                                        </Badge>
+                                    ))}
+                                    <span className="ml-auto text-xs text-muted-foreground">
+                                        {problem.status}
+                                    </span>
+                                </CardContent>
+                            </Card>
+                        </Link>
                     ))}
                 </div>
             </div>

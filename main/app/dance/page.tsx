@@ -5,6 +5,7 @@ import { Badge } from "@/shadcn-components/ui/badge";
 import { Input } from "@/shadcn-components/ui/input";
 import { Button } from "@/shadcn-components/ui/button";
 import Header from "../components/Header";
+import Link from "next/link";
 
 const problems = [
 	{

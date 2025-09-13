@@ -104,6 +104,8 @@ export default function Home() {
       console.log("DEBUG: Full blob details:", {
         size: videoBlob.size,
         type: videoBlob.type,
+        lastModified: videoBlob.lastModified || "N/A",
+        name: videoBlob.name || "N/A",
       });
 
       // DEBUG: Try to inspect the blob as ArrayBuffer first few bytes

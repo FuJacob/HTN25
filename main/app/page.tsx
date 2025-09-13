@@ -6,30 +6,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 export default function HomePage() {
   return (
     <main className="min-h-screen bg-white">
-      {/* Navigation */}
-      <nav className="bg-gray-800 text-white">
-        <div className="flex justify-between items-center px-6 py-4 max-w-7xl mx-auto">
-          <div className="flex items-center space-x-8">
-            <div className="text-xl font-bold text-orange-400">LeetCode</div>
-            <div className="hidden md:flex space-x-6">
-              <Link href="#" className="text-orange-400 hover:text-orange-300">
-                Premium
-              </Link>
-              <Link href="#" className="hover:text-gray-300">
-                Explore
-              </Link>
-              <Link href="#" className="hover:text-gray-300">
-                Product
-              </Link>
-              <Link href="#" className="hover:text-gray-300">
-                Developer
-              </Link>
-            </div>
-          </div>
-          <ProfileSection />
-        </div>
-      </nav>
-
       {/* Hero Section */}
       <section className="bg-gray-800 text-white py-20 px-6">
         <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">

@@ -13,11 +13,18 @@ export default function ProfileSection() {
         style={{ textAlign: "center" }}
       >
         <div className="group relative">
-          <img
-            src={user.picture}
-            alt="Profile"
-            style={{ borderRadius: "50%", width: "48px", height: "48px" }}
-          />
+          <Link href="/profile">
+            <img
+              src={user.picture}
+              alt="Profile"
+              style={{
+                borderRadius: "50%",
+                width: "48px",
+                height: "48px",
+                cursor: "pointer",
+              }}
+            />
+          </Link>
           <div
             className="absolute top-12 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded opacity-0 pointer-events-none transition-opacity duration-200 group-hover:opacity-100"
             style={{ minWidth: "120px" }}

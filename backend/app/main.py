@@ -3,7 +3,8 @@ from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 from app.routers import users
 from app.config.settings import settings
-import google.generativeai as genai
+from google import genai
+from google.genai import types
 import tempfile
 import os
 import time
@@ -55,33 +56,36 @@ def create_app() -> FastAPI:
             temp_video2.write(content2)
             temp_video2_path = temp_video2.name
 
-        def wait_for_active(client, file_obj, timeout=30, poll_interval=2):
+        def wait_for_file_active(uploaded_file, timeout=30, poll_interval=2):
             start = time.time()
-            file_id = file_obj.name.split('/')[-1]
             while time.time() - start < timeout:
-                status = client.files.get(name=file_id).state
-                if status == "ACTIVE":
-                    return client.files.get(name=file_id)
+                if hasattr(uploaded_file, 'state') and uploaded_file.state == "ACTIVE":
+                    return uploaded_file
                 time.sleep(poll_interval)
-            raise RuntimeError(f"File {file_id} did not become ACTIVE in time (last state: {status})")
+                # Re-fetch file status if needed
+                try:
+                    uploaded_file = client.files.get(name=uploaded_file.name)
+                except:
+                    pass
+            raise RuntimeError(f"File did not become ACTIVE in time")
 
         try:
             gemini_key = os.getenv("GEMINI_KEY", getattr(settings, "gemini_key", None))
             if not gemini_key:
                 raise ValueError("GEMINI_KEY not set in environment or settings")
-            
-            # Configure the API key
-            genai.configure(api_key=gemini_key)
-            
+
+            # Create client with API key
+            client = genai.Client(api_key=gemini_key)
+
             # Upload files using the new API
-            referencefile = genai.upload_file(temp_video1_path, mime_type="video/mp4")
+            referencefile = client.files.upload(file=temp_video1_path)
             print("Reference file upload result:", referencefile)
-            recording = genai.upload_file(temp_video2_path, mime_type="video/mp4")
+            recording = client.files.upload(file=temp_video2_path)
             print("Recording file upload result:", recording)
 
             # Wait for both files to become ACTIVE
-            referencefile_active = wait_for_active_new_api(referencefile)
-            recording_active = wait_for_active_new_api(recording)
+            referencefile_active = wait_for_file_active(referencefile)
+            recording_active = wait_for_file_active(recording)
 
             prompt = (
                 "Analyze the dance movements in the reference video and compare them to the recording. "
@@ -90,10 +94,12 @@ def create_app() -> FastAPI:
                 "Format the output exactly like this example: "
                 '{"dance_analysis": [{"timestamp_of_outcome": "0:05.0", "result": "reference", "move_type": "Spin", "feedback": "Reference spin is smooth and centered."}, {"timestamp_of_outcome": "0:05.0", "result": "recording", "move_type": "Spin", "feedback": "Recording spin is slightly off-balance, try to keep your core engaged."}]}'
             )
-            
-            # Use the new GenerativeModel API
-            model = genai.GenerativeModel("gemini-2.5-flash")
-            response = model.generate_content([prompt, referencefile_active, recording_active])
+
+            # Generate content using the new API
+            response = client.models.generate_content(
+                model="gemini-2.0-flash-001",
+                contents=[prompt, referencefile_active, recording_active]
+            )
             return {"response": response.text}
         finally:
             # Clean up temporary files
@@ -120,20 +126,25 @@ def create_app() -> FastAPI:
             temp_user_video.write(user_content)
             temp_user_video_path = temp_user_video.name
 
-        def wait_for_active(client, file_obj, timeout=30, poll_interval=2):
+        def wait_for_file_active_compare(uploaded_file, timeout=30, poll_interval=2):
             start = time.time()
-            file_id = file_obj.name.split('/')[-1]
             while time.time() - start < timeout:
-                status = client.files.get(name=file_id).state
-                if status == "ACTIVE":
-                    return client.files.get(name=file_id)
+                if hasattr(uploaded_file, 'state') and uploaded_file.state == "ACTIVE":
+                    return uploaded_file
                 time.sleep(poll_interval)
-            raise RuntimeError(f"File {file_id} did not become ACTIVE in time (last state: {status})")
+                # Re-fetch file status if needed
+                try:
+                    uploaded_file = client.files.get(name=uploaded_file.name)
+                except:
+                    pass
+            raise RuntimeError(f"File did not become ACTIVE in time")
 
         try:
             gemini_key = os.getenv("GEMINI_KEY", getattr(settings, "gemini_key", None))
             if not gemini_key:
                 raise ValueError("GEMINI_KEY not set in environment or settings")
+
+            # Create client with API key
             client = genai.Client(api_key=gemini_key)
 
             # Upload user video
@@ -141,7 +152,7 @@ def create_app() -> FastAPI:
             print("User video upload result:", user_video_file)
 
             # Wait for file to become ACTIVE
-            user_video_active = wait_for_active(client, user_video_file)
+            user_video_active = wait_for_file_active_compare(user_video_file)
 
             # Create comprehensive prompt that includes the dance analysis format
             prompt = (
@@ -158,10 +169,10 @@ def create_app() -> FastAPI:
             )
 
             response = client.models.generate_content(
-                model="gemini-2.5-flash",
+                model="gemini-2.0-flash-001",
                 contents=[prompt, user_video_active]
             )
-            return response
+            return {"response": response.text}
         finally:
             # Clean up temporary file
             os.unlink(temp_user_video_path)

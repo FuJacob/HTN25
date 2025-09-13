@@ -4,7 +4,7 @@ pydantic-settings
 python-dotenv
 httpx
 python-multipart
-google-generativeai
+google-genai
 opencv-python
 mediapipe
 numpy

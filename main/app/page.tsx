@@ -1,11 +1,7 @@
 import Link from "next/link";
-import { Button } from "@/shadcn-components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/shadcn-components/ui/card";
+import { Button } from "@/components/ui/button";
+import ProfileSection from "./components/ProfileSection";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function HomePage() {
   return (
@@ -16,19 +12,21 @@ export default function HomePage() {
           <div className="flex items-center space-x-8">
             <div className="text-xl font-bold text-orange-400">LeetCode</div>
             <div className="hidden md:flex space-x-6">
-              <Link href="#" className="text-orange-400 hover:text-orange-300">Premium</Link>
-              <Link href="#" className="hover:text-gray-300">Explore</Link>
-              <Link href="#" className="hover:text-gray-300">Product</Link>
-              <Link href="#" className="hover:text-gray-300">Developer</Link>
+              <Link href="#" className="text-orange-400 hover:text-orange-300">
+                Premium
+              </Link>
+              <Link href="#" className="hover:text-gray-300">
+                Explore
+              </Link>
+              <Link href="#" className="hover:text-gray-300">
+                Product
+              </Link>
+              <Link href="#" className="hover:text-gray-300">
+                Developer
+              </Link>
             </div>
           </div>
-          <div>
-            <Link href="/auth/login">
-              <Button variant="outline" className="text-white border-white hover:bg-white hover:text-gray-800">
-                Sign in
-              </Button>
-            </Link>
-          </div>
+          <ProfileSection />
         </div>
       </nav>
 
@@ -36,11 +34,10 @@ export default function HomePage() {
       <section className="bg-gray-800 text-white py-20 px-6">
         <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
           <div>
-            <h1 className="text-5xl font-bold mb-6">
-              A New Way to Learn
-            </h1>
+            <h1 className="text-5xl font-bold mb-6">A New Way to Learn</h1>
             <p className="text-xl text-gray-300 mb-8">
-              LeetCode is the best platform to help you enhance your skills, expand your knowledge and prepare for technical interviews.
+              LeetCode is the best platform to help you enhance your skills,
+              expand your knowledge and prepare for technical interviews.
             </p>
             <Button className="bg-teal-500 hover:bg-teal-600 text-white px-8 py-3">
               Create Account
@@ -61,7 +58,7 @@ export default function HomePage() {
                 <div className="h-2 bg-gray-200 rounded w-3/5"></div>
               </div>
               <div className="grid grid-cols-4 gap-1 mb-4">
-                {Array.from({length: 16}).map((_, i) => (
+                {Array.from({ length: 16 }).map((_, i) => (
                   <div key={i} className="h-3 bg-gray-100 rounded-sm"></div>
                 ))}
               </div>
@@ -79,11 +76,18 @@ export default function HomePage() {
             </div>
           </div>
           <div>
-            <h2 className="text-3xl font-bold text-gray-800 mb-6">Start Exploring</h2>
+            <h2 className="text-3xl font-bold text-gray-800 mb-6">
+              Start Exploring
+            </h2>
             <p className="text-lg text-gray-600 mb-6">
-              Explore is a well-organized tool that helps you get the most out of LeetCode by providing structure to guide your progress towards the next step in your programming career.
+              Explore is a well-organized tool that helps you get the most out
+              of LeetCode by providing structure to guide your progress towards
+              the next step in your programming career.
             </p>
-            <Button variant="outline" className="text-teal-600 border-teal-600 hover:bg-teal-50">
+            <Button
+              variant="outline"
+              className="text-teal-600 border-teal-600 hover:bg-teal-50"
+            >
               Get Started →
             </Button>
           </div>
@@ -114,9 +118,15 @@ export default function HomePage() {
               </CardHeader>
               <CardContent className="p-0">
                 <p className="text-gray-600 mb-6">
-                  Over 3900 questions for you to practice. Come and join one of the largest tech communities with hundreds of thousands of active users and participate in our contests to challenge yourself and earn rewards.
+                  Over 3900 questions for you to practice. Come and join one of
+                  the largest tech communities with hundreds of thousands of
+                  active users and participate in our contests to challenge
+                  yourself and earn rewards.
                 </p>
-                <Button variant="outline" className="text-blue-600 border-blue-600 hover:bg-blue-50">
+                <Button
+                  variant="outline"
+                  className="text-blue-600 border-blue-600 hover:bg-blue-50"
+                >
                   View Questions →
                 </Button>
               </CardContent>
@@ -139,9 +149,16 @@ export default function HomePage() {
               </CardHeader>
               <CardContent className="p-0">
                 <p className="text-gray-600 mb-6">
-                  Not only does LeetCode prepare candidates for technical interviews, we also help companies identify top technical talent. From sponsoring contests to providing online assessments and training, we offer numerous services to businesses.
+                  Not only does LeetCode prepare candidates for technical
+                  interviews, we also help companies identify top technical
+                  talent. From sponsoring contests to providing online
+                  assessments and training, we offer numerous services to
+                  businesses.
                 </p>
-                <Button variant="outline" className="text-orange-600 border-orange-600 hover:bg-orange-50">
+                <Button
+                  variant="outline"
+                  className="text-orange-600 border-orange-600 hover:bg-orange-50"
+                >
                   Business Opportunities →
                 </Button>
               </CardContent>
@@ -158,33 +175,76 @@ export default function HomePage() {
           </div>
           <h2 className="text-3xl font-bold text-teal-600 mb-8">Developer</h2>
           <p className="text-lg text-gray-600 mb-12 max-w-4xl mx-auto">
-            We now support 14 popular coding languages. At our core, LeetCode is about developers. Our powerful development tools such as Playground help you test, debug and even write your own projects online.
+            We now support 14 popular coding languages. At our core, LeetCode is
+            about developers. Our powerful development tools such as Playground
+            help you test, debug and even write your own projects online.
           </p>
 
           {/* Code Editor Preview */}
           <div className="bg-gray-900 rounded-lg p-6 max-w-4xl mx-auto">
             <div className="flex items-center justify-between mb-4">
               <div className="flex space-x-2">
-                <span className="bg-gray-700 text-white px-3 py-1 rounded text-sm">C++</span>
-                <span className="bg-gray-700 text-gray-400 px-3 py-1 rounded text-sm">Java</span>
-                <span className="bg-gray-700 text-gray-400 px-3 py-1 rounded text-sm">Python</span>
+                <span className="bg-gray-700 text-white px-3 py-1 rounded text-sm">
+                  C++
+                </span>
+                <span className="bg-gray-700 text-gray-400 px-3 py-1 rounded text-sm">
+                  Java
+                </span>
+                <span className="bg-gray-700 text-gray-400 px-3 py-1 rounded text-sm">
+                  Python
+                </span>
               </div>
               <div className="flex space-x-2">
-                <Button size="sm" variant="outline" className="text-xs">📋 Copy</Button>
-                <Button size="sm" className="bg-green-600 hover:bg-green-700 text-xs">▶ Run</Button>
-                <Button size="sm" className="bg-orange-600 hover:bg-orange-700 text-xs">🏃‍♂️ Playground</Button>
+                <Button size="sm" variant="outline" className="text-xs">
+                  📋 Copy
+                </Button>
+                <Button
+                  size="sm"
+                  className="bg-green-600 hover:bg-green-700 text-xs"
+                >
+                  ▶ Run
+                </Button>
+                <Button
+                  size="sm"
+                  className="bg-orange-600 hover:bg-orange-700 text-xs"
+                >
+                  🏃‍♂️ Playground
+                </Button>
               </div>
             </div>
             <div className="text-left bg-gray-800 rounded p-4 font-mono text-sm">
               <div className="text-gray-400">1</div>
-              <div className="text-gray-400">2  <span className="text-green-400">/**</span></div>
-              <div className="text-gray-400">3   <span className="text-green-400">* Definition for singly-linked list.</span></div>
-              <div className="text-gray-400">4   <span className="text-green-400">* struct ListNode {'{'}</span></div>
-              <div className="text-gray-400">5   <span className="text-green-400">*     int val;</span></div>
-              <div className="text-gray-400">6   <span className="text-green-400">*     ListNode *next;</span></div>
-              <div className="text-gray-400">7   <span className="text-green-400">*     ListNode(int x) : val(x), next(NULL) {'{}'}</span></div>
-              <div className="text-gray-400">8   <span className="text-green-400">* {'};'}</span></div>
-              <div className="text-gray-400">9   <span className="text-green-400">*/</span></div>
+              <div className="text-gray-400">
+                2 <span className="text-green-400">/**</span>
+              </div>
+              <div className="text-gray-400">
+                3{" "}
+                <span className="text-green-400">
+                  * Definition for singly-linked list.
+                </span>
+              </div>
+              <div className="text-gray-400">
+                4{" "}
+                <span className="text-green-400">* struct ListNode {"{"}</span>
+              </div>
+              <div className="text-gray-400">
+                5 <span className="text-green-400">* int val;</span>
+              </div>
+              <div className="text-gray-400">
+                6 <span className="text-green-400">* ListNode *next;</span>
+              </div>
+              <div className="text-gray-400">
+                7{" "}
+                <span className="text-green-400">
+                  * ListNode(int x) : val(x), next(NULL) {"{}"}
+                </span>
+              </div>
+              <div className="text-gray-400">
+                8 <span className="text-green-400">* {"};"}</span>
+              </div>
+              <div className="text-gray-400">
+                9 <span className="text-green-400">*/</span>
+              </div>
             </div>
             <div className="mt-4 text-right">
               <Button className="bg-teal-600 hover:bg-teal-700">

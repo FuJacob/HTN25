@@ -1,6 +1,8 @@
 "use client";
 import { useRef, useState, useEffect } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/shadcn-components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/shadcn-components/ui/card";
+import { Input } from "@/shadcn-components/ui/input";
 
 export default function Home() {
   const [video1, setVideo1] = useState<File | null>(null);
@@ -102,8 +104,6 @@ export default function Home() {
       console.log("DEBUG: Full blob details:", {
         size: videoBlob.size,
         type: videoBlob.type,
-        lastModified: videoBlob.lastModified || "N/A",
-        name: videoBlob.name || "N/A",
       });
 
       // DEBUG: Try to inspect the blob as ArrayBuffer first few bytes

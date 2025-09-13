@@ -3,7 +3,6 @@
 import { ChevronDown, ChevronRight, Plus } from "lucide-react";
 import React, { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { useUser } from "@/lib/useUser";
 
 export default function SideBar() {
   const [listsOpen, setListsOpen] = useState(true);
@@ -12,30 +11,8 @@ export default function SideBar() {
   const [newListName, setNewListName] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
-  const { user } = useUser();
 
   // Key for localStorage based on user ID
-  const userKey = user?.sub || user?.email || "guest";
-  const storageKey = `lists_${userKey}`;
-
-  // Load lists from localStorage on user change
-  React.useEffect(() => {
-    if (userKey) {
-      const stored = localStorage.getItem(storageKey);
-      if (stored) {
-        setLists(JSON.parse(stored));
-      } else {
-        setLists([]);
-      }
-    }
-  }, [userKey]);
-
-  // Save lists to localStorage when lists change
-  React.useEffect(() => {
-    if (userKey) {
-      localStorage.setItem(storageKey, JSON.stringify(lists));
-    }
-  }, [lists, userKey]);
 
   React.useEffect(() => {
     if (adding && inputRef.current) {

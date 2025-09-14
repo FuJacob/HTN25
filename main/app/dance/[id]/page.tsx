@@ -572,11 +572,8 @@ export default function ProblemPage() {
               <FaStickyNote className="w-5 h-5" />
             </button>
           </div>
-          {/* Right: Timing, Layout, Settings, and Profile */}
+          {/* Right: Layout, Settings, and Profile */}
           <div className="flex items-center space-x-3">
-            <div className="bg-tiktok-red text-white px-3 py-1.5 rounded-lg text-sm font-medium">
-              0.0s
-            </div>
             <div className="flex items-center space-x-1 border border-zinc-200 rounded-lg p-1">
               <button className="text-zinc-600 hover:text-tiktok-red hover:bg-zinc-50 transition-all duration-200 p-2 rounded">
                 <FaTh className="w-4 h-4" />
@@ -597,13 +594,11 @@ export default function ProblemPage() {
           {/* Description Box */}
           <div className="flex-[0.25] bg-white rounded-xl shadow-sm border border-zinc-200/50 flex flex-col overflow-hidden">
             <div className="px-6 py-4 border-b border-zinc-100 flex-shrink-0">
-              <h3 className="text-zinc-800 font-semibold flex items-center space-x-2">
-                <FaInfoCircle className="w-4 h-4 text-zinc-500" />
-                <span>{problemData.title}</span>
-              </h3>
-            </div>
-            <div className="flex-1 p-6 overflow-auto">
-              <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center justify-between">
+                <h3 className="text-zinc-800 font-semibold flex items-center space-x-2">
+                  <FaInfoCircle className="w-4 h-4 text-zinc-500" />
+                  <span>{problemData.title}</span>
+                </h3>
                 <div className="flex items-center gap-2">
                   <Badge
                     className={`text-xs font-medium px-3 py-1 rounded-lg ${
@@ -626,8 +621,11 @@ export default function ProblemPage() {
                   ))}
                 </div>
               </div>
+            </div>
+            <div className="flex-1 p-6 overflow-auto">
               <p className="text-zinc-600 text-sm leading-relaxed">
-                Follow the reference dance and record your performance. Use the video guide to learn the moves.
+                Follow the reference dance and record your performance. Use the
+                video guide to learn the moves.
               </p>
             </div>
           </div>
@@ -644,7 +642,7 @@ export default function ProblemPage() {
               <video
                 src={`/videos/${danceData.video}`}
                 controls
-                className="rounded-lg max-h-full w-auto object-cover shadow-sm"
+                className="rounded-lg h-[550px] object-cover shadow-sm"
                 ref={referenceVideoRef}
                 onEnded={handleReferenceVideoEnd}
               />
@@ -709,9 +707,7 @@ export default function ProblemPage() {
                     <h2 className="text-xl font-semibold text-zinc-800 mb-1">
                       Ready to Dance
                     </h2>
-                    <p className="text-sm">
-                      Click "Record Dance" to begin.
-                    </p>
+                    <p className="text-sm">Click "Record Dance" to begin.</p>
                   </div>
                 )}
 
@@ -740,20 +736,17 @@ export default function ProblemPage() {
           {/* Analysis Section */}
           <div className="flex-[0.4] bg-white rounded-xl shadow-sm border border-zinc-200/50 flex flex-col overflow-hidden">
             <div className="px-6 py-4 border-b border-zinc-100 flex-shrink-0">
-              <h3 className="text-zinc-800 font-semibold flex items-center space-x-2">
-                <FaChartLine className="w-4 h-4 text-zinc-500" />
-                <span>Dance Analysis</span>
-              </h3>
-            </div>
-            <div
-              className="flex-1 p-6 overflow-auto"
-              ref={analysisContainerRef}
-            >
-              <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center justify-between">
+                <h3 className="text-zinc-800 font-semibold flex items-center space-x-2">
+                  <FaChartLine className="w-4 h-4 text-zinc-500" />
+                  <span>Dance Analysis</span>
+                </h3>
                 <div className="flex items-center space-x-4">
                   {analysisData && analysisData.parsed_data?.dance_analysis && (
                     <div className="flex items-center space-x-2 text-sm">
-                      <span className="font-semibold text-zinc-800">Score:</span>
+                      <span className="font-semibold text-zinc-800">
+                        Score:
+                      </span>
                       <span className="text-tiktok-red font-bold">
                         {getValidMoves().reduce((sum: number, move: any) => {
                           const baseScore = 100;
@@ -764,7 +757,9 @@ export default function ProblemPage() {
                     </div>
                   )}
                   <div className="flex items-center space-x-2 text-sm">
-                    <span className="font-semibold text-zinc-800">Duration:</span>
+                    <span className="font-semibold text-zinc-800">
+                      Duration:
+                    </span>
                     <span className="text-zinc-600">
                       {videoDuration > 0
                         ? `${videoDuration.toFixed(1)}s`
@@ -773,7 +768,11 @@ export default function ProblemPage() {
                   </div>
                 </div>
               </div>
-
+            </div>
+            <div
+              className="flex-1 p-6 overflow-auto"
+              ref={analysisContainerRef}
+            >
               {isAnalyzing && !analysisData && (
                 <div className="text-center text-zinc-500 py-8">
                   <div className="animate-spin w-6 h-6 border-2 border-tiktok-red border-t-transparent rounded-full mx-auto mb-3"></div>
@@ -822,13 +821,22 @@ export default function ProblemPage() {
                             {move.problem_type}
                           </span>
                           {isBlunder && (
-                            <div className="w-2 h-2 bg-red-500 rounded-full" title="Blunder"></div>
+                            <div
+                              className="w-2 h-2 bg-red-500 rounded-full"
+                              title="Blunder"
+                            ></div>
                           )}
                           {isMistake && (
-                            <div className="w-2 h-2 bg-orange-400 rounded-full" title="Mistake"></div>
+                            <div
+                              className="w-2 h-2 bg-orange-400 rounded-full"
+                              title="Mistake"
+                            ></div>
                           )}
                           {isInaccuracy && (
-                            <div className="w-2 h-2 bg-yellow-400 rounded-full" title="Inaccuracy"></div>
+                            <div
+                              className="w-2 h-2 bg-yellow-400 rounded-full"
+                              title="Inaccuracy"
+                            ></div>
                           )}
                         </div>
                         <span className="text-xs text-zinc-400 font-medium">

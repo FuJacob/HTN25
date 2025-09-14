@@ -1,18 +1,15 @@
 "use client";
 import React, { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   FaSearch,
-  FaSortAmountDown,
   FaFilter,
   FaCode,
   FaDatabase,
   FaTerminal,
   FaSync,
-  FaFire,
 } from "react-icons/fa";
-import { SiJavascript } from "react-icons/si";
-import { Badge } from "@/shadcn-components/ui/badge";
 import { Input } from "@/shadcn-components/ui/input";
 import { Button } from "@/shadcn-components/ui/button";
 import CalendarBox from "../components/Calendar";
@@ -20,12 +17,11 @@ import Header from "../components/Header";
 import SideBar from "../components/SideBar";
 
 const topicCategories = [
-  { name: "Viral", count: 1977, active: true },
-  { name: "Trending", count: 809, active: false },
-  { name: "Hip Hop", count: 722, active: false },
-  { name: "Pop", count: 609, active: false },
-  { name: "K-Pop", count: 607, active: false },
-  { name: "Freestyle", count: 467, active: false },
+  { name: "All Genres" },
+  { name: "Hip Hop" },
+  { name: "Pop" },
+  { name: "K-Pop" },
+  { name: "Freestyle" },
 ];
 
 const problems = [
@@ -53,17 +49,17 @@ const problems = [
 ];
 
 const topicFilters = [
-  { name: "All Dances", icon: FaCode, active: true },
-  { name: "Beginner", icon: FaSync, active: false },
-  { name: "Intermediate", icon: FaDatabase, active: false },
-  { name: "Advanced", icon: FaTerminal, active: false },
-  { name: "Choreography", icon: FaSync, active: false },
-  { name: "TikTok", icon: null, active: false },
+  { name: "All Dances", icon: FaCode },
+  { name: "Beginner", icon: FaSync },
+  { name: "Intermediate", icon: FaDatabase },
+  { name: "Advanced", icon: FaTerminal },
 ];
 
 export default function DanceProblemsPage() {
+  const router = useRouter();
   const [search, setSearch] = useState("");
-  const [activeFilter, setActiveFilter] = useState("All Topics");
+  const [activeFilter, setActiveFilter] = useState("All Dances");
+  const [activeGenre, setActiveGenre] = useState("All Genres");
 
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
@@ -86,6 +82,38 @@ export default function DanceProblemsPage() {
     return status === "solved" ? "text-green-500" : "";
   };
 
+  const handlePremiumClick = () => {
+    // Navigate to premium subscription page
+    router.push("/premium");
+  };
+
+  const handleMasterclassClick = () => {
+    // Navigate to free masterclass
+    router.push("/masterclass");
+  };
+
+  const handleDancePlansClick = () => {
+    // Navigate to dance plans overview
+    router.push("/plans");
+  };
+
+  const handleDanceClick = (danceId: number) => {
+    router.push(`/dance/${danceId}`);
+  };
+
+  // Filter logic
+  const filteredProblems = problems.filter((problem) => {
+    const matchesSearch = problem.title.toLowerCase().includes(search.toLowerCase());
+    const matchesGenre = activeGenre === "All Genres" || problem.genre === activeGenre;
+
+    const matchesSkillLevel = activeFilter === "All Dances" ||
+      (activeFilter === "Beginner" && problem.difficulty === "Easy") ||
+      (activeFilter === "Intermediate" && problem.difficulty === "Medium") ||
+      (activeFilter === "Advanced" && problem.difficulty === "Hard");
+
+    return matchesSearch && matchesGenre && matchesSkillLevel;
+  });
+
   return (
     <div>
       {/* Header */}
@@ -101,7 +129,10 @@ export default function DanceProblemsPage() {
           <div className="p-10 bg-white border-b border-gray-200">
             <div className="grid grid-cols-3 gap-6 max-w-7xl">
               {/* Dance Premium Card */}
-              <div className="bg-gradient-to-br from-orange-100 to-orange-200 p-6 rounded-xl border border-orange-200">
+              <div
+                className="bg-gradient-to-br from-orange-100 to-orange-200 p-6 rounded-xl border border-orange-200 cursor-pointer hover:shadow-lg transition-shadow"
+                onClick={handlePremiumClick}
+              >
                 <div className="flex items-start justify-between">
                   <div>
                     <h3 className="font-semibold text-xl mb-2 text-gray-900">
@@ -121,9 +152,12 @@ export default function DanceProblemsPage() {
               </div>
 
               {/* Dance Masterclass */}
-              <div className="bg-gradient-to-br from-green-100 to-green-200 p-6 rounded-xl border border-green-200">
+              <div
+                className="bg-gradient-to-br from-green-100 to-green-200 p-6 rounded-xl border border-green-200 cursor-pointer hover:shadow-lg transition-shadow"
+                onClick={handleMasterclassClick}
+              >
                 <h3 className="font-semibold text-xl mb-2 text-gray-900">
-                  TikTok's Masterclass
+                  TikTok&apos;s Masterclass
                 </h3>
                 <p className="text-lg font-semibold text-green-700 mb-2">
                   Crash Course
@@ -133,7 +167,10 @@ export default function DanceProblemsPage() {
               </div>
 
               {/* Dance Plans Card */}
-              <div className="bg-gradient-to-br from-blue-100 to-blue-200 p-6 rounded-xl border border-blue-200">
+              <div
+                className="bg-gradient-to-br from-blue-100 to-blue-200 p-6 rounded-xl border border-blue-200 cursor-pointer hover:shadow-lg transition-shadow"
+                onClick={handleDancePlansClick}
+              >
                 <h3 className="font-semibold text-xl mb-2 text-gray-900">
                   Dance Plans
                 </h3>
@@ -152,12 +189,14 @@ export default function DanceProblemsPage() {
               {topicCategories.map((topic) => (
                 <div
                   key={topic.name}
-                  className="flex items-center gap-2 text-lg"
+                  className={`flex items-center gap-2 text-lg cursor-pointer hover:text-tiktok-red transition-colors ${
+                    activeGenre === topic.name ? "text-tiktok-red font-semibold" : "text-gray-900"
+                  }`}
+                  onClick={() => setActiveGenre(topic.name)}
                 >
-                  <span className="text-gray-900 font-medium">
+                  <span className="font-medium">
                     {topic.name}
                   </span>
-                  <span className="text-gray-600">{topic.count}</span>
                 </div>
               ))}
               <div className="ml-auto">
@@ -172,21 +211,18 @@ export default function DanceProblemsPage() {
               {topicFilters.map((filter) => (
                 <Button
                   key={filter.name}
-                  variant={filter.active ? "default" : "ghost"}
+                  variant={activeFilter === filter.name ? "default" : "ghost"}
                   size="lg"
                   className={`flex items-center gap-2 px-5 py-3 text-lg ${
-                    filter.active
+                    activeFilter === filter.name
                       ? "bg-tiktok-red text-white hover:bg-tiktok-red/90"
                       : "text-gray-700 hover:bg-gray-100"
                   }`}
                   onClick={() => setActiveFilter(filter.name)}
                 >
-                  {filter.name === "TikTok" ? (
-                    <SiJavascript className="w-5 h-5" />
-                  ) : (
-                    filter.icon &&
+                  {filter.icon &&
                     React.createElement(filter.icon, { className: "w-5 h-5" })
-                  )}
+                  }
                   {filter.name}
                 </Button>
               ))}
@@ -206,8 +242,6 @@ export default function DanceProblemsPage() {
                 />
               </div>
               <div className="flex items-center gap-5 ml-auto">
-                <FaSortAmountDown className="w-7 h-7 text-gray-500" />
-                <FaFilter className="w-7 h-7 text-gray-500" />
                 <div className="text-lg text-gray-600">4/18 Mastered</div>
               </div>
             </div>
@@ -293,46 +327,29 @@ export default function DanceProblemsPage() {
                 Trending Artists
               </h3>
               <div className="grid grid-cols-2 gap-3">
-                <div className="flex items-center justify-center p-3 bg-gray-100 rounded-full">
-                  <span className="text-base font-medium text-gray-900">
-                    Doja Cat
-                  </span>
-                </div>
-                <div className="flex items-center justify-center p-3 bg-gray-100 rounded-full">
-                  <span className="text-base font-medium text-gray-900">
-                    Megan Thee Stallion
-                  </span>
-                </div>
-                <div className="flex items-center justify-center p-3 bg-gray-100 rounded-full">
-                  <span className="text-base font-medium text-gray-900">
-                    Olivia Rodrigo
-                  </span>
-                </div>
-                <div className="flex items-center justify-center p-3 bg-gray-100 rounded-full">
-                  <span className="text-base font-medium text-gray-900">
-                    Lil Nas X
-                  </span>
-                </div>
-                <div className="flex items-center justify-center p-3 bg-gray-100 rounded-full">
-                  <span className="text-base font-medium text-gray-900">
-                    The Weeknd
-                  </span>
-                </div>
-                <div className="flex items-center justify-center p-3 bg-gray-100 rounded-full">
-                  <span className="text-base font-medium text-gray-900">
-                    Dua Lipa
-                  </span>
-                </div>
-                <div className="flex items-center justify-center p-3 bg-gray-100 rounded-full">
-                  <span className="text-base font-medium text-gray-900">
-                    Travis Scott
-                  </span>
-                </div>
-                <div className="flex items-center justify-center p-3 bg-gray-100 rounded-full">
-                  <span className="text-base font-medium text-gray-900">
-                    Ariana Grande
-                  </span>
-                </div>
+                {[
+                  "Doja Cat",
+                  "Megan Thee Stallion",
+                  "Olivia Rodrigo",
+                  "Lil Nas X",
+                  "The Weeknd",
+                  "Dua Lipa",
+                  "Travis Scott",
+                  "Ariana Grande",
+                ].map((artist) => (
+                  <div
+                    key={artist}
+                    className="flex items-center justify-center p-3 bg-gray-100 rounded-full cursor-pointer hover:bg-gray-200 transition-colors"
+                    onClick={() => {
+                      setSearch(artist);
+                      setActiveGenre("Pop");
+                    }}
+                  >
+                    <span className="text-base font-medium text-gray-900 text-center">
+                      {artist}
+                    </span>
+                  </div>
+                ))}
               </div>
             </div>
           </div>

@@ -10,6 +10,7 @@ import {
 } from "react-icons/fa6";
 import React, { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function SideBar() {
   const [listsOpen, setListsOpen] = useState(true);
@@ -40,7 +41,7 @@ export default function SideBar() {
       setLists((prev) => [...prev, { id, name: newListName.trim() }]);
       setAdding(false);
       setNewListName("");
-      router.push(`/dance/list/${id}`);
+      router.push(`/list/${id}`);
     } else if (e.key === "Escape") {
       setAdding(false);
       setNewListName("");
@@ -51,20 +52,20 @@ export default function SideBar() {
     <nav className="flex flex-col h-full text-gray-900 bg-white">
       {/* Main Navigation */}
       <div className="p-4 space-y-2">
-        <a
-          href="/dance"
+        <Link
+          href="/dances"
           className="flex items-center gap-3 px-3 py-3 text-base font-medium text-gray-900 hover:bg-gray-100 rounded-md transition-colors"
         >
           <FaBook className="w-5 h-5" />
           Library
-        </a>
-        <a
-          href="/dance/study-plan"
+        </Link>
+        <Link
+          href="/study-plan"
           className="flex items-center gap-3 px-3 py-3 text-base font-medium text-gray-900 hover:bg-gray-100 rounded-md transition-colors"
         >
           <FaCalendarDays className="w-5 h-5" />
           Study Plan
-        </a>
+        </Link>
       </div>
 
       {/* My Lists Section */}
@@ -89,9 +90,9 @@ export default function SideBar() {
         {listsOpen && (
           <div className="ml-6 mt-1 space-y-1">
             {lists.map((list) => (
-              <a
+              <Link
                 key={list.id}
-                href={`/dance/list/${list.id}`}
+                href={`/list/${list.id}`}
                 className="flex items-center gap-3 px-3 py-2 text-base text-gray-600 hover:text-gray-900 rounded-md transition-colors group"
               >
                 {list.id === "favorite" ? (
@@ -100,7 +101,7 @@ export default function SideBar() {
                   <FaLock className="w-4 h-4" />
                 )}
                 <span className="truncate">{list.name}</span>
-              </a>
+              </Link>
             ))}
             {adding && (
               <div className="px-3">

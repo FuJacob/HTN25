@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
   FaSearch,
@@ -31,6 +32,7 @@ const problems = [
     acceptance: "41.3%",
     status: "unsolved",
     premium: false,
+    video: "Renegade.mp4",
     genre: "Hip Hop",
   },
   {
@@ -40,6 +42,7 @@ const problems = [
     acceptance: "81.6%",
     status: "unsolved",
     premium: false,
+    video: "Maps.mp4", // Using Maps as placeholder
     genre: "Pop",
   },
   {
@@ -58,6 +61,7 @@ const problems = [
     acceptance: "58.9%",
     status: "unsolved",
     premium: false,
+    video: "Maps.mp4", // Using Maps as placeholder
     genre: "Pop",
   },
   {
@@ -67,6 +71,7 @@ const problems = [
     acceptance: "62.1%",
     status: "unsolved",
     premium: false,
+    video: "Supalonely.mp4",
     genre: "Freestyle",
   },
   {
@@ -76,6 +81,7 @@ const problems = [
     acceptance: "64.8%",
     status: "unsolved",
     premium: false,
+    video: "Out-West.mp4",
     genre: "Pop",
   },
   {
@@ -85,6 +91,7 @@ const problems = [
     acceptance: "59.7%",
     status: "unsolved",
     premium: false,
+    video: "Maps.mp4", // Using Maps as placeholder
     genre: "Hip Hop",
   },
   {
@@ -94,6 +101,7 @@ const problems = [
     acceptance: "55.7%",
     status: "unsolved",
     premium: false,
+    video: "Laxed.mp4",
     genre: "Hip Hop",
   },
   {
@@ -103,6 +111,7 @@ const problems = [
     acceptance: "61.2%",
     status: "unsolved",
     premium: false,
+    video: "Adderall.mp4",
     genre: "Hip Hop",
   },
   {
@@ -121,6 +130,7 @@ const problems = [
     acceptance: "68.5%",
     status: "unsolved",
     premium: false,
+    video: "Blinding-Lights.mp4",
     genre: "K-Pop",
   },
   {
@@ -130,6 +140,7 @@ const problems = [
     acceptance: "78.5%",
     status: "unsolved",
     premium: false,
+    video: "Don't-Start-Now.mp4",
     genre: "Pop",
   },
   {
@@ -139,6 +150,7 @@ const problems = [
     acceptance: "62.1%",
     status: "unsolved",
     premium: false,
+    video: "Maps.mp4", // Using Maps as placeholder
     genre: "Freestyle",
   },
   {
@@ -148,6 +160,7 @@ const problems = [
     acceptance: "34.2%",
     status: "unsolved",
     premium: false,
+    video: "Maps.mp4", // Using Maps as placeholder
     genre: "Hip Hop",
   },
   {
@@ -157,6 +170,7 @@ const problems = [
     acceptance: "59.7%",
     status: "unsolved",
     premium: false,
+    video: "Maps.mp4", // Using Maps as placeholder
     genre: "Pop",
   },
   {
@@ -175,6 +189,7 @@ const problems = [
     acceptance: "55.7%",
     status: "unsolved",
     premium: false,
+    video: "Maps.mp4", // Using Maps as placeholder
     genre: "Hip Hop",
   },
   {

@@ -122,40 +122,68 @@ export default function ProblemPage() {
         type: "video/webm",
       });
 
-      // Create FormData for API call
-      const formData = new FormData();
-      formData.append("video1", videoFile);
-      formData.append("video2", videoFile);
+      // Step 1: Analyze videos - EXACT COPY FROM HOME
+      const formData1 = new FormData();
+      formData1.append("video1", videoFile);
+      formData1.append("video2", videoFile);
 
-      // Make API call to analyze the video
-      console.log("Sending request to API with formData:", formData);
-      console.log("Video file details:", {
-        name: videoFile.name,
-        size: videoFile.size,
-        type: videoFile.type
-      });
-
+      console.log("Analyzing videos...");
       const analyzeResponse = await fetch(
         "http://localhost:8000/upload-and-analyze",
         {
           method: "POST",
-          body: formData,
+          body: formData1,
         }
       );
 
-      console.log("API response status:", analyzeResponse.status);
-      console.log("API response ok:", analyzeResponse.ok);
-
       if (!analyzeResponse.ok) {
-        const errorText = await analyzeResponse.text();
-        console.error("API error response:", errorText);
-        throw new Error(`Analysis failed: ${analyzeResponse.status} - ${errorText}`);
+        throw new Error(`Analysis failed: ${analyzeResponse.status}`);
       }
 
-      const result = await analyzeResponse.json();
-      console.log("Analysis result:", result);
+      const analyzeResult = await analyzeResponse.json();
+      console.log("Analysis result:", analyzeResult);
+
+      // Step 2: Process video directly with analysis - EXACT COPY FROM HOME
+      const formData2 = new FormData();
+      // Try to extract the actual analysis text, not the object
+      let analysisText = "";
+      if (typeof analyzeResult.response === "string") {
+        analysisText = analyzeResult.response;
+      } else if (analyzeResult.response) {
+        analysisText = JSON.stringify(analyzeResult.response);
+      } else {
+        analysisText = JSON.stringify(analyzeResult);
+      }
+
+      formData2.append("dance_analysis", analysisText);
+      formData2.append("video_file", videoFile);
+
+      console.log("Processing video with analysis...");
+      const processResponse = await fetch(
+        "http://localhost:8000/process-dance-video",
+        {
+          method: "POST",
+          body: formData2,
+        }
+      );
+
+      if (!processResponse.ok) {
+        const errorText = await processResponse.text();
+        console.error("Process response error:", errorText);
+        throw new Error(
+          `Processing failed: ${processResponse.status} - ${errorText}`
+        );
+      }
+
+      // Get the processed video
+      const videoBlob = await processResponse.blob();
+      console.log("Video blob size:", videoBlob.size, "type:", videoBlob.type);
+
+      const videoUrl = URL.createObjectURL(videoBlob);
+      console.log("Created blob URL:", videoUrl);
       
-      setAnalysisData(result);
+      // Set the analysis data from the first response
+      setAnalysisData(analyzeResult);
     } catch (err: any) {
       console.error("Analysis error:", err);
       setAnalysisError(err.message);

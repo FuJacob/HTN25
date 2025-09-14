@@ -22,7 +22,7 @@ export default function HomePage() {
           <Link href="/dance">
             <Button
               size="lg"
-              className="bg-tiktok-red hover:bg-tiktok-pink text-white text-2xl px-16 py-8 rounded-full font-bold shadow-xl transition-all duration-300 hover:scale-105"
+              className="bg-tiktok-red hover:bg-tiktok-red/80 text-white text-2xl px-16 py-8 rounded-full font-bold shadow-xl transition-all duration-300 hover:scale-105"
             >
               LET'S GET DANCING
             </Button>

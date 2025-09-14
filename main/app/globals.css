@@ -42,12 +42,10 @@
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
 
-  /* TikTok Brand Colors */
+  /* TikTok Brand Colors - ONLY BLACK, RED, WHITE */
   --color-tiktok-white: var(--tiktok-white);
   --color-tiktok-black: var(--tiktok-black);
-  --color-tiktok-pink: var(--tiktok-pink);
   --color-tiktok-red: var(--tiktok-red);
-  --color-tiktok-blue: var(--tiktok-blue);
 }
 
 :root {
@@ -58,38 +56,36 @@
   --card-foreground: #000000;
   --popover: #ffffff;
   --popover-foreground: #000000;
-  --primary: var(--tiktok-pink); /* Use pink as primary instead of red */
+  --primary: var(--tiktok-red); /* Use red as primary */
   --primary-foreground: #ffffff;
-  --secondary: var(--tiktok-blue);
+  --secondary: var(--tiktok-black);
   --secondary-foreground: #ffffff;
   --muted: oklch(0.96 0 0); /* Very light gray */
   --muted-foreground: oklch(0.45 0 0); /* Medium gray text */
-  --accent: var(--tiktok-pink); /* Remove cyan, use pink */
+  --accent: var(--tiktok-red); /* Use red for accent */
   --accent-foreground: #ffffff;
   --destructive: var(--tiktok-red);
   --border: oklch(0.9 0 0); /* Light gray border */
   --input: #ffffff; /* White input background */
-  --ring: var(--tiktok-pink); /* Remove cyan ring */
+  --ring: var(--tiktok-red); /* Red ring */
   --chart-1: var(--tiktok-red);
-  --chart-2: var(--tiktok-pink); /* Replace cyan with pink */
-  --chart-3: var(--tiktok-pink);
-  --chart-4: var(--tiktok-blue);
-  --chart-5: oklch(0.7 0.1 280); /* Purple accent */
+  --chart-2: var(--tiktok-black);
+  --chart-3: var(--tiktok-red);
+  --chart-4: var(--tiktok-black);
+  --chart-5: var(--tiktok-red);
   --sidebar: #ffffff; /* White sidebar */
   --sidebar-foreground: #000000; /* Black sidebar text */
-  --sidebar-primary: var(--tiktok-pink);
+  --sidebar-primary: var(--tiktok-red);
   --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: var(--tiktok-blue);
+  --sidebar-accent: var(--tiktok-black);
   --sidebar-accent-foreground: #ffffff;
   --sidebar-border: oklch(0.9 0 0); /* Light border */
-  --sidebar-ring: var(--tiktok-pink); /* Remove cyan ring */
+  --sidebar-ring: var(--tiktok-red);
 
-  /* TikTok Brand Colors - REMOVE CYAN */
+  /* TikTok Brand Colors - ONLY BLACK, RED, WHITE */
   --tiktok-white: #ffffff; /* Pure white */
   --tiktok-black: #000000; /* Pure black */
-  --tiktok-pink: oklch(0.685 0.12 347.8); /* #de8c9d */
-  --tiktok-red: oklch(0.588 0.258 12.57); /* #fe2858 */
-  --tiktok-blue: oklch(0.494 0.063 221.9); /* #397684 */
+  --tiktok-red: #fe2858; /* TikTok red */
 }
 
 .dark {

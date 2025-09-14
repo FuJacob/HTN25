@@ -106,7 +106,7 @@ export default function SideBar() {
               <div className="px-3">
                 <input
                   ref={inputRef}
-                  className="w-full text-base px-3 py-2 bg-white border border-gray-300 rounded text-gray-900 placeholder:text-gray-500 outline-none focus:ring-1 focus:ring-tiktok-pink focus:border-tiktok-pink"
+                  className="w-full text-base px-3 py-2 bg-white border border-gray-300 rounded text-gray-900 placeholder:text-gray-500 outline-none focus:ring-1 focus:ring-tiktok-red focus:border-tiktok-red"
                   value={newListName}
                   onChange={(e) => setNewListName(e.target.value)}
                   onKeyDown={handleInputKeyDown}

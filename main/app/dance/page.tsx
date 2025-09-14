@@ -197,7 +197,7 @@ export default function DanceProblemsPage() {
               </div>
             ))}
             <div className="ml-auto">
-              <button className="text-base text-tiktok-pink hover:text-tiktok-pink/80 flex items-center gap-2">
+              <button className="text-base text-tiktok-red hover:text-tiktok-red/80 flex items-center gap-2">
                 C Expand <FaFilter className="w-4 h-4" />
               </button>
             </div>
@@ -212,7 +212,7 @@ export default function DanceProblemsPage() {
                 size="lg"
                 className={`flex items-center gap-3 px-4 py-2 text-base ${
                   filter.active 
-                    ? "bg-tiktok-pink text-white hover:bg-tiktok-pink/90" 
+                    ? "bg-tiktok-red text-white hover:bg-tiktok-red/90" 
                     : "text-gray-700 hover:bg-gray-100"
                 }`}
                 onClick={() => setActiveFilter(filter.name)}
@@ -238,7 +238,7 @@ export default function DanceProblemsPage() {
                 placeholder="Search questions"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="pl-12 py-3 text-base border-gray-300 focus:border-tiktok-pink focus:ring-tiktok-pink"
+                className="pl-12 py-3 text-base border-gray-300 focus:border-tiktok-red focus:ring-tiktok-red"
               />
             </div>
             <div className="flex items-center gap-4">
@@ -334,25 +334,25 @@ export default function DanceProblemsPage() {
             <div className="grid grid-cols-2 gap-2">
               <div className="flex items-center justify-between p-2 bg-gray-100 rounded">
                 <span className="text-sm font-medium text-gray-900">Meta</span>
-                <span className="text-xs bg-tiktok-pink text-white px-2 py-1 rounded">
+                <span className="text-xs bg-tiktok-red text-white px-2 py-1 rounded">
                   1301
                 </span>
               </div>
               <div className="flex items-center justify-between p-2 bg-gray-100 rounded">
                 <span className="text-sm font-medium text-gray-900">Google</span>
-                <span className="text-xs bg-tiktok-pink text-white px-2 py-1 rounded">
+                <span className="text-xs bg-tiktok-red text-white px-2 py-1 rounded">
                   2108
                 </span>
               </div>
               <div className="flex items-center justify-between p-2 bg-gray-100 rounded">
                 <span className="text-sm font-medium text-gray-900">Uber</span>
-                <span className="text-xs bg-tiktok-pink text-white px-2 py-1 rounded">
+                <span className="text-xs bg-tiktok-red text-white px-2 py-1 rounded">
                   474
                 </span>
               </div>
               <div className="flex items-center justify-between p-2 bg-gray-100 rounded">
                 <span className="text-sm font-medium text-gray-900">Amazon</span>
-                <span className="text-xs bg-tiktok-pink text-white px-2 py-1 rounded">
+                <span className="text-xs bg-tiktok-red text-white px-2 py-1 rounded">
                   1890
                 </span>
               </div>

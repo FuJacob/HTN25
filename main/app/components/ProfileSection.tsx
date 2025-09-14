@@ -14,7 +14,7 @@ export default function ProfileSection() {
             <img
               src={user.picture}
               alt="Profile"
-              className="rounded-full w-12 h-12 cursor-pointer border-2 border-gray-200 hover:border-tiktok-pink transition-colors"
+              className="rounded-full w-12 h-12 cursor-pointer border-2 border-gray-200 hover:border-tiktok-red transition-colors"
             />
           </Link>
           <div className="absolute top-14 left-1/2 -translate-x-1/2 bg-tiktok-black text-tiktok-white text-xs px-3 py-2 rounded-lg opacity-0 pointer-events-none transition-opacity duration-200 group-hover:opacity-100 min-w-[120px] text-center z-50">
@@ -34,7 +34,7 @@ export default function ProfileSection() {
   }
   return (
     <Link href="/auth/login">
-      <Button className="bg-tiktok-red hover:bg-tiktok-pink text-tiktok-white font-bold px-8 py-3 text-lg rounded-full transition-colors">
+      <Button className="bg-tiktok-red hover:bg-tiktok-red/80 text-tiktok-white font-bold px-8 py-3 text-lg rounded-full transition-colors">
         Sign in
       </Button>
     </Link>

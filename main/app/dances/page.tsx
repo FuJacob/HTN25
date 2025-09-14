@@ -15,64 +15,48 @@ import { Input } from "@/shadcn-components/ui/input";
 import { Button } from "@/shadcn-components/ui/button";
 import CalendarBox from "../components/Calendar";
 
-const problems = [
-  {
-    id: 966,
-    title: "Vowel Spellchecker",
-    difficulty: "Medium",
-    acceptance: "52.1%",
-    status: "unsolved",
-    premium: false,
-  },
-  {
-    id: 1,
-    title: "Two Sum",
-    difficulty: "Easy",
-    acceptance: "56.3%",
-    status: "solved",
-    premium: false,
-  },
-  {
-    id: 2,
-    title: "Add Two Numbers",
-    difficulty: "Medium",
-    acceptance: "46.9%",
-    status: "solved",
-    premium: false,
-  },
-  {
-    id: 3,
-    title: "Longest Substring Without Repeating Characters",
-    difficulty: "Medium",
-    acceptance: "37.5%",
-    status: "unsolved",
-    premium: false,
-  },
-  {
-    id: 4,
-    title: "Median of Two Sorted Arrays",
-    difficulty: "Hard",
-    acceptance: "44.7%",
-    status: "unsolved",
-    premium: false,
-  },
-  {
-    id: 5,
-    title: "Longest Palindromic Substring",
-    difficulty: "Medium",
-    acceptance: "36.4%",
-    status: "unsolved",
-    premium: false,
-  },
-  {
-    id: 6,
-    title: "Zigzag Conversion",
-    difficulty: "Medium",
-    acceptance: "52.3%",
-    status: "unsolved",
-    premium: false,
-  },
+const videoFiles = [
+  "Adderall.mp4",
+  "Apple.mp4",
+  "Blinding-Lights.mp4",
+  "Cannibal.mp4",
+  "Chicken-Banana-Dance.mp4",
+  "Don't-Start-Now.mp4",
+  "Emergency-Budots.mp4",
+  "Git-Up-Challenge.mp4",
+  "Give-it-to-Me.mp4",
+  "I'm-Moving-Too-Fast.mp4",
+  "Illit-Jellyous.mp4",
+  "Last-Christmas.mp4",
+  "Laxed.mp4",
+  "Man-Child.mp4",
+  "Maps.mp4",
+  "Number-One-Baby.mp4",
+  "Out-West.mp4",
+  "Renegade.mp4",
+  "Supalonely.mp4",
+  "Vibe.mp4",
+  "Wednesday.mp4",
 ];
+
+function formatVideoTitle(filename: string) {
+  // Remove extension
+  let name = filename.replace(/\.mp4$/, "");
+  // Replace dashes with spaces
+  name = name.replace(/-/g, " ");
+  // Capitalize each word
+  name = name.replace(/\b\w/g, (c) => c.toUpperCase());
+  return name;
+}
+
+const problems = videoFiles.map((file, idx) => ({
+  id: idx + 1,
+  title: formatVideoTitle(file),
+  difficulty: ["Easy", "Medium", "Hard"][idx % 3],
+  acceptance: `${(30 + idx * 2.5) % 70 + 30}%`,
+  status: idx % 2 === 0 ? "solved" : "unsolved",
+  premium: false,
+}));
 
 const topicCategories = [
   { name: "Array", count: 1977, active: false },

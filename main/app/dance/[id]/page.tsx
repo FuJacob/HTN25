@@ -130,8 +130,8 @@ export default function ProblemPage() {
 
     const currentTime = video.currentTime;
 
-    // Sync reference video with analyzed video
-    if (refVideo && !recording) {
+    // Sync reference video with analyzed video (only sync time, not playback state)
+    if (refVideo && !recording && Math.abs(refVideo.currentTime - currentTime) > 0.5) {
       refVideo.currentTime = currentTime;
     }
 
@@ -178,9 +178,11 @@ export default function ProblemPage() {
       const seekTime = parseTimestamp(timestamp);
       video.currentTime = seekTime;
 
-      // Also sync reference video when seeking
+      // Also sync reference video when seeking (with slight delay to avoid conflicts)
       if (refVideo && !recording) {
-        refVideo.currentTime = seekTime;
+        setTimeout(() => {
+          refVideo.currentTime = seekTime;
+        }, 100);
       }
     }
   };
@@ -196,14 +198,14 @@ export default function ProblemPage() {
   // Handle analyzed video play/pause to sync reference video
   const handleAnalyzedVideoPlay = () => {
     const refVideo = referenceVideoRef.current;
-    if (refVideo && !recording) {
+    if (refVideo && !recording && refVideo.paused) {
       refVideo.play().catch(console.error);
     }
   };
 
   const handleAnalyzedVideoPause = () => {
     const refVideo = referenceVideoRef.current;
-    if (refVideo && !recording) {
+    if (refVideo && !recording && !refVideo.paused) {
       refVideo.pause();
     }
   };
@@ -678,6 +680,10 @@ export default function ProblemPage() {
                   src={processedVideoUrl}
                   controls
                   className="w-[750px] h-fit object-cover rounded-lg"
+                  onTimeUpdate={handleVideoTimeUpdate}
+                  onLoadedMetadata={handleVideoLoadedMetadata}
+                  onPlay={handleAnalyzedVideoPlay}
+                  onPause={handleAnalyzedVideoPause}
                 />
               </div>
             )}
@@ -742,7 +748,7 @@ export default function ProblemPage() {
                 <span>Analysis Cases</span>
               </h3>
             </div>
-            <div className="flex-1 p-4 overflow-auto">
+            <div className="flex-1 p-4 overflow-auto" ref={analysisContainerRef}>
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center space-x-2">
                 {analysisData && analysisData.parsed_data?.dance_analysis && (
@@ -750,8 +756,12 @@ export default function ProblemPage() {
                       <div className="w-1.5 h-1.5 bg-tiktok-red rounded-full"></div>
                       <span className="text-xs text-tiktok-black/70">
                       Score:{" "}
-                      {analysisData.parsed_data.dance_analysis.reduce(
-                        (sum: number, move: any) => sum + move.score,
+                      {getValidMoves().reduce(
+                        (sum: number, move: any) => {
+                          const baseScore = 100;
+                          const penalty = Math.max(0, -move.score * 5);
+                          return sum + Math.max(0, baseScore - penalty);
+                        },
                         0
                       )}
                     </span>
@@ -759,7 +769,9 @@ export default function ProblemPage() {
                 )}
                 <div className="flex items-center space-x-1">
                     <div className="w-1.5 h-1.5 bg-orange-500 rounded-full"></div>
-                    <span className="text-xs text-tiktok-black/70">10.0s</span>
+                    <span className="text-xs text-tiktok-black/70">
+                      {videoDuration > 0 ? `${videoDuration.toFixed(1)}s` : '0.0s'}
+                    </span>
                 </div>
               </div>
             </div>
@@ -787,13 +799,23 @@ export default function ProblemPage() {
                       return (
                         <div
                           key={index}
-                      className="bg-tiktok-black/5 rounded border border-tiktok-black/10 p-2 mb-2"
+                          data-move-index={index}
+                          className={`rounded border p-2 mb-2 cursor-pointer transition-all duration-300 ${
+                            currentHighlightedMove === index
+                              ? 'bg-blue-100 border-blue-400 shadow-md scale-[1.02]'
+                              : 'bg-tiktok-black/5 border-tiktok-black/10 hover:border-tiktok-black/20'
+                          }`}
+                          onClick={() => handleMoveClick(move.timestamp_of_outcome)}
                         >
                             <div className="flex items-center justify-between mb-1">
                         <div className="flex items-center space-x-1">
-                          <span className="text-xs font-mono text-tiktok-black/70 bg-tiktok-black/10 px-1 py-0.5 rounded">
-                                  {move.timestamp_of_outcome}
-                                </span>
+                          <span className={`text-xs font-mono px-1 py-0.5 rounded transition-colors ${
+                            currentHighlightedMove === index
+                              ? 'text-blue-800 bg-blue-200'
+                              : 'text-tiktok-black/70 bg-tiktok-black/10'
+                          }`}>
+                            🎯 {move.timestamp_of_outcome}
+                          </span>
                           <span className="text-tiktok-black text-xs font-medium capitalize">
                                   {move.problem_type}
                                 </span>
@@ -811,7 +833,11 @@ export default function ProblemPage() {
                                 #{index + 1}
                               </span>
                             </div>
-                      <div className="bg-tiktok-white rounded p-1.5 border-l-2 border-tiktok-red/30">
+                      <div className={`rounded p-1.5 border-l-2 ${
+                        currentHighlightedMove === index
+                          ? 'bg-blue-50 border-blue-400'
+                          : 'bg-tiktok-white border-tiktok-red/30'
+                      }`}>
                         <p className="text-tiktok-black/80 text-xs leading-relaxed">
                                 {move.feedback}
                               </p>

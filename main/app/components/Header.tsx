@@ -16,7 +16,7 @@ export default function Header() {
           >
             <img src="/logo.png" alt="Logo" className="h-8 w-auto" />
             <span className="ml-2 text-xl font-black text-tiktok-black">
-              2Sum Dance
+              LeetDance
             </span>
           </Link>
           <Link

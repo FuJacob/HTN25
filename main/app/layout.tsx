@@ -1,11 +1,15 @@
 import type { Metadata } from "next";
 import { Balsamiq_Sans } from "next/font/google";
-const balsamiqSans = Balsamiq_Sans({ subsets: ["latin"], weight: ["400", "700"], style: ["normal", "italic"] });
+const balsamiqSans = Balsamiq_Sans({
+  subsets: ["latin"],
+  weight: ["400", "700"],
+  style: ["normal", "italic"],
+});
 import "./globals.css";
 import { Auth0Provider } from "@auth0/nextjs-auth0";
 
 export const metadata: Metadata = {
-  title: "2 Sum Dance",
+  title: "LeetDance",
   description: "A platform for dance enthusiasts to connect and collaborate",
 };
 

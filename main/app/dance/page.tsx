@@ -1,13 +1,13 @@
 "use client";
 import React, { useState } from "react";
-import { 
-  FaSearch, 
+import {
+  FaSearch,
   FaSortAmountDown,
   FaFilter,
   FaCode,
   FaDatabase,
   FaTerminal,
-  FaSync
+  FaSync,
 } from "react-icons/fa";
 import { SiJavascript } from "react-icons/si";
 import { Badge } from "@/shadcn-components/ui/badge";
@@ -22,23 +22,23 @@ const problems = [
     difficulty: "Medium",
     acceptance: "52.1%",
     status: "unsolved",
-    premium: false
+    premium: false,
   },
   {
     id: 1,
     title: "Two Sum",
-    difficulty: "Easy", 
+    difficulty: "Easy",
     acceptance: "56.3%",
     status: "solved",
-    premium: false
+    premium: false,
   },
   {
     id: 2,
     title: "Add Two Numbers",
     difficulty: "Medium",
     acceptance: "46.9%",
-    status: "solved", 
-    premium: false
+    status: "solved",
+    premium: false,
   },
   {
     id: 3,
@@ -46,7 +46,7 @@ const problems = [
     difficulty: "Medium",
     acceptance: "37.5%",
     status: "unsolved",
-    premium: false
+    premium: false,
   },
   {
     id: 4,
@@ -54,7 +54,7 @@ const problems = [
     difficulty: "Hard",
     acceptance: "44.7%",
     status: "unsolved",
-    premium: false
+    premium: false,
   },
   {
     id: 5,
@@ -62,16 +62,16 @@ const problems = [
     difficulty: "Medium",
     acceptance: "36.4%",
     status: "unsolved",
-    premium: false
+    premium: false,
   },
   {
     id: 6,
     title: "Zigzag Conversion",
-    difficulty: "Medium", 
+    difficulty: "Medium",
     acceptance: "52.3%",
     status: "unsolved",
-    premium: false
-  }
+    premium: false,
+  },
 ];
 
 const topicCategories = [
@@ -80,7 +80,7 @@ const topicCategories = [
   { name: "Hash Table", count: 722, active: false },
   { name: "Dynamic Programming", count: 609, active: false },
   { name: "Math", count: 607, active: false },
-  { name: "Sorting", count: 467, active: false }
+  { name: "Sorting", count: 467, active: false },
 ];
 
 const topicFilters = [
@@ -89,7 +89,7 @@ const topicFilters = [
   { name: "Database", icon: FaDatabase, active: false },
   { name: "Shell", icon: FaTerminal, active: false },
   { name: "Concurrency", icon: FaSync, active: false },
-  { name: "JavaScript", icon: null, active: false }
+  { name: "JavaScript", icon: null, active: false },
 ];
 
 export default function DanceProblemsPage() {
@@ -122,38 +122,60 @@ export default function DanceProblemsPage() {
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col">
         {/* Top Cards Section */}
-        <div className="p-6 bg-background border-b border-border">
-          <div className="grid grid-cols-3 gap-4 max-w-4xl">
+        <div className="p-8 bg-white border-b border-gray-200">
+          <div className="grid grid-cols-3 gap-6 max-w-6xl">
             {/* LeetCode Premium Card */}
-            <div className="bg-gradient-to-br from-orange-100 to-orange-200 dark:from-orange-900/20 dark:to-orange-800/20 p-4 rounded-lg border">
+            <div className="bg-gradient-to-br from-orange-100 to-orange-200 p-6 rounded-xl border border-orange-200">
               <div className="flex items-start justify-between">
                 <div>
-                  <h3 className="font-semibold text-lg">School Time</h3>
-                  <p className="text-sm text-orange-700 dark:text-orange-300">Leet Time</p>
-                  <p className="text-xl font-bold mt-2">$119<span className="text-sm font-normal">/yr $179</span></p>
+                  <h3 className="font-semibold text-xl mb-1 text-gray-900">School Time</h3>
+                  <p className="text-lg text-orange-700 mb-3">
+                    Leet Time
+                  </p>
+                  <p className="text-2xl font-bold text-gray-900">
+                    $119<span className="text-lg font-normal">/yr $179</span>
+                  </p>
                 </div>
-                <div className="text-right text-xs text-muted-foreground">
+                <div className="text-right text-sm text-gray-600">
                   <p>FEB 23</p>
                 </div>
               </div>
             </div>
 
             {/* System Design Course */}
-            <div className="bg-gradient-to-br from-green-100 to-green-200 dark:from-green-900/20 dark:to-green-800/20 p-4 rounded-lg border">
-              <h3 className="font-semibold">LeetCode's Interview</h3>
-              <p className="text-sm text-green-700 dark:text-green-300">Crash Course:</p>
-              <p className="text-xs text-green-600 dark:text-green-400 mt-1">System Design for Interviews and Beyond</p>
-              <Button size="sm" className="mt-2 bg-green-600 hover:bg-green-700">
+            <div className="bg-gradient-to-br from-green-100 to-green-200 p-6 rounded-xl border border-green-200">
+              <h3 className="font-semibold text-lg mb-1 text-gray-900">
+                LeetCode's Interview
+              </h3>
+              <p className="text-lg font-semibold text-green-700 mb-1">
+                Crash Course:
+              </p>
+              <p className="text-base text-green-600 mb-4">
+                System Design for Interviews and Beyond
+              </p>
+              <Button
+                size="lg"
+                className="bg-green-600 hover:bg-green-700 text-white px-6 py-2"
+              >
                 Start Learning
               </Button>
             </div>
 
             {/* Data Structures Course */}
-            <div className="bg-gradient-to-br from-purple-100 to-purple-200 dark:from-purple-900/20 dark:to-purple-800/20 p-4 rounded-lg border">
-              <h3 className="font-semibold">LeetCode's Interview</h3>
-              <p className="text-sm text-purple-700 dark:text-purple-300">Crash Course:</p>
-              <p className="text-xs text-purple-600 dark:text-purple-400 mt-1">Data Structures and Algorithms</p>
-              <Button size="sm" className="mt-2 bg-purple-600 hover:bg-purple-700">
+            <div className="bg-gradient-to-br from-purple-100 to-purple-200 p-6 rounded-xl border border-purple-200">
+              <h3 className="font-semibold text-lg mb-1 text-gray-900">
+                LeetCode's Interview
+              </h3>
+              <p className="text-lg font-semibold text-purple-700 mb-1">
+                Crash Course:
+              </p>
+              <p className="text-base text-purple-600 mb-4">
+                Data Structures and Algorithms
+              </p>
+              <Button
+                size="lg"
+                className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2"
+              >
                 Start Learning
               </Button>
             </div>
@@ -161,35 +183,45 @@ export default function DanceProblemsPage() {
         </div>
 
         {/* Topics Bar */}
-        <div className="px-6 py-4 bg-background border-b border-border">
-          <div className="flex items-center gap-4 mb-4">
+        <div className="px-6 py-6 bg-white border-b border-gray-200">
+          <div className="flex items-center gap-6 mb-8">
             {topicCategories.map((topic) => (
-              <div key={topic.name} className="flex items-center gap-2 text-sm">
-                <span className="text-foreground">{topic.name}</span>
-                <span className="text-muted-foreground">{topic.count}</span>
+              <div
+                key={topic.name}
+                className="flex items-center gap-2 text-base"
+              >
+                <span className="text-gray-900 font-medium">
+                  {topic.name}
+                </span>
+                <span className="text-gray-600">{topic.count}</span>
               </div>
             ))}
             <div className="ml-auto">
-              <button className="text-sm text-primary hover:text-primary/80 flex items-center gap-1">
-                C Expand <FaFilter className="w-3 h-3" />
+              <button className="text-base text-tiktok-pink hover:text-tiktok-pink/80 flex items-center gap-2">
+                C Expand <FaFilter className="w-4 h-4" />
               </button>
             </div>
           </div>
 
           {/* Filter Buttons */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
             {topicFilters.map((filter) => (
               <Button
                 key={filter.name}
                 variant={filter.active ? "default" : "ghost"}
-                size="sm"
-                className="flex items-center gap-2"
+                size="lg"
+                className={`flex items-center gap-3 px-4 py-2 text-base ${
+                  filter.active 
+                    ? "bg-tiktok-pink text-white hover:bg-tiktok-pink/90" 
+                    : "text-gray-700 hover:bg-gray-100"
+                }`}
                 onClick={() => setActiveFilter(filter.name)}
               >
                 {filter.name === "JavaScript" ? (
-                  <SiJavascript className="w-3 h-3" />
+                  <SiJavascript className="w-4 h-4" />
                 ) : (
-                  filter.icon && React.createElement(filter.icon, { className: "w-3 h-3" })
+                  filter.icon &&
+                  React.createElement(filter.icon, { className: "w-4 h-4" })
                 )}
                 {filter.name}
               </Button>
@@ -198,21 +230,21 @@ export default function DanceProblemsPage() {
         </div>
 
         {/* Search and Controls */}
-        <div className="px-6 py-4 bg-background border-b border-border">
-          <div className="flex items-center gap-4">
+        <div className="px-6 py-6 bg-white border-b border-gray-200">
+          <div className="flex items-center gap-6">
             <div className="relative flex-1 max-w-md">
-              <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
+              <FaSearch className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 w-5 h-5" />
               <Input
                 placeholder="Search questions"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="pl-10"
+                className="pl-12 py-3 text-base border-gray-300 focus:border-tiktok-pink focus:ring-tiktok-pink"
               />
             </div>
-            <div className="flex items-center gap-2">
-              <FaSortAmountDown className="w-4 h-4 text-muted-foreground" />
-              <FaFilter className="w-4 h-4 text-muted-foreground" />
-              <div className="text-sm text-muted-foreground">
+            <div className="flex items-center gap-4">
+              <FaSortAmountDown className="w-5 h-5 text-gray-500" />
+              <FaFilter className="w-5 h-5 text-gray-500" />
+              <div className="text-base text-gray-600">
                 191/3682 Solved
               </div>
             </div>
@@ -220,46 +252,65 @@ export default function DanceProblemsPage() {
         </div>
 
         {/* Problems List */}
-        <div className="flex-1 overflow-auto">
-          <div className="divide-y divide-border">
+        <div className="flex-1 overflow-auto bg-white">
+          <div className="divide-y divide-gray-200">
             {problems.map((problem, index) => (
               <div
                 key={problem.id}
-                className="px-6 py-3 hover:bg-accent/50 cursor-pointer transition-colors"
+                className="px-6 py-4 hover:bg-gray-50 cursor-pointer transition-colors"
               >
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-6">
                   {/* Status */}
-                  <div className="w-6 text-center">
-                    <span className={`font-bold ${getStatusColor(problem.status)}`}>
+                  <div className="w-8 text-center">
+                    <span
+                      className={`text-xl font-bold ${getStatusColor(
+                        problem.status
+                      )}`}
+                    >
                       {getStatusIcon(problem.status)}
                     </span>
                   </div>
 
                   {/* Problem Number and Title */}
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2">
-                      <span className="text-sm text-muted-foreground">{problem.id}.</span>
-                      <span className="font-medium text-foreground truncate">{problem.title}</span>
+                    <div className="flex items-center gap-3">
+                      <span className="text-base text-gray-600 font-medium">
+                        {problem.id}.
+                      </span>
+                      <span className="font-medium text-gray-900 text-base truncate">
+                        {problem.title}
+                      </span>
                     </div>
                   </div>
 
                   {/* Acceptance Rate */}
-                  <div className="w-16 text-right">
-                    <span className="text-sm text-muted-foreground">{problem.acceptance}</span>
-                  </div>
-
-                  {/* Difficulty */}
-                  <div className="w-16 text-right">
-                    <span className={`text-sm font-medium ${getDifficultyColor(problem.difficulty)}`}>
-                      {problem.difficulty}
+                  <div className="w-20 text-right">
+                    <span className="text-base text-gray-600">
+                      {problem.acceptance}
                     </span>
                   </div>
 
-                  {/* Frequency bars placeholder */}
-                  <div className="w-12 flex justify-center">
-                    <div className="flex gap-px">
-                      {[1,2,3,4,5].map((bar) => (
-                        <div key={bar} className="w-1 h-3 bg-muted rounded-sm"></div>
+                  {/* Difficulty */}
+                  <div className="w-20 text-right">
+                    <span
+                      className={`text-base font-medium ${getDifficultyColor(
+                        problem.difficulty
+                      )}`}
+                    >
+                      {problem.difficulty === "Medium"
+                        ? "Med."
+                        : problem.difficulty}
+                    </span>
+                  </div>
+
+                  {/* Frequency bars */}
+                  <div className="w-16 flex justify-center">
+                    <div className="flex gap-1">
+                      {[1, 2, 3, 4, 5, 6].map((bar) => (
+                        <div
+                          key={bar}
+                          className="w-1 h-4 bg-gray-300 rounded-sm"
+                        ></div>
                       ))}
                     </div>
                   </div>
@@ -271,29 +322,39 @@ export default function DanceProblemsPage() {
       </div>
 
       {/* Right Sidebar - Calendar */}
-      <div className="w-80 h-full bg-background border-l border-border">
+      <div className="w-80 h-full bg-white border-l border-gray-200">
         <div className="p-4">
           <CalendarBox />
-          
+
           {/* Trending Companies */}
           <div className="mt-6">
-            <h3 className="font-medium mb-3 text-foreground">Trending Companies</h3>
+            <h3 className="font-medium mb-3 text-gray-900">
+              Trending Companies
+            </h3>
             <div className="grid grid-cols-2 gap-2">
-              <div className="flex items-center justify-between p-2 bg-accent rounded">
-                <span className="text-sm font-medium">Meta</span>
-                <span className="text-xs bg-primary text-primary-foreground px-2 py-1 rounded">1301</span>
+              <div className="flex items-center justify-between p-2 bg-gray-100 rounded">
+                <span className="text-sm font-medium text-gray-900">Meta</span>
+                <span className="text-xs bg-tiktok-pink text-white px-2 py-1 rounded">
+                  1301
+                </span>
               </div>
-              <div className="flex items-center justify-between p-2 bg-accent rounded">
-                <span className="text-sm font-medium">Google</span>
-                <span className="text-xs bg-primary text-primary-foreground px-2 py-1 rounded">2108</span>
+              <div className="flex items-center justify-between p-2 bg-gray-100 rounded">
+                <span className="text-sm font-medium text-gray-900">Google</span>
+                <span className="text-xs bg-tiktok-pink text-white px-2 py-1 rounded">
+                  2108
+                </span>
               </div>
-              <div className="flex items-center justify-between p-2 bg-accent rounded">
-                <span className="text-sm font-medium">Uber</span>
-                <span className="text-xs bg-primary text-primary-foreground px-2 py-1 rounded">474</span>
+              <div className="flex items-center justify-between p-2 bg-gray-100 rounded">
+                <span className="text-sm font-medium text-gray-900">Uber</span>
+                <span className="text-xs bg-tiktok-pink text-white px-2 py-1 rounded">
+                  474
+                </span>
               </div>
-              <div className="flex items-center justify-between p-2 bg-accent rounded">
-                <span className="text-sm font-medium">Amazon</span>
-                <span className="text-xs bg-primary text-primary-foreground px-2 py-1 rounded">1890</span>
+              <div className="flex items-center justify-between p-2 bg-gray-100 rounded">
+                <span className="text-sm font-medium text-gray-900">Amazon</span>
+                <span className="text-xs bg-tiktok-pink text-white px-2 py-1 rounded">
+                  1890
+                </span>
               </div>
             </div>
           </div>

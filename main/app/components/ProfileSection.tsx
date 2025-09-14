@@ -5,37 +5,26 @@ import { Button } from "../../shadcn-components/ui/button";
 
 export default function ProfileSection() {
   const { user, isLoading } = useUser();
-  if (isLoading) return <p className="text-white">Loading...</p>;
+  if (isLoading) return <p className="text-tiktok-blue">Loading...</p>;
   if (user) {
     return (
-      <div
-        className="flex flex-row items-center gap-3"
-        style={{ textAlign: "center" }}
-      >
+      <div className="flex flex-row items-center gap-3">
         <div className="group relative">
           <Link href="/profile">
             <img
               src={user.picture}
               alt="Profile"
-              style={{
-                borderRadius: "50%",
-                width: "48px",
-                height: "48px",
-                cursor: "pointer",
-              }}
+              className="rounded-full w-12 h-12 cursor-pointer border-2 border-gray-200 hover:border-tiktok-pink transition-colors"
             />
           </Link>
-          <div
-            className="absolute top-12 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded opacity-0 pointer-events-none transition-opacity duration-200 group-hover:opacity-100"
-            style={{ minWidth: "120px" }}
-          >
+          <div className="absolute top-14 left-1/2 -translate-x-1/2 bg-tiktok-black text-tiktok-white text-xs px-3 py-2 rounded-lg opacity-0 pointer-events-none transition-opacity duration-200 group-hover:opacity-100 min-w-[120px] text-center z-50">
             {user.email}
           </div>
         </div>
         <Link href="/auth/logout">
           <Button
             variant="outline"
-            className="bg-white text-gray-800 border-white hover:bg-gray-100 hover:text-gray-900"
+            className="bg-tiktok-white text-tiktok-black border-tiktok-black/20 hover:bg-tiktok-red hover:text-tiktok-white hover:border-tiktok-red transition-colors font-medium px-4 py-2"
           >
             Log out
           </Button>
@@ -45,10 +34,7 @@ export default function ProfileSection() {
   }
   return (
     <Link href="/auth/login">
-      <Button
-        variant="outline"
-        className="bg-white text-gray-800 border-white hover:bg-gray-100 hover:text-gray-900"
-      >
+      <Button className="bg-tiktok-red hover:bg-tiktok-pink text-tiktok-white font-bold px-8 py-3 text-lg rounded-full transition-colors">
         Sign in
       </Button>
     </Link>

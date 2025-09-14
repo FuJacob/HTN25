@@ -530,11 +530,6 @@ export default function DanceProblemsPage() {
                       className="flex items-center justify-center p-3 bg-gray-100 rounded-full cursor-pointer hover:bg-gray-200 transition-colors"
                       onClick={() => {
                         setSearch(artist);
-                        // Set genre based on the dance
-                        const dance = problems.find((p) => p.title === artist);
-                        if (dance) {
-                          setActiveGenre(dance.genre);
-                        }
                       }}
                     >
                       <span className="text-base font-medium text-gray-900 text-center">

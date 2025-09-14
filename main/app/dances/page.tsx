@@ -373,7 +373,7 @@ export default function DanceProblemsPage() {
                   key={filter.name}
                   variant={activeFilter === filter.name ? "default" : "ghost"}
                   size="lg"
-                  className={`flex items-center gap-2 px-5 py-3 text-lg ${
+                  className={`flex items-center gap-2 px-5 py-3 text-lg cursor-pointer ${
                     activeFilter === filter.name
                       ? "bg-tiktok-red text-white hover:bg-tiktok-red/90"
                       : "text-gray-700 hover:bg-gray-100"

@@ -13,17 +13,17 @@ export function CalendarBox() {
         <Button
           variant={"outline"}
           className={cn(
-            "w-[240px] justify-start text-left font-normal",
+            "w-full justify-start text-left font-normal py-6 text-lg",
             !date && "text-muted-foreground"
           )}
         >
-          <CalendarIcon className="mr-2 h-4 w-4" />
+          <CalendarIcon className="mr-3 h-6 w-6" />
           {date ? date.toDateString() : <span>Pick a date</span>}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0">
         {/* Replace with your calendar picker component */}
-        <div className="p-4">Calendar UI goes here</div>
+        <div className="p-6 text-lg">Calendar UI goes here</div>
       </PopoverContent>
     </Popover>
   )

@@ -14,7 +14,7 @@ export default function HomePage() {
     >
       {/* Header */}
       <Header />
-      
+
       {/* Main Content */}
       <main className="min-h-[calc(100vh-80px)] px-8 flex items-center justify-center">
         <div className="max-w-7xl mx-auto w-full flex items-center">
@@ -24,11 +24,19 @@ export default function HomePage() {
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-black leading-tight mb-8 text-tiktok-black">
               <div className="flex flex-col space-y-4">
                 <div className="flex items-center space-x-3">
-                  <img src="/leetcode.png" alt="LeetCode" className="h-12 md:h-16 lg:h-20" />
+                  <img
+                    src="/leetcode.png"
+                    alt="LeetCode"
+                    className="h-12 md:h-16 lg:h-20"
+                  />
                   <span>but for</span>
                 </div>
                 <div className="flex items-center space-x-3">
-                  <img src="/tiktok.png" alt="TikTok" className="h-12 md:h-16 lg:h-20" />
+                  <img
+                    src="/tiktok.png"
+                    alt="TikTok"
+                    className="h-12 md:h-16 lg:h-20"
+                  />
                   <span>Dances</span>
                 </div>
               </div>

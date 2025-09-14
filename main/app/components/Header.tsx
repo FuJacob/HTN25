@@ -15,7 +15,9 @@ export default function Header() {
             className="text-xl font-black text-tiktok-black hover:text-tiktok-red transition-colors flex items-center"
           >
             <img src="/logo.png" alt="Logo" className="h-8 w-auto" />
-            <span className="ml-2 text-xl font-black text-tiktok-black">2Sum Dance</span>
+            <span className="ml-2 text-xl font-black text-tiktok-black">
+              2Sum Dance
+            </span>
           </Link>
         </div>
 

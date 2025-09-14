@@ -12,9 +12,10 @@ export default function Header() {
         <div className="mr-12">
           <Link
             href="/"
-            className="text-xl font-black text-tiktok-black hover:text-tiktok-red transition-colors"
+            className="text-xl font-black text-tiktok-black hover:text-tiktok-red transition-colors flex items-center"
           >
-            2 Sum Dance
+            <img src="/logo.png" alt="Logo" className="h-8 w-auto" />
+            <span className="ml-2 text-xl font-black text-tiktok-black">2Sum Dance</span>
           </Link>
         </div>
 

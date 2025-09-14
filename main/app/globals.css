@@ -83,8 +83,8 @@
   --sidebar-ring: var(--tiktok-red);
 
   /* TikTok Brand Colors - ONLY BLACK, RED, WHITE */
-  --tiktok-white: #ffffff; /* Pure white */
-  --tiktok-black: #000000; /* Pure black */
+  --tiktok-white: #ededed; /* Pure white */
+  --tiktok-black: #141414; /* Pure black */
   --tiktok-red: #fe2858; /* TikTok red */
 }
 

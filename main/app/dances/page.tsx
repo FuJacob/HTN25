@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from "react";
+import Link from "next/link";
 import {
   FaSearch,
   FaSortAmountDown,
@@ -29,148 +30,166 @@ const topicCategories = [
 
 const problems = [
   {
-    id: 1,
+    id: "renegade",
     title: "Renegade (Lottery by K Camp)",
     difficulty: "Hard",
     acceptance: "34.2%",
     status: "unsolved",
     premium: false,
+    video: "Renegade.mp4",
   },
   {
-    id: 2,
+    id: "savage",
     title: "Savage (Megan Thee Stallion)",
     difficulty: "Medium",
     acceptance: "68.5%",
     status: "solved",
     premium: false,
+    video: "Maps.mp4", // Using Maps as placeholder
   },
   {
-    id: 3,
+    id: "wap",
     title: "WAP Dance (Cardi B & Megan Thee Stallion)",
     difficulty: "Hard",
     acceptance: "29.8%",
     status: "solved",
     premium: true,
+    video: "Maps.mp4", // Using Maps as placeholder
   },
   {
-    id: 4,
+    id: "sayso",
     title: "Say So (Doja Cat)",
     difficulty: "Medium",
     acceptance: "72.3%",
     status: "solved",
     premium: false,
+    video: "Maps.mp4", // Using Maps as placeholder
   },
   {
-    id: 5,
+    id: "supalonely",
     title: "Supalonely (Benee ft. Gus Dapperton)",
     difficulty: "Easy",
     acceptance: "81.6%",
     status: "solved",
     premium: false,
+    video: "Supalonely.mp4",
   },
   {
-    id: 6,
+    id: "outwest",
     title: "Out West (Travis Scott & Young Thug)",
     difficulty: "Medium",
     acceptance: "55.7%",
     status: "unsolved",
     premium: false,
+    video: "Out-West.mp4",
   },
   {
-    id: 7,
+    id: "stay",
     title: "Stay (The Kid LAROI & Justin Bieber)",
     difficulty: "Easy",
     acceptance: "79.4%",
     status: "unsolved",
     premium: false,
+    video: "Maps.mp4", // Using Maps as placeholder
   },
   {
-    id: 8,
+    id: "laxed",
     title: "Laxed (Siren Beat) (Jawsh 685)",
     difficulty: "Medium",
     acceptance: "62.1%",
     status: "unsolved",
     premium: false,
+    video: "Laxed.mp4",
   },
   {
-    id: 9,
+    id: "adderall",
     title: "Adderall (Corvette Corvette) (Popp Hunna)",
     difficulty: "Hard",
     acceptance: "41.3%",
     status: "unsolved",
     premium: false,
+    video: "Adderall.mp4",
   },
   {
-    id: 10,
+    id: "cannibal",
     title: "Cannibal (Kesha)",
     difficulty: "Medium",
     acceptance: "58.9%",
     status: "unsolved",
     premium: false,
+    video: "Cannibal.mp4",
   },
   {
-    id: 11,
+    id: "blindinglights",
     title: "Blinding Lights (The Weeknd)",
     difficulty: "Easy",
     acceptance: "76.2%",
     status: "unsolved",
     premium: false,
+    video: "Blinding-Lights.mp4",
   },
   {
-    id: 12,
+    id: "dontstartnow",
     title: "Don't Start Now (Dua Lipa)",
     difficulty: "Medium",
     acceptance: "64.8%",
     status: "unsolved",
     premium: false,
+    video: "Don't-Start-Now.mp4",
   },
   {
-    id: 13,
+    id: "ikoiko",
     title: "Iko Iko (My Bestie) (Justin Wellington)",
     difficulty: "Easy",
     acceptance: "83.1%",
     status: "unsolved",
     premium: false,
+    video: "Maps.mp4", // Using Maps as placeholder
   },
   {
-    id: 14,
+    id: "fancylike",
     title: "Fancy Like (Walker Hayes)",
     difficulty: "Easy",
     acceptance: "78.5%",
     status: "unsolved",
     premium: false,
+    video: "Maps.mp4", // Using Maps as placeholder
   },
   {
-    id: 15,
+    id: "rideit",
     title: "Ride It (Jay Sean)",
     difficulty: "Medium",
     acceptance: "59.7%",
     status: "unsolved",
     premium: false,
+    video: "Maps.mp4", // Using Maps as placeholder
   },
   {
-    id: 16,
+    id: "sexyback",
     title: "SexyBack (Justin Timberlake)",
     difficulty: "Hard",
     acceptance: "38.4%",
     status: "unsolved",
     premium: true,
+    video: "Maps.mp4", // Using Maps as placeholder
   },
   {
-    id: 17,
+    id: "sevenrings",
     title: "Seven Rings (Ariana Grande)",
     difficulty: "Medium",
     acceptance: "61.2%",
     status: "unsolved",
     premium: false,
+    video: "Maps.mp4", // Using Maps as placeholder
   },
   {
-    id: 18,
+    id: "vibe",
     title: "Vibe (If I Back It Up) (Cookie Kawaii)",
     difficulty: "Easy",
     acceptance: "74.8%",
     status: "unsolved",
     premium: false,
+    video: "Vibe.mp4",
   },
 ];
 
@@ -339,67 +358,66 @@ export default function DanceProblemsPage() {
         <div className="flex-1 overflow-auto bg-white">
           <div className="divide-y divide-gray-200">
             {problems.map((problem, index) => (
-              <div
-                key={problem.id}
-                className="px-8 py-6 hover:bg-gray-50 cursor-pointer transition-colors"
-              >
-                <div className="flex items-center gap-8">
-                  {/* Status */}
-                  <div className="w-10 text-center">
-                    <span
-                      className={`text-2xl font-bold ${getStatusColor(
-                        problem.status
-                      )}`}
-                    >
-                      {getStatusIcon(problem.status)}
-                    </span>
-                  </div>
-
-                  {/* Problem Number and Title */}
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-3">
-                      <span className="text-lg text-gray-600 font-medium">
-                        {problem.id}.
-                      </span>
-                      <span className="font-medium text-gray-900 text-lg truncate">
-                        {problem.title}
+              <Link key={problem.id} href={`/dance/${problem.id}`}>
+                <div className="px-8 py-6 hover:bg-gray-50 cursor-pointer transition-colors">
+                  <div className="flex items-center gap-8">
+                    {/* Status */}
+                    <div className="w-10 text-center">
+                      <span
+                        className={`text-2xl font-bold ${getStatusColor(
+                          problem.status
+                        )}`}
+                      >
+                        {getStatusIcon(problem.status)}
                       </span>
                     </div>
-                  </div>
 
-                  {/* Acceptance Rate */}
-                  <div className="w-28 text-right">
-                    <span className="text-lg text-gray-600">
-                      {problem.acceptance}
-                    </span>
-                  </div>
+                    {/* Problem Number and Title */}
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-3">
+                        <span className="text-lg text-gray-600 font-medium">
+                          {index + 1}.
+                        </span>
+                        <span className="font-medium text-gray-900 text-lg truncate">
+                          {problem.title}
+                        </span>
+                      </div>
+                    </div>
 
-                  {/* Difficulty */}
-                  <div className="w-28 text-right">
-                    <span
-                      className={`text-lg font-medium ${getDifficultyColor(
-                        problem.difficulty
-                      )}`}
-                    >
-                      {problem.difficulty === "Medium"
-                        ? "Med."
-                        : problem.difficulty}
-                    </span>
-                  </div>
+                    {/* Acceptance Rate */}
+                    <div className="w-28 text-right">
+                      <span className="text-lg text-gray-600">
+                        {problem.acceptance}
+                      </span>
+                    </div>
 
-                  {/* Frequency bars */}
-                  <div className="w-20 flex justify-center">
-                    <div className="flex gap-1">
-                      {[1, 2, 3, 4, 5, 6].map((bar) => (
-                        <div
-                          key={bar}
-                          className="w-1.5 h-7 bg-gray-300 rounded-sm"
-                        ></div>
-                      ))}
+                    {/* Difficulty */}
+                    <div className="w-28 text-right">
+                      <span
+                        className={`text-lg font-medium ${getDifficultyColor(
+                          problem.difficulty
+                        )}`}
+                      >
+                        {problem.difficulty === "Medium"
+                          ? "Med."
+                          : problem.difficulty}
+                      </span>
+                    </div>
+
+                    {/* Frequency bars */}
+                    <div className="w-20 flex justify-center">
+                      <div className="flex gap-1">
+                        {[1, 2, 3, 4, 5, 6].map((bar) => (
+                          <div
+                            key={bar}
+                            className="w-1.5 h-7 bg-gray-300 rounded-sm"
+                          ></div>
+                        ))}
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </div>

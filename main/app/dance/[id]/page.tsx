@@ -28,12 +28,41 @@ export default function ProblemPage() {
   const [isCountingDown, setIsCountingDown] = useState(false);
   const referenceVideoRef = useRef<HTMLVideoElement>(null);
 
-  // Problem data (would come from API in real app)
+  // Dance mapping - matches the dances from dances/page.tsx
+  const danceMapping: { [key: string]: { title: string; difficulty: string; video: string; tags: string[] } } = {
+    "renegade": { title: "Renegade (Lottery by K Camp)", difficulty: "Hard", video: "Renegade.mp4", tags: ["Hip Hop", "Viral", "Dance"] },
+    "savage": { title: "Savage (Megan Thee Stallion)", difficulty: "Medium", video: "Maps.mp4", tags: ["Hip Hop", "Viral", "Dance"] },
+    "wap": { title: "WAP Dance (Cardi B & Megan Thee Stallion)", difficulty: "Hard", video: "Maps.mp4", tags: ["Hip Hop", "Viral", "Dance"] },
+    "sayso": { title: "Say So (Doja Cat)", difficulty: "Medium", video: "Maps.mp4", tags: ["Pop", "Viral", "Dance"] },
+    "supalonely": { title: "Supalonely (Benee ft. Gus Dapperton)", difficulty: "Easy", video: "Supalonely.mp4", tags: ["Pop", "Indie", "Dance"] },
+    "outwest": { title: "Out West (Travis Scott & Young Thug)", difficulty: "Medium", video: "Out-West.mp4", tags: ["Hip Hop", "Trap", "Dance"] },
+    "stay": { title: "Stay (The Kid LAROI & Justin Bieber)", difficulty: "Easy", video: "Maps.mp4", tags: ["Pop", "Viral", "Dance"] },
+    "laxed": { title: "Laxed (Siren Beat) (Jawsh 685)", difficulty: "Medium", video: "Laxed.mp4", tags: ["Hip Hop", "Viral", "Dance"] },
+    "adderall": { title: "Adderall (Corvette Corvette) (Popp Hunna)", difficulty: "Hard", video: "Adderall.mp4", tags: ["Hip Hop", "Viral", "Dance"] },
+    "cannibal": { title: "Cannibal (Kesha)", difficulty: "Medium", video: "Cannibal.mp4", tags: ["Pop", "Electronic", "Dance"] },
+    "blindinglights": { title: "Blinding Lights (The Weeknd)", difficulty: "Easy", video: "Blinding-Lights.mp4", tags: ["Pop", "Synthwave", "Dance"] },
+    "dontstartnow": { title: "Don't Start Now (Dua Lipa)", difficulty: "Medium", video: "Don't-Start-Now.mp4", tags: ["Pop", "Disco", "Dance"] },
+    "ikoiko": { title: "Iko Iko (My Bestie) (Justin Wellington)", difficulty: "Easy", video: "Maps.mp4", tags: ["Pop", "Viral", "Dance"] },
+    "fancylike": { title: "Fancy Like (Walker Hayes)", difficulty: "Easy", video: "Maps.mp4", tags: ["Country", "Viral", "Dance"] },
+    "rideit": { title: "Ride It (Jay Sean)", difficulty: "Medium", video: "Maps.mp4", tags: ["R&B", "Pop", "Dance"] },
+    "sexyback": { title: "SexyBack (Justin Timberlake)", difficulty: "Hard", video: "Maps.mp4", tags: ["Pop", "Funk", "Dance"] },
+    "sevenrings": { title: "Seven Rings (Ariana Grande)", difficulty: "Medium", video: "Maps.mp4", tags: ["Pop", "Hip Hop", "Dance"] },
+    "vibe": { title: "Vibe (If I Back It Up) (Cookie Kawaii)", difficulty: "Easy", video: "Vibe.mp4", tags: ["Hip Hop", "Viral", "Dance"] },
+  };
+
+  // Get dance data based on ID
+  const danceData = danceMapping[problemId as string] || {
+    title: "Unknown Dance",
+    difficulty: "Easy",
+    video: "Adderall.mp4",
+    tags: ["Dance"]
+  };
+
   const problemData = {
     id: problemId,
-    title: "Two Sum Dance",
-    difficulty: "Easy" as const,
-    tags: ["Array", "Hash Table", "Dance"],
+    title: danceData.title,
+    difficulty: danceData.difficulty as "Easy" | "Medium" | "Hard",
+    tags: danceData.tags,
   };
 
   // Analysis data from API
@@ -128,14 +157,13 @@ export default function ProblemPage() {
         type: "video/webm",
       });
 
-      // Get the reference video (adderall.mp4) from public/videos
-      const referenceVideoUrl = "/videos/Adderall.mp4";
-      // If you need a File object for upload, fetch and convert as before:
+      // Get the reference video based on dance ID
+      const referenceVideoUrl = `/videos/${danceData.video}`;
       const referenceVideoResponse = await fetch(referenceVideoUrl);
       const referenceVideoBlob = await referenceVideoResponse.blob();
       const referenceVideoFile = new File(
         [referenceVideoBlob],
-        "adderall.mp4",
+        danceData.video,
         {
           type: "video/mp4",
         }
@@ -233,7 +261,7 @@ export default function ProblemPage() {
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
                 <Link
-                  href="/dance"
+                  href="/dances"
                   className="text-orange-400 hover:text-orange-300 transition-colors text-xl"
                 >
                   ←
@@ -253,24 +281,16 @@ export default function ProblemPage() {
             </div>
           </div>
 
-          {/* Reference Video Placeholder - Vertical TikTok Style */}
+          {/* Reference Video - Vertical TikTok Style */}
           <div className="p-6 flex justify-center items-center flex-1 min-h-0 overflow-hidden">
             <div className="relative">
-              <div
-                className="bg-gradient-to-br from-purple-900 via-purple-800 to-blue-900 rounded-2xl flex items-center justify-center shadow-2xl border border-gray-600/30 w-64"
+              <video
+                src={`/videos/${danceData.video}`}
+                controls
+                className="rounded-2xl shadow-2xl border border-gray-600/30 w-64"
                 style={{ height: "400px" }}
-              >
-                <div className="text-center text-white space-y-3">
-                  <div className="text-5xl mb-4">🎵</div>
-                  <p className="text-xl font-bold mb-1">TikTok</p>
-                  <p className="text-xl font-bold mb-3">Dance</p>
-                  <div className="space-y-1 opacity-75">
-                    <p className="text-sm">Vertical video</p>
-                    <p className="text-sm">will appear here</p>
-                  </div>
-                </div>
-              </div>
-              <div className="absolute inset-0 rounded-2xl bg-white/5 pointer-events-none"></div>
+                ref={referenceVideoRef}
+              />
             </div>
           </div>
 

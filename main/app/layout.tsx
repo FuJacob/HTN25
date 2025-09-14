@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import { Montserrat } from "next/font/google";
-const montserrat = Montserrat({ subsets: ["latin"] });
+import { Balsamiq_Sans } from "next/font/google";
+const montserrat = Balsamiq_Sans({ subsets: ["latin"], weight: "400" });
 import "./globals.css";
 import { Auth0Provider } from "@auth0/nextjs-auth0";
 import Header from "./components/Header";
@@ -20,7 +20,9 @@ export default function RootLayout({
       <body className={`${montserrat.className} antialiased`}>
         <Auth0Provider>
           <Header />
-          <main className="h-[calc(100vh-4rem)]">{children}</main>
+          <main className="h-[calc(100vh-4rem)] overflow-hidden">
+            {children}
+          </main>
         </Auth0Provider>
       </body>
     </html>

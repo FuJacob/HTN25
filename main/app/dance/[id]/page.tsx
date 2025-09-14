@@ -830,6 +830,5 @@ export default function ProblemPage() {
           </div>
         </div>
       </div>
-    </div>
   );
 }

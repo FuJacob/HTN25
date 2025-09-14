@@ -29,188 +29,27 @@ const topicCategories = [
 ];
 
 const problems = [
-  {
-    id: 1,
-    title: "Adderall",
-    difficulty: "Hard",
-    acceptance: "41.3%",
-    status: "unsolved",
-    premium: false,
-    video: "Renegade.mp4",
-  },
-  {
-    id: 2,
-    title: "Apple",
-    difficulty: "Easy",
-    acceptance: "81.6%",
-    status: "unsolved",
-    premium: false,
-    video: "Maps.mp4", // Using Maps as placeholder
-  },
-  {
-    id: 3,
-    title: "Blinding Lights",
-    difficulty: "Easy",
-    acceptance: "76.2%",
-    status: "unsolved",
-    premium: false,
-  },
-  {
-    id: 4,
-    title: "Cannibal",
-    difficulty: "Medium",
-    acceptance: "58.9%",
-    status: "unsolved",
-    premium: false,
-    video: "Maps.mp4", // Using Maps as placeholder
-  },
-  {
-    id: 5,
-    title: "Chicken Banana Dance",
-    difficulty: "Medium",
-    acceptance: "62.1%",
-    status: "unsolved",
-    premium: false,
-    video: "Supalonely.mp4",
-  },
-  {
-    id: 6,
-    title: "Don't Start Now",
-    difficulty: "Medium",
-    acceptance: "64.8%",
-    status: "unsolved",
-    premium: false,
-    video: "Out-West.mp4",
-  },
-  {
-    id: 7,
-    title: "Emergency Budots",
-    difficulty: "Medium",
-    acceptance: "59.7%",
-    status: "unsolved",
-    premium: false,
-    video: "Maps.mp4", // Using Maps as placeholder
-  },
-  {
-    id: 8,
-    title: "Git Up Challenge",
-    difficulty: "Medium",
-    acceptance: "55.7%",
-    status: "unsolved",
-    premium: false,
-    video: "Laxed.mp4",
-  },
-  {
-    id: 9,
-    title: "Give it to Me",
-    difficulty: "Medium",
-    acceptance: "61.2%",
-    status: "unsolved",
-    premium: false,
-    video: "Adderall.mp4",
-  },
-  {
-    id: 10,
-    title: "I'm Moving Too Fast",
-    difficulty: "Hard",
-    acceptance: "38.4%",
-    status: "unsolved",
-    premium: true,
-  },
-  {
-    id: 11,
-    title: "Illit Jellyous",
-    difficulty: "Medium",
-    acceptance: "68.5%",
-    status: "unsolved",
-    premium: false,
-    video: "Blinding-Lights.mp4",
-  },
-  {
-    id: 12,
-    title: "Last Christmas",
-    difficulty: "Easy",
-    acceptance: "78.5%",
-    status: "unsolved",
-    premium: false,
-    video: "Don't-Start-Now.mp4",
-  },
-  {
-    id: 13,
-    title: "Laxed",
-    difficulty: "Medium",
-    acceptance: "62.1%",
-    status: "unsolved",
-    premium: false,
-    video: "Maps.mp4", // Using Maps as placeholder
-  },
-  {
-    id: 14,
-    title: "Man Child",
-    difficulty: "Hard",
-    acceptance: "34.2%",
-    status: "unsolved",
-    premium: false,
-    video: "Maps.mp4", // Using Maps as placeholder
-  },
-  {
-    id: 15,
-    title: "Maps",
-    difficulty: "Medium",
-    acceptance: "59.7%",
-    status: "unsolved",
-    premium: false,
-    video: "Maps.mp4", // Using Maps as placeholder
-  },
-  {
-    id: 16,
-    title: "Number One Baby",
-    difficulty: "Easy",
-    acceptance: "83.1%",
-    status: "unsolved",
-    premium: false,
-  },
-  {
-    id: 17,
-    title: "Out West",
-    difficulty: "Medium",
-    acceptance: "55.7%",
-    status: "unsolved",
-    premium: false,
-    video: "Maps.mp4", // Using Maps as placeholder
-  },
-  {
-    id: 18,
-    title: "Renegade",
-    difficulty: "Hard",
-    acceptance: "34.2%",
-    status: "unsolved",
-    premium: false,
-  },
-  {
-    id: 19,
-    title: "Supalonely",
-    difficulty: "Easy",
-    acceptance: "81.6%",
-    status: "unsolved",
-    premium: false,
-  },
-  {
-    id: 20,
-    title: "Vibe",
-    difficulty: "Easy",
-    acceptance: "74.8%",
-    status: "unsolved",
-    premium: false,
-  },
-  {
-    id: 21,
-    title: "Wednesday",
-    difficulty: "Medium",
-    acceptance: "61.2%",
-    status: "unsolved",
-    premium: false,
-  },
+  { id: "1", number: 1, title: "Adderall", difficulty: "Easy", acceptance: "75%", status: "unsolved", premium: false, video: "Adderall.mp4" },
+  { id: "2", number: 2, title: "Apple", difficulty: "Easy", acceptance: "75%", status: "unsolved", premium: false, video: "Apple.mp4" },
+  { id: "3", number: 3, title: "Blinding Lights", difficulty: "Easy", acceptance: "75%", status: "unsolved", premium: false, video: "Blinding-Lights.mp4" },
+  { id: "4", number: 4, title: "Cannibal", difficulty: "Easy", acceptance: "75%", status: "unsolved", premium: false, video: "Cannibal.mp4" },
+  { id: "5", number: 5, title: "Chicken Banana Dance", difficulty: "Easy", acceptance: "75%", status: "unsolved", premium: false, video: "Chicken-Banana-Dance.mp4" },
+  { id: "6", number: 6, title: "Don't Start Now", difficulty: "Easy", acceptance: "75%", status: "unsolved", premium: false, video: "Don't-Start-Now.mp4" },
+  { id: "7", number: 7, title: "Emergency Budots", difficulty: "Easy", acceptance: "75%", status: "unsolved", premium: false, video: "Emergency-Budots.mp4" },
+  { id: "8", number: 8, title: "Git Up Challenge", difficulty: "Easy", acceptance: "75%", status: "unsolved", premium: false, video: "Git-Up-Challenge.mp4" },
+  { id: "9", number: 9, title: "Give It To Me", difficulty: "Easy", acceptance: "75%", status: "unsolved", premium: false, video: "Give-it-to-Me.mp4" },
+  { id: "10", number: 10, title: "I'm Moving Too Fast", difficulty: "Easy", acceptance: "75%", status: "unsolved", premium: false, video: "I'm-Moving-Too-Fast.mp4" },
+  { id: "11", number: 11, title: "Illit Jellyous", difficulty: "Easy", acceptance: "75%", status: "unsolved", premium: false, video: "Illit-Jellyous.mp4" },
+  { id: "12", number: 12, title: "Last Christmas", difficulty: "Easy", acceptance: "75%", status: "unsolved", premium: false, video: "Last-Christmas.mp4" },
+  { id: "13", number: 13, title: "Laxed", difficulty: "Easy", acceptance: "75%", status: "unsolved", premium: false, video: "Laxed.mp4" },
+  { id: "14", number: 14, title: "Man Child", difficulty: "Easy", acceptance: "75%", status: "unsolved", premium: false, video: "Man-Child.mp4" },
+  { id: "15", number: 15, title: "Maps", difficulty: "Easy", acceptance: "75%", status: "unsolved", premium: false, video: "Maps.mp4" },
+  { id: "16", number: 16, title: "Number One Baby", difficulty: "Easy", acceptance: "75%", status: "unsolved", premium: false, video: "Number-One-Baby.mp4" },
+  { id: "17", number: 17, title: "Out West", difficulty: "Easy", acceptance: "75%", status: "unsolved", premium: false, video: "Out-West.mp4" },
+  { id: "18", number: 18, title: "Renegade", difficulty: "Easy", acceptance: "75%", status: "unsolved", premium: false, video: "Renegade.mp4" },
+  { id: "19", number: 19, title: "Supalonely", difficulty: "Easy", acceptance: "75%", status: "unsolved", premium: false, video: "Supalonely.mp4" },
+  { id: "20", number: 20, title: "Vibe", difficulty: "Easy", acceptance: "75%", status: "unsolved", premium: false, video: "Vibe.mp4" },
+  { id: "21", number: 21, title: "Wednesday", difficulty: "Easy", acceptance: "75%", status: "unsolved", premium: false, video: "Wednesday.mp4" },
 ];
 
 const topicFilters = [
@@ -377,11 +216,9 @@ export default function DanceProblemsPage() {
           {/* Problems List */}
           <div className="flex-1 overflow-auto bg-white">
             <div className="divide-y divide-gray-200">
-              {problems.map((problem, index) => (
-                <div
-                  key={problem.id}
-                  className="px-8 py-6 hover:bg-gray-50 cursor-pointer transition-colors"
-                >
+            {problems.map((problem, index) => (
+              <Link key={problem.id} href={`/dance/${problem.id}`}>
+                <div className="px-8 py-6 hover:bg-gray-50 cursor-pointer transition-colors">
                   <div className="flex items-center gap-8">
                     {/* Status */}
                     <div className="w-10 text-center">
@@ -398,7 +235,7 @@ export default function DanceProblemsPage() {
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-3">
                         <span className="text-lg text-gray-600 font-medium">
-                          {problem.id}.
+                          {problem.number}.
                         </span>
                         <span className="font-medium text-gray-900 text-lg truncate">
                           {problem.title}
@@ -439,7 +276,8 @@ export default function DanceProblemsPage() {
                     </div>
                   </div>
                 </div>
-              ))}
+              </Link>
+            ))}
             </div>
           </div>
         </div>

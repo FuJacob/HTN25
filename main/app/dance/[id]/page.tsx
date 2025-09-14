@@ -28,41 +28,36 @@ export default function ProblemPage() {
   const [isCountingDown, setIsCountingDown] = useState(false);
   const referenceVideoRef = useRef<HTMLVideoElement>(null);
 
-  // Dance mapping - matches the dances from dances/page.tsx
-  const danceMapping: { [key: string]: { title: string; difficulty: string; video: string; tags: string[] } } = {
-    "renegade": { title: "Renegade (Lottery by K Camp)", difficulty: "Hard", video: "Renegade.mp4", tags: ["Hip Hop", "Viral", "Dance"] },
-    "savage": { title: "Savage (Megan Thee Stallion)", difficulty: "Medium", video: "Maps.mp4", tags: ["Hip Hop", "Viral", "Dance"] },
-    "wap": { title: "WAP Dance (Cardi B & Megan Thee Stallion)", difficulty: "Hard", video: "Maps.mp4", tags: ["Hip Hop", "Viral", "Dance"] },
-    "sayso": { title: "Say So (Doja Cat)", difficulty: "Medium", video: "Maps.mp4", tags: ["Pop", "Viral", "Dance"] },
-    "supalonely": { title: "Supalonely (Benee ft. Gus Dapperton)", difficulty: "Easy", video: "Supalonely.mp4", tags: ["Pop", "Indie", "Dance"] },
-    "outwest": { title: "Out West (Travis Scott & Young Thug)", difficulty: "Medium", video: "Out-West.mp4", tags: ["Hip Hop", "Trap", "Dance"] },
-    "stay": { title: "Stay (The Kid LAROI & Justin Bieber)", difficulty: "Easy", video: "Maps.mp4", tags: ["Pop", "Viral", "Dance"] },
-    "laxed": { title: "Laxed (Siren Beat) (Jawsh 685)", difficulty: "Medium", video: "Laxed.mp4", tags: ["Hip Hop", "Viral", "Dance"] },
-    "adderall": { title: "Adderall (Corvette Corvette) (Popp Hunna)", difficulty: "Hard", video: "Adderall.mp4", tags: ["Hip Hop", "Viral", "Dance"] },
-    "cannibal": { title: "Cannibal (Kesha)", difficulty: "Medium", video: "Cannibal.mp4", tags: ["Pop", "Electronic", "Dance"] },
-    "blindinglights": { title: "Blinding Lights (The Weeknd)", difficulty: "Easy", video: "Blinding-Lights.mp4", tags: ["Pop", "Synthwave", "Dance"] },
-    "dontstartnow": { title: "Don't Start Now (Dua Lipa)", difficulty: "Medium", video: "Don't-Start-Now.mp4", tags: ["Pop", "Disco", "Dance"] },
-    "ikoiko": { title: "Iko Iko (My Bestie) (Justin Wellington)", difficulty: "Easy", video: "Maps.mp4", tags: ["Pop", "Viral", "Dance"] },
-    "fancylike": { title: "Fancy Like (Walker Hayes)", difficulty: "Easy", video: "Maps.mp4", tags: ["Country", "Viral", "Dance"] },
-    "rideit": { title: "Ride It (Jay Sean)", difficulty: "Medium", video: "Maps.mp4", tags: ["R&B", "Pop", "Dance"] },
-    "sexyback": { title: "SexyBack (Justin Timberlake)", difficulty: "Hard", video: "Maps.mp4", tags: ["Pop", "Funk", "Dance"] },
-    "sevenrings": { title: "Seven Rings (Ariana Grande)", difficulty: "Medium", video: "Maps.mp4", tags: ["Pop", "Hip Hop", "Dance"] },
-    "vibe": { title: "Vibe (If I Back It Up) (Cookie Kawaii)", difficulty: "Easy", video: "Vibe.mp4", tags: ["Hip Hop", "Viral", "Dance"] },
-  };
-
-  // Get dance data based on ID
-  const danceData = danceMapping[problemId as string] || {
-    title: "Unknown Dance",
-    difficulty: "Easy",
-    video: "Adderall.mp4",
-    tags: ["Dance"]
-  };
+  // Simple dance mapping based on number ID
+  const danceData = {
+    "1": { title: "Adderall", video: "Adderall.mp4" },
+    "2": { title: "Apple", video: "Apple.mp4" },
+    "3": { title: "Blinding Lights", video: "Blinding-Lights.mp4" },
+    "4": { title: "Cannibal", video: "Cannibal.mp4" },
+    "5": { title: "Chicken Banana Dance", video: "Chicken-Banana-Dance.mp4" },
+    "6": { title: "Don't Start Now", video: "Don't-Start-Now.mp4" },
+    "7": { title: "Emergency Budots", video: "Emergency-Budots.mp4" },
+    "8": { title: "Git Up Challenge", video: "Git-Up-Challenge.mp4" },
+    "9": { title: "Give It To Me", video: "Give-it-to-Me.mp4" },
+    "10": { title: "I'm Moving Too Fast", video: "I'm-Moving-Too-Fast.mp4" },
+    "11": { title: "Illit Jellyous", video: "Illit-Jellyous.mp4" },
+    "12": { title: "Last Christmas", video: "Last-Christmas.mp4" },
+    "13": { title: "Laxed", video: "Laxed.mp4" },
+    "14": { title: "Man Child", video: "Man-Child.mp4" },
+    "15": { title: "Maps", video: "Maps.mp4" },
+    "16": { title: "Number One Baby", video: "Number-One-Baby.mp4" },
+    "17": { title: "Out West", video: "Out-West.mp4" },
+    "18": { title: "Renegade", video: "Renegade.mp4" },
+    "19": { title: "Supalonely", video: "Supalonely.mp4" },
+    "20": { title: "Vibe", video: "Vibe.mp4" },
+    "21": { title: "Wednesday", video: "Wednesday.mp4" },
+  }[problemId as string] || { title: "Unknown Dance", video: "Adderall.mp4" };
 
   const problemData = {
     id: problemId,
     title: danceData.title,
-    difficulty: danceData.difficulty as "Easy" | "Medium" | "Hard",
-    tags: danceData.tags,
+    difficulty: "Easy" as "Easy" | "Medium" | "Hard",
+    tags: ["Dance", "Viral"],
   };
 
   // Analysis data from API

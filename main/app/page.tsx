@@ -51,7 +51,7 @@ export default function HomePage() {
             {/* CTA Buttons */}
             <div className="flex flex-col lg:flex-row gap-4">
               <Link href="/dances">
-                <div className="bg-tiktok-white border-2 border-tiktok-red rounded-xl px-8 py-6 shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer">
+                <div className="bg-tiktok-white border-2 border-tiktok-red rounded-xl px-8 py-2.5 shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer">
                   <div className="flex items-center justify-center space-x-3">
                     {[...Array(5)].map((_, i) => (
                       <FaStar key={i} className="text-yellow-400 text-xl" />

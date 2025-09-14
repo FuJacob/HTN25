@@ -14,6 +14,9 @@ import {
   FaRobot,
   FaRedo,
   FaPlaneDeparture,
+  FaCog,
+  FaTh,
+  FaStickyNote,
 } from "react-icons/fa";
 import { Button } from "@/shadcn-components/ui/button";
 import {
@@ -131,7 +134,11 @@ export default function ProblemPage() {
     const currentTime = video.currentTime;
 
     // Sync reference video with analyzed video (only sync time, not playback state)
-    if (refVideo && !recording && Math.abs(refVideo.currentTime - currentTime) > 0.5) {
+    if (
+      refVideo &&
+      !recording &&
+      Math.abs(refVideo.currentTime - currentTime) > 0.5
+    ) {
       refVideo.currentTime = currentTime;
     }
 
@@ -455,10 +462,10 @@ export default function ProblemPage() {
   };
 
   return (
-    <div className="h-screen bg-tiktok-black flex flex-col overflow-hidden">
-      {/* Header - Fixed height */}
-      <nav className="bg-tiktok-white border-b border-tiktok-black/10 w-full flex-shrink-0">
-        <div className="flex items-center justify-between px-8 py-3 w-full">
+    <div className="h-screen bg-zinc-50 flex flex-col overflow-hidden">
+      {/* Header - Modern clean design */}
+      <nav className="bg-white border-b border-zinc-200/50 w-full flex-shrink-0 backdrop-blur-sm">
+        <div className="flex items-center justify-between px-6 py-4 w-full">
           {/* Left: Logo and navigation */}
           <div className="flex items-center space-x-4">
             <img
@@ -468,48 +475,50 @@ export default function ProblemPage() {
               onClick={() => router.push("/")}
             />
             <span
-              className="text-tiktok-black font-medium flex items-center space-x-2 cursor-pointer hover:text-tiktok-red transition-colors"
+              className="text-zinc-800 font-medium flex items-center space-x-2 cursor-pointer hover:text-tiktok-red transition-colors"
               onClick={() => router.push("/dances")}
             >
               <FaList className="w-4 h-4" />
-              <span>Dance List</span>
+              <span>Dances</span>
             </span>
-            <button
-              onClick={() => navigateToDance("prev")}
-              className="text-tiktok-red hover:text-tiktok-red/80 transition-colors p-2 rounded-lg hover:bg-tiktok-black/5"
-            >
-              <FaChevronLeft className="w-5 h-5" />
-            </button>
-            <button
-              onClick={() => navigateToDance("next")}
-              className="text-tiktok-red hover:text-tiktok-red/80 transition-colors p-2 rounded-lg hover:bg-tiktok-black/5"
-            >
-              <FaChevronRight className="w-5 h-5" />
-            </button>
-            <button
-              onClick={() => navigateToDance("random")}
-              className="text-tiktok-red hover:text-tiktok-red/80 transition-colors p-2 rounded-lg hover:bg-tiktok-black/5"
-            >
-              <FaRandom className="w-5 h-5" />
-            </button>
+            <div className="flex items-center space-x-1 border border-zinc-200 rounded-lg p-1">
+              <button
+                onClick={() => navigateToDance("prev")}
+                className="text-zinc-600 hover:text-tiktok-red hover:bg-zinc-50 transition-colors p-2 rounded"
+              >
+                <FaChevronLeft className="w-4 h-4" />
+              </button>
+              <button
+                onClick={() => navigateToDance("next")}
+                className="text-zinc-600 hover:text-tiktok-red hover:bg-zinc-50 transition-colors p-2 rounded"
+              >
+                <FaChevronRight className="w-4 h-4" />
+              </button>
+              <button
+                onClick={() => navigateToDance("random")}
+                className="text-zinc-600 hover:text-tiktok-red hover:bg-zinc-50 transition-colors p-2 rounded"
+              >
+                <FaRandom className="w-4 h-4" />
+              </button>
             </div>
-
-          {/* Center: Submit Button */}
-          <div>
+          </div>{" "}
+          {/* Center: Record Button and Note */}
+          <div className="flex items-center space-x-4">
+            <div>
               {!recording && !recordedVideo && !isCountingDown && (
                 <Button
                   onClick={startCountdownAndRecording}
-                className="bg-tiktok-red hover:bg-tiktok-red/80 text-tiktok-white font-bold px-6 py-2 text-sm rounded-full transition-colors flex items-center space-x-2"
-              >
-                <FaCamera className="w-4 h-4" />
-                <span>Record</span>
-              </Button>
-            )}
+                  className="bg-tiktok-red hover:bg-red-600 text-white font-medium px-8 py-2.5 rounded-lg transition-all duration-200 flex items-center space-x-2 shadow-sm hover:shadow-md"
+                >
+                  <FaCamera className="w-4 h-4" />
+                  <span>Record Dance</span>
+                </Button>
+              )}
 
               {isCountingDown && (
                 <Button
                   disabled
-                className="bg-orange-500 text-tiktok-white font-bold px-6 py-2 text-sm rounded-full cursor-not-allowed"
+                  className="bg-orange-500 text-white font-medium px-8 py-2.5 rounded-lg cursor-not-allowed"
                 >
                   Get Ready... {countdown}
                 </Button>
@@ -518,81 +527,91 @@ export default function ProblemPage() {
               {recording && (
                 <Button
                   onClick={handleStopRecording}
-                className="bg-tiktok-red hover:bg-tiktok-red/80 text-tiktok-white font-bold px-6 py-2 text-sm rounded-full animate-pulse"
+                  className="bg-red-500 hover:bg-red-600 text-white font-medium px-8 py-2.5 rounded-lg animate-pulse transition-all duration-200 flex items-center space-x-2 shadow-md"
                 >
-                  ● Stop Recording
+                  <div className="w-2 h-2 bg-white rounded-full"></div>
+                  <span>Stop Recording</span>
                 </Button>
               )}
 
               {recordedVideo && !recording && (
-              <div className="flex items-center space-x-2">
+                <div className="flex items-center space-x-3">
                   <Button
                     onClick={() => {
                       setRecordedVideo(null);
                       setMediaStream(null);
                     }}
                     variant="outline"
-                  size="sm"
-                  className="border-tiktok-black/20 text-tiktok-black hover:bg-tiktok-black/5 flex items-center space-x-1"
-                >
-                  <FaRedo className="w-3 h-3" />
-                  <span>Try Again</span>
-                </Button>
-                <Button
-                  onClick={handleSubmitForAnalysis}
-                  disabled={isAnalyzing}
-                  size="sm"
-                  className="bg-tiktok-red hover:bg-tiktok-red/80 text-tiktok-white font-bold rounded-full flex items-center space-x-1"
-                >
-                  {isAnalyzing ? (
-                    <>
-                      <FaRobot className="w-3 h-3 animate-pulse" />
-                      <span>Analyzing...</span>
-                    </>
-                  ) : (
-                    <>
-                      <FaPlaneDeparture className="w-3 h-3" />
-                      <span>Submit Dance Attempt</span>
-                    </>
-                  )}
-                </Button>
-              </div>
-            )}
-          </div>
+                    className="border-zinc-300 text-zinc-700 hover:bg-zinc-50 font-medium px-4 py-2.5 rounded-lg transition-all duration-200 flex items-center space-x-2"
+                  >
+                    <FaRedo className="w-4 h-4" />
+                    <span>Try Again</span>
+                  </Button>
+                  <Button
+                    onClick={handleSubmitForAnalysis}
+                    disabled={isAnalyzing}
+                    className="bg-tiktok-red hover:bg-red-600 text-white font-medium px-6 py-2.5 rounded-lg transition-all duration-200 flex items-center space-x-2 shadow-sm hover:shadow-md"
+                  >
+                    {isAnalyzing ? (
+                      <>
+                        <FaRobot className="w-4 h-4 animate-pulse" />
+                        <span>Analyzing...</span>
+                      </>
+                    ) : (
+                      <>
+                        <FaPlaneDeparture className="w-4 h-4" />
+                        <span>Submit</span>
+                      </>
+                    )}
+                  </Button>
+                </div>
+              )}
+            </div>
 
-          {/* Right: Profile Section */}
-          <div>
+            <button className="text-zinc-600 hover:text-tiktok-red hover:bg-zinc-50 transition-all duration-200 p-2.5 rounded-lg">
+              <FaStickyNote className="w-5 h-5" />
+            </button>
+          </div>
+          {/* Right: Timing, Layout, Settings, and Profile */}
+          <div className="flex items-center space-x-3">
+            <div className="bg-tiktok-red text-white px-3 py-1.5 rounded-lg text-sm font-medium">
+              0.0s
+            </div>
+            <div className="flex items-center space-x-1 border border-zinc-200 rounded-lg p-1">
+              <button className="text-zinc-600 hover:text-tiktok-red hover:bg-zinc-50 transition-all duration-200 p-2 rounded">
+                <FaTh className="w-4 h-4" />
+              </button>
+              <button className="text-zinc-600 hover:text-tiktok-red hover:bg-zinc-50 transition-all duration-200 p-2 rounded">
+                <FaCog className="w-4 h-4" />
+              </button>
+            </div>
             <ProfileSection />
           </div>
         </div>
       </nav>
 
-      {/* Main Content Grid - Takes remaining height */}
-      <div className="flex-1 grid grid-cols-3 gap-4 p-4 overflow-hidden">
+      {/* Main Content - Modern grid layout */}
+      <div className="flex-1 grid grid-cols-3 gap-6 p-6 overflow-hidden bg-zinc-50">
         {/* Left Column - Description and Reference */}
-        <div className="flex flex-col gap-4 overflow-hidden">
-          {/* Description Box - Takes 20% of left column */}
-          <div className="flex-[0.2] bg-tiktok-white rounded-xl shadow-lg flex flex-col overflow-hidden">
-            {/* Header */}
-            <div className="bg-gradient-to-r from-gray-100 to-gray-200 px-4 py-2 border-b border-gray-200 flex-shrink-0">
-              <h3 className="text-tiktok-black font-semibold text-sm flex items-center space-x-2">
-                <FaInfoCircle className="w-4 h-4" />
-                <span>Description</span>
+        <div className="flex flex-col gap-6 overflow-hidden">
+          {/* Description Box */}
+          <div className="flex-[0.25] bg-white rounded-xl shadow-sm border border-zinc-200/50 flex flex-col overflow-hidden">
+            <div className="px-6 py-4 border-b border-zinc-100 flex-shrink-0">
+              <h3 className="text-zinc-800 font-semibold flex items-center space-x-2">
+                <FaInfoCircle className="w-4 h-4 text-zinc-500" />
+                <span>{problemData.title}</span>
               </h3>
             </div>
-            <div className="flex-1 p-4 overflow-auto">
-              <div className="flex items-center justify-between mb-2">
-                <h4 className="text-lg font-bold text-tiktok-black">
-                  {problemData.title}
-                </h4>
+            <div className="flex-1 p-6 overflow-auto">
+              <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-2">
                   <Badge
-                    className={`text-xs font-medium px-2 py-1 ${
+                    className={`text-xs font-medium px-3 py-1 rounded-lg ${
                       problemData.difficulty === "Easy"
-                        ? "bg-green-100 text-green-800 border-green-200"
+                        ? "bg-emerald-100 text-emerald-700 border-emerald-200"
                         : problemData.difficulty === "Medium"
-                        ? "bg-yellow-100 text-yellow-800 border-yellow-200"
-                        : "bg-red-100 text-red-800 border-red-200"
+                        ? "bg-amber-100 text-amber-700 border-amber-200"
+                        : "bg-red-100 text-red-700 border-red-200"
                     }`}
                   >
                     {problemData.difficulty}
@@ -600,34 +619,32 @@ export default function ProblemPage() {
                   {problemData.tags.map((tag) => (
                     <Badge
                       key={tag}
-                      variant="secondary"
-                      className="bg-tiktok-black/5 text-tiktok-black border-tiktok-black/10 px-2 py-1 text-xs"
+                      className="bg-zinc-100 text-zinc-600 border-zinc-200 px-3 py-1 text-xs rounded-lg"
                     >
                       {tag}
                     </Badge>
                   ))}
                 </div>
               </div>
-              <p className="text-tiktok-black/70 text-sm leading-relaxed">
-                Follow the reference dance and record your performance
+              <p className="text-zinc-600 text-sm leading-relaxed">
+                Follow the reference dance and record your performance. Use the video guide to learn the moves.
               </p>
             </div>
           </div>
 
-          {/* Reference Video - Takes 80% of left column */}
-          <div className="flex-1 bg-tiktok-white rounded-xl shadow-lg flex flex-col overflow-hidden">
-            {/* Header */}
-            <div className="bg-gradient-to-r from-gray-100 to-gray-200 px-4 py-2 border-b border-gray-200 flex-shrink-0">
-              <h3 className="text-tiktok-black font-semibold text-sm flex items-center space-x-2">
-                <FaVideo className="w-4 h-4" />
-                <span>Dance Reference</span>
+          {/* Reference Video */}
+          <div className="flex-1 bg-white rounded-xl shadow-sm border border-zinc-200/50 flex flex-col overflow-hidden">
+            <div className="px-6 py-4 border-b border-zinc-100 flex-shrink-0">
+              <h3 className="text-zinc-800 font-semibold flex items-center space-x-2">
+                <FaVideo className="w-4 h-4 text-zinc-500" />
+                <span>Reference Video</span>
               </h3>
             </div>
-            <div className="flex-1 p-4 flex items-center justify-center">
+            <div className="flex-1 p-6 flex items-center justify-center bg-zinc-50">
               <video
                 src={`/videos/${danceData.video}`}
                 controls
-                className="rounded-lg h-fit w-90 object-cover"
+                className="rounded-lg max-h-full w-auto object-cover shadow-sm"
                 ref={referenceVideoRef}
                 onEnded={handleReferenceVideoEnd}
               />
@@ -636,231 +653,214 @@ export default function ProblemPage() {
         </div>
 
         {/* Right Column - Camera and Analysis */}
-        <div className="col-span-2 flex flex-col gap-4 overflow-hidden">
-          {/* Camera Section - Takes 70% of right column */}
-          <div className="flex-1 bg-tiktok-white rounded-xl shadow-lg flex flex-col overflow-hidden relative">
-            {/* Header */}
-            <div className="bg-gradient-to-r from-gray-100 to-gray-200 px-4 py-2 border-b border-gray-200 flex-shrink-0">
-              <h3 className="text-tiktok-black font-semibold text-sm flex items-center space-x-2">
-                <FaCamera className="w-4 h-4" />
-                <span>Camera</span>
+        <div className="col-span-2 flex flex-col gap-6 overflow-hidden">
+          {/* Camera Section */}
+          <div className="flex-1 bg-white rounded-xl shadow-sm border border-zinc-200/50 flex flex-col overflow-hidden relative">
+            <div className="px-6 py-4 border-b border-zinc-100 flex-shrink-0">
+              <h3 className="text-zinc-800 font-semibold flex items-center space-x-2">
+                <FaCamera className="w-4 h-4 text-zinc-500" />
+                <span>Your Performance</span>
               </h3>
             </div>
 
-            {/* Always-mounted video element */}
-            {/* Right Panel */}
+            <div className="flex-1 flex items-center justify-center bg-zinc-50/50 relative">
+              {/* Always-mounted video element for camera feed */}
+              <video
+                ref={cameraVideoRef}
+                autoPlay
+                muted
+                className={`absolute inset-0 w-full h-full object-cover z-0 transform scale-x-[-1] ${
+                  recording ? "block" : "hidden"
+                }`}
+              />
 
-            {/* Always-mounted video element */}
-            <video
-              ref={cameraVideoRef}
-              autoPlay
-              muted
-              className={`absolute inset-0 w-full h-full object-cover z-0 transform scale-x-[-1] ${
-                recording ? "block" : "hidden"
-              }`}
-            />
-
-          {/* Countdown Overlay */}
-          {isCountingDown && countdown && (
-              <div
-                className="absolute inset-0 bg-tiktok-black/75 flex items-center justify-center"
-                style={{ top: "40px" }}
-              >
-                <div className="text-tiktok-white text-6xl font-bold animate-pulse">
-                {countdown}
-              </div>
-            </div>
-          )}
-
-            {/* Processed Video */}
-            {processedVideoUrl && !recording && (
-              <div className="flex-1 p-2 flex items-center justify-center">
-                <video
-                  ref={processedVideoRef}
-                  src={processedVideoUrl}
-                  controls
-                  className="w-[750px] h-fit object-cover rounded-lg"
-                  onTimeUpdate={handleVideoTimeUpdate}
-                  onLoadedMetadata={handleVideoLoadedMetadata}
-                  onPlay={handleAnalyzedVideoPlay}
-                  onPause={handleAnalyzedVideoPause}
-                />
-              </div>
-            )}
-
-            {/* Ready State */}
-            {!processedVideoUrl &&
-              !recording &&
-              !isCountingDown &&
-              !isAnalyzing && (
-                <div className="flex-1 flex items-center justify-center p-4">
-                  <div className="text-center">
-                    <div className="flex justify-center mb-4">
-                      <FaCamera className="text-4xl text-tiktok-black/30" />
-                    </div>
-                    <h2 className="text-xl font-bold mb-2 text-tiktok-black">
-                      Ready to Dance
-                    </h2>
-                    <p className="text-sm text-tiktok-black/70">
-                  Start the challenge to begin recording
-                </p>
+              {/* Countdown Overlay */}
+              {isCountingDown && countdown && (
+                <div className="absolute inset-0 bg-black/50 flex items-center justify-center z-20">
+                  <div className="text-white text-8xl font-bold animate-pulse">
+                    {countdown}
                   </div>
                 </div>
               )}
 
-            {/* Analyzing State */}
-            {!processedVideoUrl &&
-              !recording &&
-              !isCountingDown &&
-              isAnalyzing && (
-                <div className="flex-1 flex items-center justify-center p-4">
-                  <div className="text-center">
-                    <div className="flex justify-center mb-4">
-                      <FaRobot className="text-4xl text-tiktok-black/30 animate-pulse" />
-                    </div>
-                    <h3 className="text-lg font-bold mb-2 text-tiktok-black">
-                      Analyzing
-                    </h3>
+              {/* Processed Video */}
+              {processedVideoUrl && !recording && (
+                <div className="w-full h-full flex items-center justify-center p-4">
+                  <video
+                    ref={processedVideoRef}
+                    src={processedVideoUrl}
+                    controls
+                    className="max-w-full max-h-full object-contain rounded-lg"
+                    onTimeUpdate={handleVideoTimeUpdate}
+                    onLoadedMetadata={handleVideoLoadedMetadata}
+                    onPlay={handleAnalyzedVideoPlay}
+                    onPause={handleAnalyzedVideoPause}
+                  />
+                </div>
+              )}
 
-                    {/* Progress Bar */}
-                    <div className="w-full bg-gray-200 rounded-full h-2 mb-2">
+              {/* Ready State */}
+              {!processedVideoUrl &&
+                !recording &&
+                !isCountingDown &&
+                !isAnalyzing && (
+                  <div className="text-center text-zinc-500">
+                    <FaCamera className="text-5xl mx-auto mb-4" />
+                    <h2 className="text-xl font-semibold text-zinc-800 mb-1">
+                      Ready to Dance
+                    </h2>
+                    <p className="text-sm">
+                      Click "Record Dance" to begin.
+                    </p>
+                  </div>
+                )}
+
+              {/* Analyzing State */}
+              {!processedVideoUrl &&
+                !recording &&
+                !isCountingDown &&
+                isAnalyzing && (
+                  <div className="text-center text-zinc-500">
+                    <FaRobot className="text-5xl mx-auto mb-4 animate-pulse" />
+                    <h2 className="text-xl font-semibold text-zinc-800 mb-2">
+                      Analyzing Your Moves
+                    </h2>
+                    <div className="w-48 bg-zinc-200 rounded-full h-2 mx-auto mb-2">
                       <div
-                        className="bg-gradient-to-r from-tiktok-red to-pink-500 h-2 rounded-full transition-all duration-500 ease-out"
+                        className="bg-tiktok-red h-2 rounded-full transition-all duration-500"
                         style={{ width: `${analysisProgress}%` }}
                       ></div>
                     </div>
-
-                    {/* Progress Text */}
-                    <p className="text-xs text-tiktok-black/50">
-                      {analysisProgress}% Complete
-                    </p>
+                    <p className="text-xs">{analysisStep}</p>
                   </div>
-              </div>
-            )}
+                )}
+            </div>
           </div>
 
-          {/* Analysis Section - Takes 30% of right column */}
-          <div className="flex-[0.3] bg-tiktok-white rounded-xl shadow-lg flex flex-col overflow-hidden">
-            {/* Header */}
-            <div className="bg-gradient-to-r from-gray-100 to-gray-200 px-4 py-2 border-b border-gray-200 flex-shrink-0">
-              <h3 className="text-tiktok-black font-semibold text-sm flex items-center space-x-2">
-                <FaChartLine className="w-4 h-4" />
-                <span>Analysis Cases</span>
+          {/* Analysis Section */}
+          <div className="flex-[0.4] bg-white rounded-xl shadow-sm border border-zinc-200/50 flex flex-col overflow-hidden">
+            <div className="px-6 py-4 border-b border-zinc-100 flex-shrink-0">
+              <h3 className="text-zinc-800 font-semibold flex items-center space-x-2">
+                <FaChartLine className="w-4 h-4 text-zinc-500" />
+                <span>Dance Analysis</span>
               </h3>
             </div>
-            <div className="flex-1 p-4 overflow-auto" ref={analysisContainerRef}>
-              <div className="flex items-center justify-between mb-3">
-                <div className="flex items-center space-x-2">
-                {analysisData && analysisData.parsed_data?.dance_analysis && (
-                  <div className="flex items-center space-x-1">
-                      <div className="w-1.5 h-1.5 bg-tiktok-red rounded-full"></div>
-                      <span className="text-xs text-tiktok-black/70">
-                      Score:{" "}
-                      {getValidMoves().reduce(
-                        (sum: number, move: any) => {
+            <div
+              className="flex-1 p-6 overflow-auto"
+              ref={analysisContainerRef}
+            >
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center space-x-4">
+                  {analysisData && analysisData.parsed_data?.dance_analysis && (
+                    <div className="flex items-center space-x-2 text-sm">
+                      <span className="font-semibold text-zinc-800">Score:</span>
+                      <span className="text-tiktok-red font-bold">
+                        {getValidMoves().reduce((sum: number, move: any) => {
                           const baseScore = 100;
                           const penalty = Math.max(0, -move.score * 5);
                           return Math.max(0, baseScore - penalty);
-                        },
-                        0
-                      )}
+                        }, 0)}
+                      </span>
+                    </div>
+                  )}
+                  <div className="flex items-center space-x-2 text-sm">
+                    <span className="font-semibold text-zinc-800">Duration:</span>
+                    <span className="text-zinc-600">
+                      {videoDuration > 0
+                        ? `${videoDuration.toFixed(1)}s`
+                        : "0.0s"}
                     </span>
                   </div>
-                )}
-                <div className="flex items-center space-x-1">
-                    <div className="w-1.5 h-1.5 bg-orange-500 rounded-full"></div>
-                    <span className="text-xs text-tiktok-black/70">
-                      {videoDuration > 0 ? `${videoDuration.toFixed(1)}s` : '0.0s'}
-                    </span>
                 </div>
               </div>
-            </div>
 
-                {isAnalyzing && (
-                <div className="text-center text-tiktok-black/70 py-4">
-                  <div className="animate-spin w-4 h-4 border-2 border-tiktok-red border-t-transparent rounded-full mx-auto mb-2"></div>
-                  <p className="text-xs">Analyzing your dance...</p>
-                  </div>
-                )}
+              {isAnalyzing && !analysisData && (
+                <div className="text-center text-zinc-500 py-8">
+                  <div className="animate-spin w-6 h-6 border-2 border-tiktok-red border-t-transparent rounded-full mx-auto mb-3"></div>
+                  <p className="text-sm">Analyzing your dance...</p>
+                </div>
+              )}
 
-                {analysisError && (
-                <div className="bg-red-50 border border-red-200 rounded p-2">
-                  <p className="text-red-800 text-xs">Error: {analysisError}</p>
-                  </div>
-                )}
+              {analysisError && (
+                <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+                  <p className="text-red-700 text-sm font-medium">
+                    Analysis Error: {analysisError}
+                  </p>
+                </div>
+              )}
 
-                {analysisData &&
-                  analysisData.parsed_data?.dance_analysis &&
+              {analysisData &&
+                analysisData.parsed_data?.dance_analysis &&
                 getValidMoves().map((move: any, index: number) => {
-                      const isBlunder = move.score <= -4;
-                      const isMistake = move.score === -3;
-                      const isInaccuracy = move.score >= -2;
+                  const isBlunder = move.score <= -4;
+                  const isMistake = move.score === -3;
+                  const isInaccuracy = move.score >= -2;
 
-                      return (
-                        <div
-                          key={index}
-                          data-move-index={index}
-                          className={`rounded border p-2 mb-2 cursor-pointer transition-all duration-300 ${
-                            currentHighlightedMove === index
-                              ? 'bg-blue-100 border-blue-400 shadow-md scale-[1.02]'
-                              : 'bg-tiktok-black/5 border-tiktok-black/10 hover:border-tiktok-black/20'
-                          }`}
-                          onClick={() => handleMoveClick(move.timestamp_of_outcome)}
-                        >
-                            <div className="flex items-center justify-between mb-1">
-                        <div className="flex items-center space-x-1">
-                          <span className={`text-xs font-mono px-1 py-0.5 rounded transition-colors ${
-                            currentHighlightedMove === index
-                              ? 'text-blue-800 bg-blue-200'
-                              : 'text-tiktok-black/70 bg-tiktok-black/10'
-                          }`}>
-                            🎯 {move.timestamp_of_outcome}
-                          </span>
-                          <span className="text-tiktok-black text-xs font-medium capitalize">
-                                  {move.problem_type}
-                                </span>
-                                {isBlunder && (
-                                  <div className="w-1.5 h-1.5 bg-red-500 rounded-full"></div>
-                                )}
-                                {isMistake && (
-                                  <div className="w-1.5 h-1.5 bg-orange-500 rounded-full"></div>
-                                )}
-                                {isInaccuracy && (
-                                  <div className="w-1.5 h-1.5 bg-yellow-500 rounded-full"></div>
-                                )}
-                              </div>
-                        <span className="text-xs text-tiktok-black/50">
-                                #{index + 1}
-                              </span>
-                            </div>
-                      <div className={`rounded p-1.5 border-l-2 ${
+                  return (
+                    <div
+                      key={index}
+                      data-move-index={index}
+                      className={`rounded-lg border p-3 mb-2 cursor-pointer transition-all duration-300 ${
                         currentHighlightedMove === index
-                          ? 'bg-blue-50 border-blue-400'
-                          : 'bg-tiktok-white border-tiktok-red/30'
-                      }`}>
-                        <p className="text-tiktok-black/80 text-xs leading-relaxed">
-                                {move.feedback}
-                              </p>
-                          </div>
+                          ? "bg-blue-50 border-blue-400 shadow-lg scale-[1.02]"
+                          : "bg-zinc-50/80 border-zinc-200/80 hover:border-zinc-300 hover:bg-zinc-100"
+                      }`}
+                      onClick={() => handleMoveClick(move.timestamp_of_outcome)}
+                    >
+                      <div className="flex items-center justify-between mb-2">
+                        <div className="flex items-center space-x-2">
+                          <span
+                            className={`text-xs font-mono px-2 py-1 rounded-md transition-colors ${
+                              currentHighlightedMove === index
+                                ? "text-blue-800 bg-blue-200"
+                                : "text-zinc-600 bg-zinc-200"
+                            }`}
+                          >
+                            {move.timestamp_of_outcome}
+                          </span>
+                          <span className="text-zinc-800 text-sm font-semibold capitalize">
+                            {move.problem_type}
+                          </span>
+                          {isBlunder && (
+                            <div className="w-2 h-2 bg-red-500 rounded-full" title="Blunder"></div>
+                          )}
+                          {isMistake && (
+                            <div className="w-2 h-2 bg-orange-400 rounded-full" title="Mistake"></div>
+                          )}
+                          {isInaccuracy && (
+                            <div className="w-2 h-2 bg-yellow-400 rounded-full" title="Inaccuracy"></div>
+                          )}
                         </div>
-                      );
+                        <span className="text-xs text-zinc-400 font-medium">
+                          #{index + 1}
+                        </span>
+                      </div>
+                      <div
+                        className={`rounded-md p-2 border-l-4 ${
+                          currentHighlightedMove === index
+                            ? "bg-blue-50/50 border-blue-500"
+                            : "bg-white border-zinc-300"
+                        }`}
+                      >
+                        <p className="text-zinc-700 text-sm leading-relaxed">
+                          {move.feedback}
+                        </p>
+                      </div>
+                    </div>
+                  );
                 })}
 
-                {!analysisData && !isAnalyzing && !analysisError && (
-                <div className="flex-1 flex items-center justify-center">
-                  <div className="text-center">
-                    <div className="flex justify-center mb-3">
-                      <FaChartLine className="text-3xl text-tiktok-black/30" />
-                    </div>
-                    <h4 className="text-xl font-bold mb-2 text-tiktok-black">
-                      Ready to Analyze
-                    </h4>
-                    <p className="text-sm text-tiktok-black/70">
-                      Record and submit your dance for analysis
-                    </p>
-                  </div>
-                  </div>
-                )}
+              {!analysisData && !isAnalyzing && !analysisError && (
+                <div className="text-center text-zinc-400 py-8">
+                  <FaChartLine className="text-4xl mx-auto mb-3" />
+                  <h4 className="font-semibold text-zinc-600 mb-1">
+                    Awaiting Analysis
+                  </h4>
+                  <p className="text-sm">
+                    Your dance feedback will appear here.
+                  </p>
+                </div>
+              )}
             </div>
           </div>
         </div>

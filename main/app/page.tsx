@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Button } from "../shadcn-components/ui/button";
 import Header from "./components/Header";
+import UserSync from "./components/UserSync";
 
 export default function HomePage() {
   return (
@@ -12,6 +13,9 @@ export default function HomePage() {
         backgroundSize: "cover",
       }}
     >
+      {/* User Sync - Automatically creates user in DB when logged in */}
+      <UserSync />
+      
       {/* Header */}
       <Header />
 

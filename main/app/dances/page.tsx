@@ -17,6 +17,7 @@ import { Button } from "@/shadcn-components/ui/button";
 import CalendarBox from "../components/Calendar";
 import Header from "../components/Header";
 import SideBar from "../components/SideBar";
+import { useCreateUserOnLogin } from "../../lib/useCreateUserOnLogin";
 
 const topicCategories = [
   { name: "Viral", count: 1977, active: true },
@@ -186,6 +187,14 @@ const topicFilters = [
 export default function DanceProblemsPage() {
   const [search, setSearch] = useState("");
   const [activeFilter, setActiveFilter] = useState("All Topics");
+  
+  // This will automatically create user in DB when they log in
+  const { user, dbUser, isLoading } = useCreateUserOnLogin();
+  
+  // Debug logging
+  console.log("Auth0 User:", user);
+  console.log("DB User:", dbUser);
+  console.log("Loading:", isLoading);
 
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {

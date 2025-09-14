@@ -156,11 +156,13 @@ export default function ProblemPage() {
 
   // Set camera stream to video element
   useEffect(() => {
-    if (recording && cameraVideoRef.current && mediaStream) {
-      cameraVideoRef.current.srcObject = mediaStream;
-    }
-    if (!recording && cameraVideoRef.current) {
-      cameraVideoRef.current.srcObject = null;
+    const videoElement = cameraVideoRef.current;
+    if (!videoElement) return;
+
+    if (recording && mediaStream) {
+      videoElement.srcObject = mediaStream;
+    } else if (!recording) {
+      videoElement.srcObject = null;
     }
   }, [recording, mediaStream]);
 
@@ -273,9 +275,17 @@ export default function ProblemPage() {
 
         {/* Right Panel - Tabs */}
         <div className="w-2/3 flex flex-col bg-black relative min-h-0">
+          {/* Always-mounted video element */}
+          <video
+            ref={cameraVideoRef}
+            autoPlay
+            muted
+            className={`absolute inset-0 w-full h-full object-cover z-0 ${recording && activeTab === 'code' ? 'block' : 'hidden'}`}
+          />
+          
           <Tabs value={activeTab} onValueChange={setActiveTab} className="flex flex-col h-full min-h-0">
             {/* Tab Headers */}
-            <TabsList className="flex border-b border-gray-700 bg-gray-900 flex-shrink-0">
+            <TabsList className="flex border-b border-gray-700 bg-gray-900 flex-shrink-0 relative z-10">
               <TabsTrigger value="code" className="px-6 py-3 text-white data-[state=active]:border-b-2 data-[state=active]:border-orange-500">
                 Recording
               </TabsTrigger>
@@ -288,7 +298,7 @@ export default function ProblemPage() {
             <TabsContent value="code" className="flex-1 relative min-h-0 overflow-hidden">
               {/* Countdown Overlay */}
               {isCountingDown && countdown && (
-                <div className="absolute inset-0 bg-black/75 flex items-center justify-center z-10">
+                <div className="absolute inset-0 bg-black/75 flex items-center justify-center z-20">
                   <div className="text-white text-9xl font-bold animate-pulse">
                     {countdown}
                   </div>
@@ -296,16 +306,7 @@ export default function ProblemPage() {
               )}
 
               {/* Camera Area */}
-              <div className="flex-1 flex items-center justify-center min-h-0">
-                {recording && (
-                  <video
-                    ref={cameraVideoRef}
-                    autoPlay
-                    muted
-                    className="w-full h-full object-cover"
-                  />
-                )}
-
+              <div className="flex-1 flex items-center justify-center min-h-0 relative z-10">
                 {recordedVideo && !recording && (
                   <video
                     src={recordedVideo}
@@ -325,7 +326,7 @@ export default function ProblemPage() {
             </TabsContent>
 
             {/* Tab 2: Analysis */}
-            <TabsContent value="description" className="flex-1 p-6 overflow-hidden text-white min-h-0">
+            <TabsContent value="description" className="flex-1 p-6 overflow-auto text-white min-h-0">
               <div className="space-y-4 h-full overflow-auto">
                 {/* Header */}
                 <div className="border-b border-gray-700 pb-3 flex-shrink-0">

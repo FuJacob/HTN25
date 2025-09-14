@@ -1,11 +1,15 @@
-import * as React from "react"
-import { Calendar as CalendarIcon } from "lucide-react"
-import { Popover, PopoverContent, PopoverTrigger } from "@/shadcn-components/ui/popover"
-import { Button } from "@/shadcn-components/ui/button"
-import { cn } from "@/lib/utils"
+import * as React from "react";
+import { Calendar as CalendarIcon } from "lucide-react";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/shadcn-components/ui/popover";
+import { Button } from "@/shadcn-components/ui/button";
+import { cn } from "@/lib/utils";
 
 export function CalendarBox() {
-  const [date, setDate] = React.useState<Date | undefined>(undefined)
+  const [date, setDate] = React.useState<Date | undefined>(undefined);
 
   return (
     <Popover>
@@ -26,7 +30,7 @@ export function CalendarBox() {
         <div className="p-6 text-lg">Calendar UI goes here</div>
       </PopoverContent>
     </Popover>
-  )
+  );
 }
 
 export default CalendarBox;

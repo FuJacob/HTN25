@@ -104,7 +104,6 @@ export default function ProblemStatsCircle({
       {/* Center text */}
       <div className="absolute inset-0 flex flex-col items-center justify-center">
         <span className="text-2xl font-bold">{solved}</span>
-        <span className="text-xs text-gray-500">/ {total}</span>
         <span className="text-green-600 text-sm mt-1">Solved</span>
       </div>
     </div>

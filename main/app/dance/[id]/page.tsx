@@ -486,61 +486,61 @@ export default function ProblemPage() {
             >
               <FaRandom className="w-5 h-5" />
             </button>
-          </div>
+            </div>
 
           {/* Center: Submit Button */}
           <div>
-            {!recording && !recordedVideo && !isCountingDown && (
-              <Button
-                onClick={startCountdownAndRecording}
+              {!recording && !recordedVideo && !isCountingDown && (
+                <Button
+                  onClick={startCountdownAndRecording}
                 className="bg-tiktok-red hover:bg-tiktok-red/80 text-tiktok-white font-bold px-6 py-2 text-sm rounded-full transition-colors flex items-center space-x-2"
-              >
+                >
                 <FaUpload className="w-4 h-4" />
                 <span>Submit</span>
-              </Button>
-            )}
+                </Button>
+              )}
 
-            {isCountingDown && (
-              <Button
-                disabled
-                className="bg-orange-500 text-tiktok-white font-bold px-6 py-2 text-sm rounded-full cursor-not-allowed"
-              >
-                Get Ready... {countdown}
-              </Button>
-            )}
-
-            {recording && (
-              <Button
-                onClick={handleStopRecording}
-                className="bg-tiktok-red hover:bg-tiktok-red/80 text-tiktok-white font-bold px-6 py-2 text-sm rounded-full animate-pulse"
-              >
-                ● Stop Recording
-              </Button>
-            )}
-
-            {recordedVideo && !recording && (
-              <div className="flex items-center space-x-2">
+              {isCountingDown && (
                 <Button
-                  onClick={() => {
-                    setRecordedVideo(null);
-                    setMediaStream(null);
-                  }}
-                  variant="outline"
+                  disabled
+                className="bg-orange-500 text-tiktok-white font-bold px-6 py-2 text-sm rounded-full cursor-not-allowed"
+                >
+                  Get Ready... {countdown}
+                </Button>
+              )}
+
+              {recording && (
+                <Button
+                  onClick={handleStopRecording}
+                className="bg-tiktok-red hover:bg-tiktok-red/80 text-tiktok-white font-bold px-6 py-2 text-sm rounded-full animate-pulse"
+                >
+                  ● Stop Recording
+                </Button>
+              )}
+
+              {recordedVideo && !recording && (
+              <div className="flex items-center space-x-2">
+                  <Button
+                    onClick={() => {
+                      setRecordedVideo(null);
+                      setMediaStream(null);
+                    }}
+                    variant="outline"
                   size="sm"
                   className="border-tiktok-black/20 text-tiktok-black hover:bg-tiktok-black/5"
-                >
-                  Try Again
-                </Button>
-                <Button
-                  onClick={handleSubmitForAnalysis}
-                  disabled={isAnalyzing}
+                  >
+                    Try Again
+                  </Button>
+                  <Button
+                    onClick={handleSubmitForAnalysis}
+                    disabled={isAnalyzing}
                   size="sm"
                   className="bg-tiktok-red hover:bg-tiktok-red/80 text-tiktok-white font-bold rounded-full"
-                >
-                  {isAnalyzing ? "🔄 Analyzing..." : "Submit for Analysis"}
-                </Button>
-              </div>
-            )}
+                  >
+                    {isAnalyzing ? "🔄 Analyzing..." : "Submit for Analysis"}
+                  </Button>
+                </div>
+              )}
           </div>
 
           {/* Right: Profile Section */}
@@ -630,36 +630,36 @@ export default function ProblemPage() {
               </h3>
             </div>
 
-            {/* Always-mounted video element */}
-            <video
-              ref={cameraVideoRef}
-              autoPlay
-              muted
+          {/* Always-mounted video element */}
+          <video
+            ref={cameraVideoRef}
+            autoPlay
+            muted
               className={`absolute inset-0 w-full h-full object-cover rounded-b-xl ${
-                recording ? "block" : "hidden"
-              }`}
+              recording ? "block" : "hidden"
+            }`}
               style={{ top: "40px" }} // Account for header height
-            />
+          />
 
-            {/* Countdown Overlay */}
-            {isCountingDown && countdown && (
+          {/* Countdown Overlay */}
+          {isCountingDown && countdown && (
               <div
                 className="absolute inset-0 bg-tiktok-black/75 flex items-center justify-center"
                 style={{ top: "40px" }}
               >
                 <div className="text-tiktok-white text-6xl font-bold animate-pulse">
-                  {countdown}
-                </div>
+                {countdown}
               </div>
-            )}
+            </div>
+          )}
 
             {/* Processed Video */}
             {processedVideoUrl && !recording && (
               <div className="flex-1 p-4">
-                <video
+              <video
                   ref={processedVideoRef}
-                  src={processedVideoUrl}
-                  controls
+                src={processedVideoUrl}
+                controls
                   className="w-full h-full object-contain rounded-lg"
                 />
               </div>
@@ -679,8 +679,8 @@ export default function ProblemPage() {
                       Ready to Dance
                     </h2>
                     <p className="text-sm text-tiktok-black/70">
-                      Start the challenge to begin recording
-                    </p>
+                  Start the challenge to begin recording
+                </p>
                   </div>
                 </div>
               )}
@@ -716,8 +716,8 @@ export default function ProblemPage() {
                       {analysisProgress}% Complete
                     </p>
                   </div>
-                </div>
-              )}
+              </div>
+            )}
           </div>
 
           {/* Analysis Section - Takes 30% of right column */}
@@ -732,82 +732,82 @@ export default function ProblemPage() {
             <div className="flex-1 p-4 overflow-auto">
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center space-x-2">
-                  {analysisData && analysisData.parsed_data?.dance_analysis && (
-                    <div className="flex items-center space-x-1">
+                {analysisData && analysisData.parsed_data?.dance_analysis && (
+                  <div className="flex items-center space-x-1">
                       <div className="w-1.5 h-1.5 bg-tiktok-red rounded-full"></div>
                       <span className="text-xs text-tiktok-black/70">
-                        Score:{" "}
-                        {analysisData.parsed_data.dance_analysis.reduce(
-                          (sum: number, move: any) => sum + move.score,
-                          0
-                        )}
-                      </span>
-                    </div>
-                  )}
-                  <div className="flex items-center space-x-1">
+                      Score:{" "}
+                      {analysisData.parsed_data.dance_analysis.reduce(
+                        (sum: number, move: any) => sum + move.score,
+                        0
+                      )}
+                    </span>
+                  </div>
+                )}
+                <div className="flex items-center space-x-1">
                     <div className="w-1.5 h-1.5 bg-orange-500 rounded-full"></div>
                     <span className="text-xs text-tiktok-black/70">10.0s</span>
-                  </div>
                 </div>
               </div>
+            </div>
 
-              {isAnalyzing && (
+                {isAnalyzing && (
                 <div className="text-center text-tiktok-black/70 py-4">
                   <div className="animate-spin w-4 h-4 border-2 border-tiktok-red border-t-transparent rounded-full mx-auto mb-2"></div>
                   <p className="text-xs">Analyzing your dance...</p>
-                </div>
-              )}
+                  </div>
+                )}
 
-              {analysisError && (
+                {analysisError && (
                 <div className="bg-red-50 border border-red-200 rounded p-2">
                   <p className="text-red-800 text-xs">Error: {analysisError}</p>
-                </div>
-              )}
+                  </div>
+                )}
 
-              {analysisData &&
-                analysisData.parsed_data?.dance_analysis &&
+                {analysisData &&
+                  analysisData.parsed_data?.dance_analysis &&
                 getValidMoves().map((move: any, index: number) => {
-                  const isBlunder = move.score <= -4;
-                  const isMistake = move.score === -3;
-                  const isInaccuracy = move.score >= -2;
+                      const isBlunder = move.score <= -4;
+                      const isMistake = move.score === -3;
+                      const isInaccuracy = move.score >= -2;
 
-                  return (
-                    <div
-                      key={index}
+                      return (
+                        <div
+                          key={index}
                       className="bg-tiktok-black/5 rounded border border-tiktok-black/10 p-2 mb-2"
-                    >
-                      <div className="flex items-center justify-between mb-1">
+                        >
+                            <div className="flex items-center justify-between mb-1">
                         <div className="flex items-center space-x-1">
                           <span className="text-xs font-mono text-tiktok-black/70 bg-tiktok-black/10 px-1 py-0.5 rounded">
-                            {move.timestamp_of_outcome}
-                          </span>
+                                  {move.timestamp_of_outcome}
+                                </span>
                           <span className="text-tiktok-black text-xs font-medium capitalize">
-                            {move.problem_type}
-                          </span>
-                          {isBlunder && (
-                            <div className="w-1.5 h-1.5 bg-red-500 rounded-full"></div>
-                          )}
-                          {isMistake && (
-                            <div className="w-1.5 h-1.5 bg-orange-500 rounded-full"></div>
-                          )}
-                          {isInaccuracy && (
-                            <div className="w-1.5 h-1.5 bg-yellow-500 rounded-full"></div>
-                          )}
-                        </div>
+                                  {move.problem_type}
+                                </span>
+                                {isBlunder && (
+                                  <div className="w-1.5 h-1.5 bg-red-500 rounded-full"></div>
+                                )}
+                                {isMistake && (
+                                  <div className="w-1.5 h-1.5 bg-orange-500 rounded-full"></div>
+                                )}
+                                {isInaccuracy && (
+                                  <div className="w-1.5 h-1.5 bg-yellow-500 rounded-full"></div>
+                                )}
+                              </div>
                         <span className="text-xs text-tiktok-black/50">
-                          #{index + 1}
-                        </span>
-                      </div>
+                                #{index + 1}
+                              </span>
+                            </div>
                       <div className="bg-tiktok-white rounded p-1.5 border-l-2 border-tiktok-red/30">
                         <p className="text-tiktok-black/80 text-xs leading-relaxed">
-                          {move.feedback}
-                        </p>
-                      </div>
-                    </div>
-                  );
+                                {move.feedback}
+                              </p>
+                          </div>
+                        </div>
+                      );
                 })}
 
-              {!analysisData && !isAnalyzing && !analysisError && (
+                {!analysisData && !isAnalyzing && !analysisError && (
                 <div className="flex-1 flex items-center justify-center">
                   <div className="text-center">
                     <div className="flex justify-center mb-3">
@@ -820,8 +820,8 @@ export default function ProblemPage() {
                       Record and submit your dance for analysis
                     </p>
                   </div>
-                </div>
-              )}
+                  </div>
+                )}
             </div>
           </div>
         </div>

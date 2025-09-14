@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import { Poppins } from "next/font/google";
-const poppins = Poppins({ subsets: ["latin"], weight: ["300", "400", "500", "600", "700", "800", "900"] });
+import { Space_Grotesk } from "next/font/google";
+const spaceGrotesk = Space_Grotesk({ subsets: ["latin"], weight: ["300", "400", "500", "600", "700"] });
 import "./globals.css";
 import { Auth0Provider } from "@auth0/nextjs-auth0";
 
@@ -16,7 +16,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${poppins.className} antialiased`}>
+      <body className={`${spaceGrotesk.className} antialiased`}>
         <Auth0Provider>
           <main className="h-[calc(100vh-4.5rem)]">{children}</main>
         </Auth0Provider>

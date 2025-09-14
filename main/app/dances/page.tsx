@@ -410,30 +410,33 @@ export default function DanceProblemsPage() {
           <div className="flex-1 overflow-auto bg-white">
             {/* Table Headers */}
             <div className="px-8 py-4 bg-gray-50 border-b border-gray-200 sticky top-0 z-10">
-              <div className="flex items-center gap-8">
-                {/* Preview Header */}
-                <div className="w-12 text-center">
+              <div className="flex items-center">
+                {/* Number Header */}
+                <div className="w-8 text-center mr-4">
                   <span className="text-sm font-semibold text-gray-700 uppercase tracking-wide">
-                    Preview
+                    #
                   </span>
+                </div>
+
+                {/* Preview Header */}
+                <div className="w-12 text-center mr-4">
+                  <span className="text-sm font-semibold text-gray-700 uppercase tracking-wide"></span>
                 </div>
 
                 {/* Title Header */}
-                <div className="flex-1 min-w-0">
-                  <span className="text-sm font-semibold text-gray-700 uppercase tracking-wide">
-                    Title
-                  </span>
+                <div className="flex-1 min-w-0 mr-6">
+                  <span className="text-sm font-semibold text-gray-700 uppercase tracking-wide"></span>
                 </div>
 
                 {/* Status Header */}
-                <div className="w-16 text-center">
+                <div className="w-16 text-center mr-2">
                   <span className="text-sm font-semibold text-gray-700 uppercase tracking-wide">
                     Status
                   </span>
                 </div>
 
                 {/* Pass % Header */}
-                <div className="w-20 text-right">
+                <div className="w-20 text-right mr-2">
                   <span className="text-sm font-semibold text-gray-700 uppercase tracking-wide">
                     Pass %
                   </span>
@@ -452,9 +455,16 @@ export default function DanceProblemsPage() {
               {filteredProblems.map((problem, index) => (
                 <Link key={problem.id} href={`/dance/${problem.id}`}>
                   <div className="px-8 py-6 hover:bg-gray-50 cursor-pointer transition-colors">
-                    <div className="flex items-center gap-8">
+                    <div className="flex items-center">
+                      {/* Problem Number */}
+                      <div className="w-8 text-center mr-4">
+                        <span className="text-lg text-gray-600 font-medium">
+                          {problem.number}
+                        </span>
+                      </div>
+
                       {/* Dance Preview GIF */}
-                      <div className="w-12 h-12 rounded-lg overflow-hidden bg-gray-100 flex-shrink-0">
+                      <div className="w-12 h-12 rounded-lg overflow-hidden bg-gray-100 flex-shrink-0 mr-4">
                         <img
                           src={`/gifs/${problem.video.replace(".mp4", ".gif")}`}
                           alt={`${problem.title} preview`}
@@ -462,20 +472,15 @@ export default function DanceProblemsPage() {
                         />
                       </div>
 
-                      {/* Problem Number and Title */}
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-3">
-                          <span className="text-lg text-gray-600 font-medium">
-                            {problem.number}.
-                          </span>
-                          <span className="font-medium text-gray-900 text-lg truncate">
-                            {problem.title}
-                          </span>
-                        </div>
+                      {/* Title */}
+                      <div className="flex-1 min-w-0 mr-6">
+                        <span className="font-medium text-gray-900 text-lg truncate">
+                          {problem.title}
+                        </span>
                       </div>
 
                       {/* Status */}
-                      <div className="w-16 text-center">
+                      <div className="w-16 text-center mr-2">
                         <span
                           className={`text-xl font-bold ${getStatusColor(
                             problem.status
@@ -486,7 +491,7 @@ export default function DanceProblemsPage() {
                       </div>
 
                       {/* Pass % */}
-                      <div className="w-20 text-right">
+                      <div className="w-20 text-right mr-2">
                         <span className="text-lg text-gray-600">
                           {problem.acceptance}
                         </span>
@@ -500,7 +505,7 @@ export default function DanceProblemsPage() {
                           )}`}
                         >
                           {problem.difficulty === "Medium"
-                            ? "Med."
+                            ? "Medium"
                             : problem.difficulty}
                         </span>
                       </div>

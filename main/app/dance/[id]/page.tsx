@@ -459,11 +459,11 @@ export default function ProblemPage() {
               src="/logo.png"
               alt="Logo"
               className="h-8 w-auto cursor-pointer hover:opacity-80 transition-opacity"
-              onClick={() => router.push('/')}
+              onClick={() => router.push("/")}
             />
             <span
               className="text-tiktok-black font-medium flex items-center space-x-2 cursor-pointer hover:text-tiktok-red transition-colors"
-              onClick={() => router.push('/dances')}
+              onClick={() => router.push("/dances")}
             >
               <FaList className="w-4 h-4" />
               <span>Dance List</span>
@@ -551,7 +551,7 @@ export default function ProblemPage() {
       {/* Main Content */}
       <div className="flex flex-1 overflow-hidden">
         {/* Left Column - Width based on video */}
-        <div className="flex-shrink-0 flex flex-col w-fit gap-6">
+        <div className="flex-shrink-0 flex flex-col w-[400px]">
           {/* Reference Video */}
           <div className="flex-1 flex items-center justify-start p-6 bg-tiktok-black">
             <div className="bg-tiktok-white rounded-xl p-4 shadow-lg flex flex-col">
@@ -765,71 +765,71 @@ export default function ProblemPage() {
                   </div>
                 </div>
                 <div className="max-h-48 overflow-auto">
-                {isAnalyzing && (
-                  <div className="text-center text-tiktok-black/70 py-4">
-                    <div className="animate-spin w-6 h-6 border-2 border-tiktok-red border-t-transparent rounded-full mx-auto mb-2"></div>
-                    <p className="text-sm">Analyzing your dance...</p>
-                  </div>
-                )}
+                  {isAnalyzing && (
+                    <div className="text-center text-tiktok-black/70 py-4">
+                      <div className="animate-spin w-6 h-6 border-2 border-tiktok-red border-t-transparent rounded-full mx-auto mb-2"></div>
+                      <p className="text-sm">Analyzing your dance...</p>
+                    </div>
+                  )}
 
-                {analysisError && (
-                  <div className="bg-red-50 border border-red-200 rounded p-3">
-                    <p className="text-red-800 text-sm">
-                      Error: {analysisError}
-                    </p>
-                  </div>
-                )}
+                  {analysisError && (
+                    <div className="bg-red-50 border border-red-200 rounded p-3">
+                      <p className="text-red-800 text-sm">
+                        Error: {analysisError}
+                      </p>
+                    </div>
+                  )}
 
-                {analysisData &&
-                  analysisData.parsed_data?.dance_analysis &&
-                  getValidMoves().map((move: any, index: number) => {
-                    const isBlunder = move.score <= -4;
-                    const isMistake = move.score === -3;
-                    const isInaccuracy = move.score >= -2;
+                  {analysisData &&
+                    analysisData.parsed_data?.dance_analysis &&
+                    getValidMoves().map((move: any, index: number) => {
+                      const isBlunder = move.score <= -4;
+                      const isMistake = move.score === -3;
+                      const isInaccuracy = move.score >= -2;
 
-                    return (
-                      <div
-                        key={index}
-                        className="bg-tiktok-black/5 rounded border border-tiktok-black/10 p-3 mb-2"
-                      >
-                        <div className="flex items-center justify-between mb-2">
-                          <div className="flex items-center space-x-2">
-                            <span className="text-xs font-mono text-tiktok-black/70 bg-tiktok-black/10 px-2 py-1 rounded">
-                              {move.timestamp_of_outcome}
+                      return (
+                        <div
+                          key={index}
+                          className="bg-tiktok-black/5 rounded border border-tiktok-black/10 p-3 mb-2"
+                        >
+                          <div className="flex items-center justify-between mb-2">
+                            <div className="flex items-center space-x-2">
+                              <span className="text-xs font-mono text-tiktok-black/70 bg-tiktok-black/10 px-2 py-1 rounded">
+                                {move.timestamp_of_outcome}
+                              </span>
+                              <span className="text-tiktok-black text-sm font-medium capitalize">
+                                {move.problem_type}
+                              </span>
+                              {isBlunder && (
+                                <div className="w-2 h-2 bg-red-500 rounded-full"></div>
+                              )}
+                              {isMistake && (
+                                <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
+                              )}
+                              {isInaccuracy && (
+                                <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
+                              )}
+                            </div>
+                            <span className="text-xs text-tiktok-black/50">
+                              #{index + 1}
                             </span>
-                            <span className="text-tiktok-black text-sm font-medium capitalize">
-                              {move.problem_type}
-                            </span>
-                            {isBlunder && (
-                              <div className="w-2 h-2 bg-red-500 rounded-full"></div>
-                            )}
-                            {isMistake && (
-                              <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
-                            )}
-                            {isInaccuracy && (
-                              <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
-                            )}
                           </div>
-                          <span className="text-xs text-tiktok-black/50">
-                            #{index + 1}
-                          </span>
+                          <div className="bg-tiktok-white rounded p-2 border-l-2 border-tiktok-red/30">
+                            <p className="text-tiktok-black/80 text-xs leading-relaxed">
+                              {move.feedback}
+                            </p>
+                          </div>
                         </div>
-                        <div className="bg-tiktok-white rounded p-2 border-l-2 border-tiktok-red/30">
-                          <p className="text-tiktok-black/80 text-xs leading-relaxed">
-                            {move.feedback}
-                          </p>
-                        </div>
-                      </div>
-                    );
-                  })}
+                      );
+                    })}
 
-                {!analysisData && !isAnalyzing && !analysisError && (
-                  <div className="text-center text-tiktok-black/70 py-4">
-                    <p className="text-sm">
-                      Record and submit your dance for analysis
-                    </p>
-                  </div>
-                )}
+                  {!analysisData && !isAnalyzing && !analysisError && (
+                    <div className="text-center text-tiktok-black/70 py-4">
+                      <p className="text-sm">
+                        Record and submit your dance for analysis
+                      </p>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

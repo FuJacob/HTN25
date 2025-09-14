@@ -37,9 +37,21 @@ export default function ProfilePage() {
           <h2 className="text-2xl font-bold mb-2">
             {user.nickname || user.name}
           </h2>
-          <p className="text-gray-500 mb-4 text-base">
+          <p className="text-gray-500 mb-2 text-base">
             Dance Level: Intermediate
           </p>
+          {/* Progress Bar */}
+          <div className="w-full flex flex-col items-center mb-4">
+            <span className="text-xs text-gray-400 mb-1">
+              Progress to Next Level
+            </span>
+            <div className="w-32 h-2 bg-gray-200 rounded-full overflow-hidden">
+              <div
+                className="h-2 bg-pink-400 rounded-full"
+                style={{ width: "60%" }}
+              ></div>
+            </div>
+          </div>
           <Button className="bg-pink-100 text-pink-700 mb-2 px-6 py-2 text-base font-semibold rounded-lg">
             Edit Dancer Profile
           </Button>
@@ -102,11 +114,11 @@ export default function ProfilePage() {
               <span className="bg-pink-50 text-pink-700 px-3 py-1 rounded-full text-xs font-semibold">
                 Hip-Hop
               </span>
-              <span className="bg-yellow-50 text-yellow-700 px-3 py-1 rounded-full text-xs font-semibold">
-                Jazz
+              <span className="bg-blue-50 text-blue-700 px-3 py-1 rounded-full text-xs font-semibold">
+                Pop
               </span>
               <span className="bg-blue-50 text-blue-700 px-3 py-1 rounded-full text-xs font-semibold">
-                Ballet
+                Freestyle
               </span>
             </div>
             {/* Achievements */}
@@ -131,19 +143,7 @@ export default function ProfilePage() {
             {/* Location */}
             <div className="flex flex-col items-center">
               <span className="text-xs text-gray-400">Location</span>
-              <span className="text-sm text-gray-700">Toronto, ON</span>
-            </div>
-            {/* Progress Bar */}
-            <div className="w-full flex flex-col items-center">
-              <span className="text-xs text-gray-400 mb-1">
-                Progress to Next Level
-              </span>
-              <div className="w-32 h-2 bg-gray-200 rounded-full overflow-hidden">
-                <div
-                  className="h-2 bg-pink-400 rounded-full"
-                  style={{ width: "60%" }}
-                ></div>
-              </div>
+              <span className="text-sm text-gray-700">Waterloo, ON</span>
             </div>
             {/* Fun Fact */}
             <div className="flex flex-col items-center">
@@ -161,32 +161,30 @@ export default function ProfilePage() {
             <div className="flex items-center gap-12">
               {/* Replace ProblemStatsCircle with a dance stats circle if available, else keep as is */}
               <ProblemStatsCircle
-                easy={12} // Hip-Hop
-                medium={18} // Jazz
-                hard={7} // Ballet
-                total={50} // Total Dances
-                solved={37} // Dances Performed
+                easy={2} // Hip-Hop
+                medium={3} // Jazz
+                hard={1} // Ballet
+                total={21} // Total Dances
+                solved={6} // Dances Performed
               />
               <div className="flex flex-col items-center">
                 <span className="text-sm text-gray-400">Easy</span>
-                <span className="text-xl text-green-500 font-bold">12</span>
+                <span className="text-xl text-green-500 font-bold">2</span>
               </div>
               <div className="flex flex-col items-center">
                 <span className="text-sm text-gray-400">Medium</span>
-                <span className="text-xl text-yellow-500 font-bold">18</span>
+                <span className="text-xl text-yellow-500 font-bold">3</span>
               </div>
               <div className="flex flex-col items-center">
                 <span className="text-sm text-gray-400">Hard</span>
-                <span className="text-xl text-red-500 font-bold">7</span>
+                <span className="text-xl text-red-500 font-bold">1</span>
               </div>
             </div>
             <div className="mt-10 md:mt-0 text-center md:text-right">
               <span className="block text-xs text-gray-500">Dance Badges</span>
               <span className="block text-3xl font-bold">2</span>
               <span className="block text-xs text-gray-400">Locked Badge</span>
-              <span className="block text-xs text-gray-500">
-                Spring Dance Challenge
-              </span>
+              <span className="block text-xs text-gray-500">Dance Guru</span>
             </div>
           </div>
           <div className="mb-10">
@@ -236,20 +234,20 @@ export default function ProfilePage() {
             </div>
             <ul className="space-y-3">
               <li className="bg-gray-50 rounded-lg p-4 flex justify-between items-center">
-                <span className="text-base">Apple</span>
-                <span className="text-xs text-gray-400">5 days ago</span>
+                <span className="text-base">Man Child</span>
+                <span className="text-xs text-gray-400">10 hours ago</span>
               </li>
               <li className="bg-gray-50 rounded-lg p-4 flex justify-between items-center">
-                <span className="text-base">Jazz Night</span>
-                <span className="text-xs text-gray-400">12 days ago</span>
+                <span className="text-base">Don't Start Now</span>
+                <span className="text-xs text-gray-400">15 hours ago</span>
               </li>
               <li className="bg-gray-50 rounded-lg p-4 flex justify-between items-center">
-                <span className="text-base">Ballet Recital</span>
-                <span className="text-xs text-gray-400">18 days ago</span>
+                <span className="text-base">Git Up Challenge</span>
+                <span className="text-xs text-gray-400">1 day ago</span>
               </li>
               <li className="bg-gray-50 rounded-lg p-4 flex justify-between items-center">
-                <span className="text-base">Freestyle Jam</span>
-                <span className="text-xs text-gray-400">a month ago</span>
+                <span className="text-base">Laxed</span>
+                <span className="text-xs text-gray-400">1 day ago</span>
               </li>
             </ul>
           </div>

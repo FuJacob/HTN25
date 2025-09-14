@@ -174,7 +174,7 @@ const problems = [
     title: "Man Child",
     difficulty: "Easy",
     acceptance: "88%",
-    status: "solved",
+    status: "unsolved",
     genre: "Freestyle",
     premium: false,
     video: "Man-Child.mp4",

@@ -115,6 +115,7 @@ def create_app() -> FastAPI:
                 "Focus on timing, technique, and execution. "
                 "for the timestamp, make sure the timestamps are exactly when the move is performed in the user's recording"
                 "for the score, -10 is the move completely ruined the dance, and 10 meaning that the move went really above and beyond in implementing it. if the feedback for the moment is negative, the score should be negative."
+                "you can also make a moment on the facial expressions only if severely different."
                 "Give specific, actionable feedback for improvements directly related to the reference video. "
                 "Return the result as a valid JSON object."
             )
@@ -567,11 +568,11 @@ def create_app() -> FastAPI:
                     landmark_drawing_spec = mp_drawing.DrawingSpec(
                         color=(255, 255, 255),  # White joints
                         thickness=2,
-                        circle_radius=3
+                        circle_radius=3,
                     )
                     connection_drawing_spec = mp_drawing.DrawingSpec(
                         color=(255, 255, 255),  # White connections
-                        thickness=2
+                        thickness=2,
                     )
 
                     # Draw landmarks (joints)
@@ -580,7 +581,7 @@ def create_app() -> FastAPI:
                         pose_results.pose_landmarks,
                         mp_pose.POSE_CONNECTIONS,
                         landmark_drawing_spec=landmark_drawing_spec,
-                        connection_drawing_spec=connection_drawing_spec
+                        connection_drawing_spec=connection_drawing_spec,
                     )
 
                 # Check for dance events and display moment-based feedback
@@ -739,7 +740,9 @@ def create_app() -> FastAPI:
                 )
 
                 if not out.isOpened():
-                    raise Exception("Could not create output video writer with any codec")
+                    raise Exception(
+                        "Could not create output video writer with any codec"
+                    )
 
             # Write all frames to the final video like working example
             for frame in processed_frames:
@@ -764,12 +767,16 @@ def create_app() -> FastAPI:
 
             if codec_name == "mp4v":
                 # Try to convert to H.264 for better browser compatibility using FFmpeg
-                temp_h264_video_path = temp_output_video_path.replace(".mp4", "_h264.mp4")
+                temp_h264_video_path = temp_output_video_path.replace(
+                    ".mp4", "_h264.mp4"
+                )
 
                 try:
                     import subprocess
 
-                    print("Converting video to H.264 for better browser compatibility...")
+                    print(
+                        "Converting video to H.264 for better browser compatibility..."
+                    )
 
                     # Use FFmpeg to convert to H.264 with web-optimized settings
                     ffmpeg_cmd = [
@@ -801,19 +808,25 @@ def create_app() -> FastAPI:
                     if result.returncode == 0 and os.path.exists(temp_h264_video_path):
                         h264_size = os.path.getsize(temp_h264_video_path)
                         if h264_size > 0:
-                            print(f"H.264 conversion successful. Size: {h264_size} bytes")
+                            print(
+                                f"H.264 conversion successful. Size: {h264_size} bytes"
+                            )
                             # Clean up original file and use H.264 version
                             os.unlink(temp_output_video_path)
                             temp_output_video_path = temp_h264_video_path
                             codec_name = "libx264"
                         else:
-                            print("H.264 conversion resulted in empty file, using original")
+                            print(
+                                "H.264 conversion resulted in empty file, using original"
+                            )
                     else:
                         print(f"H.264 conversion failed: {result.stderr}")
                         print("Using original mp4v video")
 
                 except Exception as conv_error:
-                    print(f"FFmpeg conversion failed: {conv_error}, using original video")
+                    print(
+                        f"FFmpeg conversion failed: {conv_error}, using original video"
+                    )
                     # Clean up failed conversion file if it exists
                     if os.path.exists(temp_h264_video_path):
                         os.unlink(temp_h264_video_path)

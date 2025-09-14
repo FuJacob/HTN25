@@ -7,6 +7,8 @@ import {
   FaPlus,
   FaLock,
   FaHeart,
+  FaPeace,
+  FaBacon,
 } from "react-icons/fa6";
 import React, { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
@@ -16,7 +18,7 @@ export default function SideBar() {
   const [listsOpen, setListsOpen] = useState(true);
   const [lists, setLists] = useState<{ id: string; name: string }[]>([
     { id: "favorite", name: "Favorite" },
-    { id: "arrays", name: "arrays n strings" },
+    { id: "arrays", name: "Want to Learn" },
   ]);
   const [adding, setAdding] = useState(false);
   const [newListName, setNewListName] = useState("");
@@ -98,7 +100,7 @@ export default function SideBar() {
                 {list.id === "favorite" ? (
                   <FaHeart className="w-4 h-4" />
                 ) : (
-                  <FaLock className="w-4 h-4" />
+                  <FaBacon className="w-4 h-4" />
                 )}
                 <span className="truncate">{list.name}</span>
               </Link>

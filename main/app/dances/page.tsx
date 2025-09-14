@@ -25,34 +25,244 @@ const topicCategories = [
 ];
 
 const problems = [
-  { id: "1", number: 1, title: "Adderall", difficulty: "Easy", acceptance: "75%", status: "unsolved", premium: false, video: "Adderall.mp4" },
-  { id: "2", number: 2, title: "Apple", difficulty: "Easy", acceptance: "75%", status: "unsolved", premium: false, video: "Apple.mp4" },
-  { id: "3", number: 3, title: "Blinding Lights", difficulty: "Easy", acceptance: "75%", status: "unsolved", premium: false, video: "Blinding-Lights.mp4" },
-  { id: "4", number: 4, title: "Cannibal", difficulty: "Easy", acceptance: "75%", status: "unsolved", premium: false, video: "Cannibal.mp4" },
-  { id: "5", number: 5, title: "Chicken Banana Dance", difficulty: "Easy", acceptance: "75%", status: "unsolved", premium: false, video: "Chicken-Banana-Dance.mp4" },
-  { id: "6", number: 6, title: "Don't Start Now", difficulty: "Easy", acceptance: "75%", status: "unsolved", premium: false, video: "Don't-Start-Now.mp4" },
-  { id: "7", number: 7, title: "Emergency Budots", difficulty: "Easy", acceptance: "75%", status: "unsolved", premium: false, video: "Emergency-Budots.mp4" },
-  { id: "8", number: 8, title: "Git Up Challenge", difficulty: "Easy", acceptance: "75%", status: "unsolved", premium: false, video: "Git-Up-Challenge.mp4" },
-  { id: "9", number: 9, title: "Give It To Me", difficulty: "Easy", acceptance: "75%", status: "unsolved", premium: false, video: "Give-it-to-Me.mp4" },
-  { id: "10", number: 10, title: "I'm Moving Too Fast", difficulty: "Easy", acceptance: "75%", status: "unsolved", premium: false, video: "I'm-Moving-Too-Fast.mp4" },
-  { id: "11", number: 11, title: "Illit Jellyous", difficulty: "Easy", acceptance: "75%", status: "unsolved", premium: false, video: "Illit-Jellyous.mp4" },
-  { id: "12", number: 12, title: "Last Christmas", difficulty: "Easy", acceptance: "75%", status: "unsolved", premium: false, video: "Last-Christmas.mp4" },
-  { id: "13", number: 13, title: "Laxed", difficulty: "Easy", acceptance: "75%", status: "unsolved", premium: false, video: "Laxed.mp4" },
-  { id: "14", number: 14, title: "Man Child", difficulty: "Easy", acceptance: "75%", status: "unsolved", premium: false, video: "Man-Child.mp4" },
-  { id: "15", number: 15, title: "Maps", difficulty: "Easy", acceptance: "75%", status: "unsolved", premium: false, video: "Maps.mp4" },
-  { id: "16", number: 16, title: "Number One Baby", difficulty: "Easy", acceptance: "75%", status: "unsolved", premium: false, video: "Number-One-Baby.mp4" },
-  { id: "17", number: 17, title: "Out West", difficulty: "Easy", acceptance: "75%", status: "unsolved", premium: false, video: "Out-West.mp4" },
-  { id: "18", number: 18, title: "Renegade", difficulty: "Easy", acceptance: "75%", status: "unsolved", premium: false, video: "Renegade.mp4" },
-  { id: "19", number: 19, title: "Supalonely", difficulty: "Easy", acceptance: "75%", status: "unsolved", premium: false, video: "Supalonely.mp4" },
-  { id: "20", number: 20, title: "Vibe", difficulty: "Easy", acceptance: "75%", status: "unsolved", premium: false, video: "Vibe.mp4" },
-  { id: "21", number: 21, title: "Wednesday", difficulty: "Easy", acceptance: "75%", status: "unsolved", premium: false, video: "Wednesday.mp4" },
+  {
+    id: "1",
+    number: 1,
+    title: "Adderall",
+    difficulty: "Medium",
+    acceptance: "68%",
+    status: "unsolved",
+    genre: "Hip Hop",
+    premium: false,
+    video: "Adderall.mp4",
+  },
+  {
+    id: "2",
+    number: 2,
+    title: "Apple",
+    difficulty: "Easy",
+    acceptance: "89%",
+    status: "solved",
+    genre: "Pop",
+    premium: false,
+    video: "Apple.mp4",
+  },
+  {
+    id: "3",
+    number: 3,
+    title: "Blinding Lights",
+    difficulty: "Hard",
+    acceptance: "42%",
+    status: "unsolved",
+    genre: "Pop",
+    premium: false,
+    video: "Blinding-Lights.mp4",
+  },
+  {
+    id: "4",
+    number: 4,
+    title: "Cannibal",
+    difficulty: "Medium",
+    acceptance: "71%",
+    status: "unsolved",
+    genre: "Hip Hop",
+    premium: false,
+    video: "Cannibal.mp4",
+  },
+  {
+    id: "5",
+    number: 5,
+    title: "Chicken Banana Dance",
+    difficulty: "Easy",
+    acceptance: "92%",
+    status: "unsolved",
+    genre: "Freestyle",
+    premium: false,
+    video: "Chicken-Banana-Dance.mp4",
+  },
+  {
+    id: "6",
+    number: 6,
+    title: "Don't Start Now",
+    difficulty: "Medium",
+    acceptance: "64%",
+    status: "solved",
+    genre: "Pop",
+    premium: false,
+    video: "Don't-Start-Now.mp4",
+  },
+  {
+    id: "7",
+    number: 7,
+    title: "Emergency Budots",
+    difficulty: "Hard",
+    acceptance: "38%",
+    status: "unsolved",
+    genre: "Hip Hop",
+    premium: false,
+    video: "Emergency-Budots.mp4",
+  },
+  {
+    id: "8",
+    number: 8,
+    title: "Git Up Challenge",
+    difficulty: "Easy",
+    acceptance: "85%",
+    status: "solved",
+    genre: "Freestyle",
+    premium: false,
+    video: "Git-Up-Challenge.mp4",
+  },
+  {
+    id: "9",
+    number: 9,
+    title: "Give It To Me",
+    difficulty: "Hard",
+    acceptance: "29%",
+    status: "unsolved",
+    genre: "Hip Hop",
+    premium: false,
+    video: "Give-it-to-Me.mp4",
+  },
+  {
+    id: "10",
+    number: 10,
+    title: "I'm Moving Too Fast",
+    difficulty: "Medium",
+    acceptance: "73%",
+    status: "unsolved",
+    genre: "Pop",
+    premium: false,
+    video: "I'm-Moving-Too-Fast.mp4",
+  },
+  {
+    id: "11",
+    number: 11,
+    title: "Illit Jellyous",
+    difficulty: "Easy",
+    acceptance: "91%",
+    status: "unsolved",
+    genre: "K-Pop",
+    premium: false,
+    video: "Illit-Jellyous.mp4",
+  },
+  {
+    id: "12",
+    number: 12,
+    title: "Last Christmas",
+    difficulty: "Medium",
+    acceptance: "67%",
+    status: "unsolved",
+    genre: "Pop",
+    premium: false,
+    video: "Last-Christmas.mp4",
+  },
+  {
+    id: "13",
+    number: 13,
+    title: "Laxed",
+    difficulty: "Hard",
+    acceptance: "35%",
+    status: "solved",
+    genre: "Hip Hop",
+    premium: false,
+    video: "Laxed.mp4",
+  },
+  {
+    id: "14",
+    number: 14,
+    title: "Man Child",
+    difficulty: "Easy",
+    acceptance: "88%",
+    status: "solved",
+    genre: "Freestyle",
+    premium: false,
+    video: "Man-Child.mp4",
+  },
+  {
+    id: "15",
+    number: 15,
+    title: "Maps",
+    difficulty: "Medium",
+    acceptance: "69%",
+    status: "unsolved",
+    genre: "Pop",
+    premium: false,
+    video: "Maps.mp4",
+  },
+  {
+    id: "16",
+    number: 16,
+    title: "Number One Baby",
+    difficulty: "Hard",
+    acceptance: "44%",
+    status: "unsolved",
+    genre: "K-Pop",
+    premium: false,
+    video: "Number-One-Baby.mp4",
+  },
+  {
+    id: "17",
+    number: 17,
+    title: "Out West",
+    difficulty: "Easy",
+    acceptance: "87%",
+    status: "unsolved",
+    genre: "Hip Hop",
+    premium: false,
+    video: "Out-West.mp4",
+  },
+  {
+    id: "18",
+    number: 18,
+    title: "Renegade",
+    difficulty: "Hard",
+    acceptance: "31%",
+    status: "unsolved",
+    genre: "Hip Hop",
+    premium: false,
+    video: "Renegade.mp4",
+  },
+  {
+    id: "19",
+    number: 19,
+    title: "Supalonely",
+    difficulty: "Medium",
+    acceptance: "76%",
+    status: "solved",
+    genre: "Pop",
+    premium: false,
+    video: "Supalonely.mp4",
+  },
+  {
+    id: "20",
+    number: 20,
+    title: "Vibe",
+    difficulty: "Easy",
+    acceptance: "83%",
+    status: "unsolved",
+    genre: "Freestyle",
+    premium: false,
+    video: "Vibe.mp4",
+  },
+  {
+    id: "21",
+    number: 21,
+    title: "Wednesday",
+    difficulty: "Medium",
+    acceptance: "72%",
+    status: "solved",
+    genre: "Pop",
+    premium: false,
+    video: "Wednesday.mp4",
+  },
 ];
 
 const topicFilters = [
-  { name: "All Dances", icon: FaCode },
-  { name: "Beginner", icon: FaSync },
-  { name: "Intermediate", icon: FaDatabase },
-  { name: "Advanced", icon: FaTerminal },
+  { name: "All Dances" },
+  { name: "Beginner" },
+  { name: "Intermediate" },
+  { name: "Advanced" },
 ];
 
 export default function DanceProblemsPage() {
@@ -103,16 +313,24 @@ export default function DanceProblemsPage() {
 
   // Filter logic
   const filteredProblems = problems.filter((problem) => {
-    const matchesSearch = problem.title.toLowerCase().includes(search.toLowerCase());
-    const matchesGenre = activeGenre === "All Genres" || problem.genre === activeGenre;
+    const matchesSearch = problem.title
+      .toLowerCase()
+      .includes(search.toLowerCase());
+    const matchesGenre =
+      activeGenre === "All Genres" || problem.genre === activeGenre;
 
-    const matchesSkillLevel = activeFilter === "All Dances" ||
+    const matchesSkillLevel =
+      activeFilter === "All Dances" ||
       (activeFilter === "Beginner" && problem.difficulty === "Easy") ||
       (activeFilter === "Intermediate" && problem.difficulty === "Medium") ||
       (activeFilter === "Advanced" && problem.difficulty === "Hard");
 
     return matchesSearch && matchesGenre && matchesSkillLevel;
   });
+
+  // Calculate mastered count
+  const masteredCount = problems.filter((p) => p.status === "solved").length;
+  const totalCount = problems.length;
 
   return (
     <div>
@@ -125,64 +343,6 @@ export default function DanceProblemsPage() {
 
         {/* Main Content Area */}
         <div className="flex-1 flex flex-col">
-          {/* Top Cards Section */}
-          <div className="p-10 bg-white border-b border-gray-200">
-            <div className="grid grid-cols-3 gap-6 max-w-7xl">
-              {/* Dance Premium Card */}
-              <div
-                className="bg-gradient-to-br from-orange-100 to-orange-200 p-6 rounded-xl border border-orange-200 cursor-pointer hover:shadow-lg transition-shadow"
-                onClick={handlePremiumClick}
-              >
-                <div className="flex items-start justify-between">
-                  <div>
-                    <h3 className="font-semibold text-xl mb-2 text-gray-900">
-                      Dance Time
-                    </h3>
-                    <p className="text-lg text-orange-700 mb-3">
-                      Premium Moves
-                    </p>
-                    <p className="text-2xl font-bold text-gray-900">
-                      $119<span className="text-lg font-normal">/yr $179</span>
-                    </p>
-                  </div>
-                  <div className="text-right text-sm text-gray-600">
-                    <p>FEB 23</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Dance Masterclass */}
-              <div
-                className="bg-gradient-to-br from-green-100 to-green-200 p-6 rounded-xl border border-green-200 cursor-pointer hover:shadow-lg transition-shadow"
-                onClick={handleMasterclassClick}
-              >
-                <h3 className="font-semibold text-xl mb-2 text-gray-900">
-                  TikTok&apos;s Masterclass
-                </h3>
-                <p className="text-lg font-semibold text-green-700 mb-2">
-                  Crash Course
-                </p>
-                <p className="text-lg text-gray-600 mb-3">Viral Choreography</p>
-                <p className="text-xl font-bold text-gray-900">FREE</p>
-              </div>
-
-              {/* Dance Plans Card */}
-              <div
-                className="bg-gradient-to-br from-blue-100 to-blue-200 p-6 rounded-xl border border-blue-200 cursor-pointer hover:shadow-lg transition-shadow"
-                onClick={handleDancePlansClick}
-              >
-                <h3 className="font-semibold text-xl mb-2 text-gray-900">
-                  Dance Plans
-                </h3>
-                <div className="space-y-2">
-                  <div className="text-lg text-blue-700">Top 100 Moves</div>
-                  <div className="text-lg text-blue-700">Trending Routines</div>
-                  <div className="text-lg text-blue-700">Choreography</div>
-                </div>
-              </div>
-            </div>
-          </div>
-
           {/* Topics Bar */}
           <div className="px-8 py-8 bg-white border-b border-gray-200">
             <div className="flex items-center gap-8 mb-8">
@@ -190,18 +350,18 @@ export default function DanceProblemsPage() {
                 <div
                   key={topic.name}
                   className={`flex items-center gap-2 text-lg cursor-pointer hover:text-tiktok-red transition-colors ${
-                    activeGenre === topic.name ? "text-tiktok-red font-semibold" : "text-gray-900"
+                    activeGenre === topic.name
+                      ? "text-tiktok-red font-semibold"
+                      : "text-gray-900"
                   }`}
                   onClick={() => setActiveGenre(topic.name)}
                 >
-                  <span className="font-medium">
-                    {topic.name}
-                  </span>
+                  <span className="font-medium">{topic.name}</span>
                 </div>
               ))}
               <div className="ml-auto">
                 <button className="text-lg text-tiktok-red hover:text-tiktok-red/80 flex items-center gap-2">
-                  ♪ Expand <FaFilter className="w-5 h-5" />
+                  <FaFilter className="w-5 h-5" />
                 </button>
               </div>
             </div>
@@ -220,9 +380,6 @@ export default function DanceProblemsPage() {
                   }`}
                   onClick={() => setActiveFilter(filter.name)}
                 >
-                  {filter.icon &&
-                    React.createElement(filter.icon, { className: "w-5 h-5" })
-                  }
                   {filter.name}
                 </Button>
               ))}
@@ -242,76 +399,115 @@ export default function DanceProblemsPage() {
                 />
               </div>
               <div className="flex items-center gap-5 ml-auto">
-                <div className="text-lg text-gray-600">4/18 Mastered</div>
+                <div className="text-lg text-gray-600">
+                  {masteredCount}/{totalCount} Mastered
+                </div>
               </div>
             </div>
           </div>
 
           {/* Problems List */}
           <div className="flex-1 overflow-auto bg-white">
-            <div className="divide-y divide-gray-200">
-            {problems.map((problem, index) => (
-              <Link key={problem.id} href={`/dance/${problem.id}`}>
-                <div className="px-8 py-6 hover:bg-gray-50 cursor-pointer transition-colors">
-                  <div className="flex items-center gap-8">
-                    {/* Status */}
-                    <div className="w-10 text-center">
-                      <span
-                        className={`text-2xl font-bold ${getStatusColor(
-                          problem.status
-                        )}`}
-                      >
-                        {getStatusIcon(problem.status)}
-                      </span>
-                    </div>
+            {/* Table Headers */}
+            <div className="px-8 py-4 bg-gray-50 border-b border-gray-200 sticky top-0 z-10">
+              <div className="flex items-center gap-8">
+                {/* Preview Header */}
+                <div className="w-12 text-center">
+                  <span className="text-sm font-semibold text-gray-700 uppercase tracking-wide">
+                    Preview
+                  </span>
+                </div>
 
-                    {/* Problem Number and Title */}
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-3">
-                        <span className="text-lg text-gray-600 font-medium">
-                          {problem.number}.
-                        </span>
-                        <span className="font-medium text-gray-900 text-lg truncate">
-                          {problem.title}
+                {/* Title Header */}
+                <div className="flex-1 min-w-0">
+                  <span className="text-sm font-semibold text-gray-700 uppercase tracking-wide">
+                    Title
+                  </span>
+                </div>
+
+                {/* Status Header */}
+                <div className="w-16 text-center">
+                  <span className="text-sm font-semibold text-gray-700 uppercase tracking-wide">
+                    Status
+                  </span>
+                </div>
+
+                {/* Pass % Header */}
+                <div className="w-20 text-right">
+                  <span className="text-sm font-semibold text-gray-700 uppercase tracking-wide">
+                    Pass %
+                  </span>
+                </div>
+
+                {/* Difficulty Header */}
+                <div className="w-28 text-right">
+                  <span className="text-sm font-semibold text-gray-700 uppercase tracking-wide">
+                    Difficulty
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div className="divide-y divide-gray-200">
+              {filteredProblems.map((problem, index) => (
+                <Link key={problem.id} href={`/dance/${problem.id}`}>
+                  <div className="px-8 py-6 hover:bg-gray-50 cursor-pointer transition-colors">
+                    <div className="flex items-center gap-8">
+                      {/* Dance Preview GIF */}
+                      <div className="w-12 h-12 rounded-lg overflow-hidden bg-gray-100 flex-shrink-0">
+                        <img
+                          src={`/gifs/${problem.video.replace(".mp4", ".gif")}`}
+                          alt={`${problem.title} preview`}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+
+                      {/* Problem Number and Title */}
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-3">
+                          <span className="text-lg text-gray-600 font-medium">
+                            {problem.number}.
+                          </span>
+                          <span className="font-medium text-gray-900 text-lg truncate">
+                            {problem.title}
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Status */}
+                      <div className="w-16 text-center">
+                        <span
+                          className={`text-xl font-bold ${getStatusColor(
+                            problem.status
+                          )}`}
+                        >
+                          {getStatusIcon(problem.status)}
                         </span>
                       </div>
-                    </div>
 
-                    {/* Acceptance Rate */}
-                    <div className="w-28 text-right">
-                      <span className="text-lg text-gray-600">
-                        {problem.acceptance}
-                      </span>
-                    </div>
+                      {/* Pass % */}
+                      <div className="w-20 text-right">
+                        <span className="text-lg text-gray-600">
+                          {problem.acceptance}
+                        </span>
+                      </div>
 
-                    {/* Difficulty */}
-                    <div className="w-28 text-right">
-                      <span
-                        className={`text-lg font-medium ${getDifficultyColor(
-                          problem.difficulty
-                        )}`}
-                      >
-                        {problem.difficulty === "Medium"
-                          ? "Med."
-                          : problem.difficulty}
-                      </span>
-                    </div>
-
-                    {/* Frequency bars */}
-                    <div className="w-20 flex justify-center">
-                      <div className="flex gap-1">
-                        {[1, 2, 3, 4, 5, 6].map((bar) => (
-                          <div
-                            key={bar}
-                            className="w-1.5 h-7 bg-gray-300 rounded-sm"
-                          ></div>
-                        ))}
+                      {/* Difficulty */}
+                      <div className="w-28 text-right">
+                        <span
+                          className={`text-lg font-medium ${getDifficultyColor(
+                            problem.difficulty
+                          )}`}
+                        >
+                          {problem.difficulty === "Medium"
+                            ? "Med."
+                            : problem.difficulty}
+                        </span>
                       </div>
                     </div>
                   </div>
-                </div>
-              </Link>
-            ))}
+                </Link>
+              ))}
             </div>
           </div>
         </div>
@@ -324,32 +520,29 @@ export default function DanceProblemsPage() {
             {/* Trending Artists */}
             <div className="mt-6">
               <h3 className="font-medium mb-5 text-gray-900 text-lg">
-                Trending Artists
+                Trending Dances
               </h3>
               <div className="grid grid-cols-2 gap-3">
-                {[
-                  "Doja Cat",
-                  "Megan Thee Stallion",
-                  "Olivia Rodrigo",
-                  "Lil Nas X",
-                  "The Weeknd",
-                  "Dua Lipa",
-                  "Travis Scott",
-                  "Ariana Grande",
-                ].map((artist) => (
-                  <div
-                    key={artist}
-                    className="flex items-center justify-center p-3 bg-gray-100 rounded-full cursor-pointer hover:bg-gray-200 transition-colors"
-                    onClick={() => {
-                      setSearch(artist);
-                      setActiveGenre("Pop");
-                    }}
-                  >
-                    <span className="text-base font-medium text-gray-900 text-center">
-                      {artist}
-                    </span>
-                  </div>
-                ))}
+                {["Apple", "Illit Jellyous", "Renegade", "Man Child"].map(
+                  (artist) => (
+                    <div
+                      key={artist}
+                      className="flex items-center justify-center p-3 bg-gray-100 rounded-full cursor-pointer hover:bg-gray-200 transition-colors"
+                      onClick={() => {
+                        setSearch(artist);
+                        // Set genre based on the dance
+                        const dance = problems.find((p) => p.title === artist);
+                        if (dance) {
+                          setActiveGenre(dance.genre);
+                        }
+                      }}
+                    >
+                      <span className="text-base font-medium text-gray-900 text-center">
+                        {artist}
+                      </span>
+                    </div>
+                  )
+                )}
               </div>
             </div>
           </div>

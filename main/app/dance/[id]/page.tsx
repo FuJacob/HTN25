@@ -82,7 +82,7 @@ export default function ProblemPage() {
     "17": { title: "Out West", video: "Out-West.mp4" },
     "18": { title: "Renegade", video: "Renegade.mp4" },
     "19": { title: "Supalonely", video: "Supalonely.mp4" },
-    "20": { title: "Vibe", video: "Vibe.mp4" },
+    "20": { title: "Soda Pop", video: "Soda-Pop.mp4" },
     "21": { title: "Wednesday", video: "Wednesday.mp4" },
     "22": { title: "Slide", video: "Slide.mp4" },
   }[problemId as string] || { title: "Unknown Dance", video: "Adderall.mp4" };

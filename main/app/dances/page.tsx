@@ -237,13 +237,13 @@ const problems = [
   {
     id: "20",
     number: 20,
-    title: "Vibe",
+    title: "Soda Pop",
     difficulty: "Easy",
     acceptance: "83%",
     status: "unsolved",
-    genre: "Freestyle",
+    genre: "K-Pop",
     premium: false,
-    video: "Vibe.mp4",
+    video: "Soda-Pop.mp4",
   },
   {
     id: "21",

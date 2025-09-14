@@ -3,7 +3,12 @@ import { useRef, useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/app/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/app/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/app/components/ui/card";
 import { Badge } from "@/app/components/ui/badge";
 
 export default function ProblemPage() {
@@ -22,20 +27,22 @@ export default function ProblemPage() {
   const [countdown, setCountdown] = useState<number | null>(null);
   const [isCountingDown, setIsCountingDown] = useState(false);
   const referenceVideoRef = useRef<HTMLVideoElement>(null);
-  
 
   // Problem data (would come from API in real app)
   const problemData = {
     id: problemId,
     title: "Two Sum Dance",
     difficulty: "Easy" as const,
-    tags: ["Array", "Hash Table", "Dance"]
+    tags: ["Array", "Hash Table", "Dance"],
   };
 
   // Analysis data from API
   const [analysisData, setAnalysisData] = useState<any>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [analysisError, setAnalysisError] = useState<string | null>(null);
+  const [processedVideoUrl, setProcessedVideoUrl] = useState<string | null>(
+    null
+  );
 
   const startCountdownAndRecording = async () => {
     try {
@@ -92,7 +99,6 @@ export default function ProblemPage() {
           clearInterval(countdownInterval);
         }
       }, 500); // 500ms between each count (adjust to match beat)
-
     } catch (err) {
       console.error("Could not access camera:", err);
     }
@@ -118,14 +124,27 @@ export default function ProblemPage() {
       // Convert recorded video URL to File
       const response = await fetch(recordedVideo);
       const blob = await response.blob();
-      const videoFile = new File([blob], "recorded-video.webm", {
+      const recordedVideoFile = new File([blob], "recorded-video.webm", {
         type: "video/webm",
       });
 
+      // Get the reference video (adderall.mp4) from public/videos
+      const referenceVideoUrl = "/videos/Adderall.mp4";
+      // If you need a File object for upload, fetch and convert as before:
+      const referenceVideoResponse = await fetch(referenceVideoUrl);
+      const referenceVideoBlob = await referenceVideoResponse.blob();
+      const referenceVideoFile = new File(
+        [referenceVideoBlob],
+        "adderall.mp4",
+        {
+          type: "video/mp4",
+        }
+      );
+
       // Step 1: Analyze videos - EXACT COPY FROM HOME
       const formData1 = new FormData();
-      formData1.append("video1", videoFile);
-      formData1.append("video2", videoFile);
+      formData1.append("video1", referenceVideoFile); // Reference video
+      formData1.append("video2", recordedVideoFile); // User's recorded video
 
       console.log("Analyzing videos...");
       const analyzeResponse = await fetch(
@@ -156,7 +175,7 @@ export default function ProblemPage() {
       }
 
       formData2.append("dance_analysis", analysisText);
-      formData2.append("video_file", videoFile);
+      formData2.append("video_file", recordedVideoFile);
 
       console.log("Processing video with analysis...");
       const processResponse = await fetch(
@@ -181,8 +200,9 @@ export default function ProblemPage() {
 
       const videoUrl = URL.createObjectURL(videoBlob);
       console.log("Created blob URL:", videoUrl);
-      
-      // Set the analysis data from the first response
+
+      // Set the processed video URL and analysis data
+      setProcessedVideoUrl(videoUrl);
       setAnalysisData(analyzeResult);
     } catch (err: any) {
       console.error("Analysis error:", err);
@@ -212,12 +232,22 @@ export default function ProblemPage() {
           <div className="border-b border-gray-700 p-6 bg-gray-800/50">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
-                <Link href="/dance" className="text-orange-400 hover:text-orange-300 transition-colors text-xl">
+                <Link
+                  href="/dance"
+                  className="text-orange-400 hover:text-orange-300 transition-colors text-xl"
+                >
                   ←
                 </Link>
-                <h2 className="text-xl font-semibold text-white">{problemData.title}</h2>
+                <h2 className="text-xl font-semibold text-white">
+                  {problemData.title}
+                </h2>
               </div>
-              <Badge variant={problemData.difficulty === 'Easy' ? 'default' : 'destructive'} className="text-sm px-3 py-1">
+              <Badge
+                variant={
+                  problemData.difficulty === "Easy" ? "default" : "destructive"
+                }
+                className="text-sm px-3 py-1"
+              >
                 {problemData.difficulty}
               </Badge>
             </div>
@@ -228,7 +258,7 @@ export default function ProblemPage() {
             <div className="relative">
               <div
                 className="bg-gradient-to-br from-purple-900 via-purple-800 to-blue-900 rounded-2xl flex items-center justify-center shadow-2xl border border-gray-600/30 w-64"
-                style={{ height: '400px' }}
+                style={{ height: "400px" }}
               >
                 <div className="text-center text-white space-y-3">
                   <div className="text-5xl mb-4">🎵</div>
@@ -252,7 +282,11 @@ export default function ProblemPage() {
               </p>
               <div className="flex flex-wrap gap-2">
                 {problemData.tags.map((tag) => (
-                  <Badge key={tag} variant="secondary" className="text-xs px-3 py-1 bg-gray-700 text-gray-200 border-0">
+                  <Badge
+                    key={tag}
+                    variant="secondary"
+                    className="text-xs px-3 py-1 bg-gray-700 text-gray-200 border-0"
+                  >
                     {tag}
                   </Badge>
                 ))}
@@ -302,11 +336,11 @@ export default function ProblemPage() {
                   >
                     Try Again
                   </Button>
-                  <Button 
+                  <Button
                     onClick={handleSubmitForAnalysis}
                     disabled={isAnalyzing}
                     className="w-full h-12 font-semibold bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:t
-                    o-emerald-700 shadow-lg transform hover:scale-[1.02] transition-all duration-200" 
+                    o-emerald-700 shadow-lg transform hover:scale-[1.02] transition-all duration-200"
                     size="lg"
                   >
                     {isAnalyzing ? "🔄 Analyzing..." : "Submit for Analysis"}
@@ -324,47 +358,59 @@ export default function ProblemPage() {
             ref={cameraVideoRef}
             autoPlay
             muted
-            className={`absolute inset-0 w-full h-full object-cover z-0 ${recording ? 'block' : 'hidden'}`}
+            className={`absolute inset-0 w-full h-full object-cover z-0 ${
+              recording ? "block" : "hidden"
+            }`}
           />
-          
-              {/* Countdown Overlay */}
-              {isCountingDown && countdown && (
-                <div className="absolute inset-0 bg-black/75 flex items-center justify-center z-20">
-                  <div className="text-white text-9xl font-bold animate-pulse">
-                    {countdown}
-                  </div>
-                </div>
-              )}
 
-          {/* Top Section - Blank for now */}
-          <div className="flex-1 flex items-center justify-center relative z-10">
-                {recordedVideo && !recording && (
-                  <video
-                    src={recordedVideo}
-                    controls
-                    className="w-full h-full object-cover"
-                  />
-                )}
-
-                {!recording && !recordedVideo && !isCountingDown && (
-                  <div className="text-center text-gray-400">
-                    <div className="text-8xl mb-6">📹</div>
-                    <CardTitle className="text-3xl mb-4">Ready to Dance</CardTitle>
-                    <p className="text-lg">Start the challenge to begin recording</p>
-                  </div>
-                )}
+          {/* Countdown Overlay */}
+          {isCountingDown && countdown && (
+            <div className="absolute inset-0 bg-black/75 flex items-center justify-center z-20">
+              <div className="text-white text-9xl font-bold animate-pulse">
+                {countdown}
               </div>
+            </div>
+          )}
+
+          {/* Top Section - Processed Video */}
+          <div className="flex-1 flex items-center justify-center relative z-10">
+            {processedVideoUrl && (
+              <video
+                src={processedVideoUrl}
+                controls
+                className="w-full h-full object-cover"
+              />
+            )}
+
+            {!processedVideoUrl && !recording && !isCountingDown && (
+              <div className="text-center text-gray-400">
+                <div className="text-8xl mb-6">📹</div>
+                <CardTitle className="text-3xl mb-4">Ready to Dance</CardTitle>
+                <p className="text-lg">
+                  Start the challenge to begin recording
+                </p>
+              </div>
+            )}
+          </div>
 
           {/* Bottom Section - Compact Analysis */}
           <div className="h-36 border-t border-gray-700 bg-gray-900/50 relative z-10 flex flex-col">
             {/* Sticky Header */}
             <div className="sticky top-0 px-4 py-3 bg-gradient-to-b from-gray-900/95 via-gray-900/80 to-transparent backdrop-blur-md flex items-center justify-between border-b border-gray-700 flex-shrink-0">
-              <h3 className="text-sm font-semibold text-white">Dance Analysis</h3>
+              <h3 className="text-sm font-semibold text-white">
+                Dance Analysis
+              </h3>
               <div className="flex items-center space-x-3">
                 {analysisData && analysisData.parsed_data?.dance_analysis && (
                   <div className="flex items-center space-x-1">
                     <div className="w-2 h-2 bg-red-500 rounded-full"></div>
-                    <span className="text-xs text-gray-300">Score: {analysisData.parsed_data.dance_analysis.reduce((sum: number, move: any) => sum + move.score, 0)}</span>
+                    <span className="text-xs text-gray-300">
+                      Score:{" "}
+                      {analysisData.parsed_data.dance_analysis.reduce(
+                        (sum: number, move: any) => sum + move.score,
+                        0
+                      )}
+                    </span>
                   </div>
                 )}
                 <div className="flex items-center space-x-1">
@@ -386,54 +432,67 @@ export default function ProblemPage() {
 
                 {analysisError && (
                   <div className="bg-red-900/50 rounded border border-red-700 p-3">
-                    <p className="text-red-200 text-sm">Error: {analysisError}</p>
+                    <p className="text-red-200 text-sm">
+                      Error: {analysisError}
+                    </p>
                   </div>
                 )}
 
-                {analysisData && analysisData.parsed_data?.dance_analysis && (
-                  analysisData.parsed_data.dance_analysis.map((move: any, index: number) => {
-                    const isBlunder = move.score <= -4;
-                    const isMistake = move.score === -3;
-                    const isInaccuracy = move.score >= -2;
-                    
-                    return (
-                      <div key={index} className="bg-gray-800/50 rounded border border-gray-700 hover:border-gray-600 transition-colors">
-                        <div className="p-2">
-                          {/* Move Header */}
-                          <div className="flex items-center justify-between mb-1">
-                            <div className="flex items-center space-x-2">
-                              <span className="text-xs font-mono text-gray-400 bg-gray-900 px-1 py-0.5 rounded">
-                                {move.timestamp_of_outcome}
-                              </span>
-                              <span className="text-white text-sm font-medium capitalize">{move.problem_type}</span>
-                              {isBlunder && (
-                                <div className="w-1.5 h-1.5 bg-red-500 rounded-full"></div>
-                              )}
-                              {isMistake && (
-                                <div className="w-1.5 h-1.5 bg-orange-500 rounded-full"></div>
-                              )}
-                              {isInaccuracy && (
-                                <div className="w-1.5 h-1.5 bg-yellow-500 rounded-full"></div>
-                              )}
-                            </div>
-                            <span className="text-xs text-gray-400">#{index + 1}</span>
-                          </div>
+                {analysisData &&
+                  analysisData.parsed_data?.dance_analysis &&
+                  analysisData.parsed_data.dance_analysis.map(
+                    (move: any, index: number) => {
+                      const isBlunder = move.score <= -4;
+                      const isMistake = move.score === -3;
+                      const isInaccuracy = move.score >= -2;
 
-                          {/* Feedback - Compact */}
-                          <div className="bg-gray-900/50 rounded p-1.5 border-l-2 border-gray-600">
-                            <p className="text-gray-200 text-xs leading-relaxed line-clamp-2">
-                              {move.feedback}
-                            </p>
+                      return (
+                        <div
+                          key={index}
+                          className="bg-gray-800/50 rounded border border-gray-700 hover:border-gray-600 transition-colors"
+                        >
+                          <div className="p-2">
+                            {/* Move Header */}
+                            <div className="flex items-center justify-between mb-1">
+                              <div className="flex items-center space-x-2">
+                                <span className="text-xs font-mono text-gray-400 bg-gray-900 px-1 py-0.5 rounded">
+                                  {move.timestamp_of_outcome}
+                                </span>
+                                <span className="text-white text-sm font-medium capitalize">
+                                  {move.problem_type}
+                                </span>
+                                {isBlunder && (
+                                  <div className="w-1.5 h-1.5 bg-red-500 rounded-full"></div>
+                                )}
+                                {isMistake && (
+                                  <div className="w-1.5 h-1.5 bg-orange-500 rounded-full"></div>
+                                )}
+                                {isInaccuracy && (
+                                  <div className="w-1.5 h-1.5 bg-yellow-500 rounded-full"></div>
+                                )}
+                              </div>
+                              <span className="text-xs text-gray-400">
+                                #{index + 1}
+                              </span>
+                            </div>
+
+                            {/* Feedback - Compact */}
+                            <div className="bg-gray-900/50 rounded p-1.5 border-l-2 border-gray-600">
+                              <p className="text-gray-200 text-xs leading-relaxed line-clamp-2">
+                                {move.feedback}
+                              </p>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    );
-                  })
-                )}
+                      );
+                    }
+                  )}
 
                 {!analysisData && !isAnalyzing && !analysisError && (
                   <div className="text-center text-gray-400 py-4">
-                    <p className="text-sm">Record and submit your dance for analysis</p>
+                    <p className="text-sm">
+                      Record and submit your dance for analysis
+                    </p>
                   </div>
                 )}
               </div>

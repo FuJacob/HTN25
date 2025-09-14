@@ -28,6 +28,21 @@ export default function ProblemPage() {
   const [isCountingDown, setIsCountingDown] = useState(false);
   const referenceVideoRef = useRef<HTMLVideoElement>(null);
 
+  // Auto-analysis flag
+  const [shouldAutoAnalyze, setShouldAutoAnalyze] = useState(false);
+
+  // Progress tracking
+  const [analysisProgress, setAnalysisProgress] = useState(0);
+  const [analysisStep, setAnalysisStep] = useState("");
+
+  // Handle reference video end event
+  const handleReferenceVideoEnd = () => {
+    if (recording) {
+      setShouldAutoAnalyze(true); // Flag for auto-analysis
+      handleStopRecording();
+    }
+  };
+
   // Simple dance mapping based on number ID
   const danceData = {
     "1": { title: "Adderall", video: "Adderall.mp4" },
@@ -68,6 +83,119 @@ export default function ProblemPage() {
     null
   );
 
+  // Auto-scroll functionality
+  const processedVideoRef = useRef<HTMLVideoElement>(null);
+  const analysisContainerRef = useRef<HTMLDivElement>(null);
+  const [currentHighlightedMove, setCurrentHighlightedMove] = useState<number | null>(null);
+  const [videoDuration, setVideoDuration] = useState<number>(0);
+
+  // Parse timestamp to seconds
+  const parseTimestamp = (timestamp: string): number => {
+    const parts = timestamp.split(':');
+    if (parts.length === 2) {
+      const [minutes, seconds] = parts.map(parseFloat);
+      return minutes * 60 + seconds;
+    } else if (parts.length === 1) {
+      return parseFloat(parts[0]);
+    }
+    return 0;
+  };
+
+  // Auto-scroll handler for video time updates
+  const handleVideoTimeUpdate = () => {
+    const video = processedVideoRef.current;
+    const container = analysisContainerRef.current;
+    const refVideo = referenceVideoRef.current;
+
+    if (!video || !container || !analysisData?.parsed_data?.dance_analysis) return;
+
+    const currentTime = video.currentTime;
+
+    // Sync reference video with analyzed video
+    if (refVideo && !recording) {
+      refVideo.currentTime = currentTime;
+    }
+
+    const validMoves = getValidMoves();
+
+    // Find the current move based on video time
+    let currentMoveIndex = -1;
+    for (let i = 0; i < validMoves.length; i++) {
+      const moveTime = parseTimestamp(validMoves[i].timestamp_of_outcome);
+      if (currentTime >= moveTime - 1 && currentTime <= moveTime + 2) {
+        currentMoveIndex = i;
+        break;
+      }
+    }
+
+    // Update highlighted move and scroll if necessary
+    if (currentMoveIndex !== -1 && currentMoveIndex !== currentHighlightedMove) {
+      setCurrentHighlightedMove(currentMoveIndex);
+
+      // Scroll to the highlighted move
+      const moveElement = container.querySelector(`[data-move-index="${currentMoveIndex}"]`);
+      if (moveElement) {
+        moveElement.scrollIntoView({
+          behavior: 'auto',
+          block: 'center'
+        });
+      }
+    } else if (currentMoveIndex === -1) {
+      setCurrentHighlightedMove(null);
+    }
+  };
+
+  // Handle clicking on move to seek video
+  const handleMoveClick = (timestamp: string) => {
+    const video = processedVideoRef.current;
+    const refVideo = referenceVideoRef.current;
+
+    if (video) {
+      const seekTime = parseTimestamp(timestamp);
+      video.currentTime = seekTime;
+
+      // Also sync reference video when seeking
+      if (refVideo && !recording) {
+        refVideo.currentTime = seekTime;
+      }
+    }
+  };
+
+  // Handle video duration loaded
+  const handleVideoLoadedMetadata = () => {
+    const video = processedVideoRef.current;
+    if (video) {
+      setVideoDuration(video.duration);
+    }
+  };
+
+  // Handle analyzed video play/pause to sync reference video
+  const handleAnalyzedVideoPlay = () => {
+    const refVideo = referenceVideoRef.current;
+    if (refVideo && !recording) {
+      refVideo.play().catch(console.error);
+    }
+  };
+
+  const handleAnalyzedVideoPause = () => {
+    const refVideo = referenceVideoRef.current;
+    if (refVideo && !recording) {
+      refVideo.pause();
+    }
+  };
+
+  // Filter moves that are within video duration
+  const getValidMoves = () => {
+    if (!analysisData?.parsed_data?.dance_analysis || videoDuration === 0) {
+      return analysisData?.parsed_data?.dance_analysis || [];
+    }
+
+    return analysisData.parsed_data.dance_analysis.filter((move: any) => {
+      const moveTime = parseTimestamp(move.timestamp_of_outcome);
+      return moveTime <= videoDuration;
+    });
+  };
+
   const startCountdownAndRecording = async () => {
     try {
       // Get camera access first
@@ -105,6 +233,7 @@ export default function ProblemPage() {
       // Start countdown
       setIsCountingDown(true);
       setCountdown(5);
+      setShouldAutoAnalyze(false); // Reset auto-analyze flag
 
       // Countdown sequence: 5, 6, 7, 8, then start recording
       const countdownSequence = [5, 6, 7, 8];
@@ -115,11 +244,19 @@ export default function ProblemPage() {
         if (currentIndex < countdownSequence.length) {
           setCountdown(countdownSequence[currentIndex]);
         } else {
-          // Countdown finished, start recording
+          // Countdown finished, start recording and reference video
           setCountdown(null);
           setIsCountingDown(false);
           setRecording(true);
           mediaRecorder.start();
+
+          // Start playing the reference video synchronized with recording
+          const refVideo = referenceVideoRef.current;
+          if (refVideo) {
+            refVideo.currentTime = 0; // Reset to start
+            refVideo.play().catch(console.error);
+          }
+
           clearInterval(countdownInterval);
         }
       }, 500); // 500ms between each count (adjust to match beat)
@@ -135,6 +272,12 @@ export default function ProblemPage() {
     ) {
       mediaRecorderRef.current.stop();
       setRecording(false);
+
+      // Stop the reference video when recording stops
+      const refVideo = referenceVideoRef.current;
+      if (refVideo) {
+        refVideo.pause();
+      }
     }
   };
 
@@ -143,9 +286,13 @@ export default function ProblemPage() {
 
     setIsAnalyzing(true);
     setAnalysisError(null);
+    setAnalysisProgress(0);
+    setAnalysisStep("Preparing videos for analysis...");
 
     try {
       // Convert recorded video URL to File
+      setAnalysisProgress(10);
+      setAnalysisStep("Processing recorded video...");
       const response = await fetch(recordedVideo);
       const blob = await response.blob();
       const recordedVideoFile = new File([blob], "recorded-video.webm", {
@@ -153,6 +300,8 @@ export default function ProblemPage() {
       });
 
       // Get the reference video based on dance ID
+      setAnalysisProgress(20);
+      setAnalysisStep("Loading reference video...");
       const referenceVideoUrl = `/videos/${danceData.video}`;
       const referenceVideoResponse = await fetch(referenceVideoUrl);
       const referenceVideoBlob = await referenceVideoResponse.blob();
@@ -165,6 +314,8 @@ export default function ProblemPage() {
       );
 
       // Step 1: Analyze videos - EXACT COPY FROM HOME
+      setAnalysisProgress(30);
+      setAnalysisStep("Comparing dance movements...");
       const formData1 = new FormData();
       formData1.append("video1", referenceVideoFile); // Reference video
       formData1.append("video2", recordedVideoFile); // User's recorded video
@@ -182,10 +333,14 @@ export default function ProblemPage() {
         throw new Error(`Analysis failed: ${analyzeResponse.status}`);
       }
 
+      setAnalysisProgress(60);
+      setAnalysisStep("Generating feedback...");
       const analyzeResult = await analyzeResponse.json();
       console.log("Analysis result:", analyzeResult);
 
       // Step 2: Process video directly with analysis - EXACT COPY FROM HOME
+      setAnalysisProgress(70);
+      setAnalysisStep("Creating analysis video...");
       const formData2 = new FormData();
       // Try to extract the actual analysis text, not the object
       let analysisText = "";
@@ -200,6 +355,8 @@ export default function ProblemPage() {
       formData2.append("dance_analysis", analysisText);
       formData2.append("video_file", recordedVideoFile);
 
+      setAnalysisProgress(85);
+      setAnalysisStep("Finalizing results...");
       console.log("Processing video with analysis...");
       const processResponse = await fetch(
         "http://localhost:8000/process-dance-video",
@@ -225,6 +382,8 @@ export default function ProblemPage() {
       console.log("Created blob URL:", videoUrl);
 
       // Set the processed video URL and analysis data
+      setAnalysisProgress(100);
+      setAnalysisStep("Complete!");
       setProcessedVideoUrl(videoUrl);
       setAnalysisData(analyzeResult);
     } catch (err: any) {
@@ -232,6 +391,11 @@ export default function ProblemPage() {
       setAnalysisError(err.message);
     } finally {
       setIsAnalyzing(false);
+      // Reset progress after a short delay to show completion
+      setTimeout(() => {
+        setAnalysisProgress(0);
+        setAnalysisStep("");
+      }, 2000);
     }
   };
 
@@ -247,8 +411,25 @@ export default function ProblemPage() {
     }
   }, [recording, mediaStream]);
 
+  // Reset reference video when recording state changes
+  useEffect(() => {
+    const refVideo = referenceVideoRef.current;
+    if (!recording && refVideo && !refVideo.paused) {
+      refVideo.pause();
+      refVideo.currentTime = 0;
+    }
+  }, [recording]);
+
+  // Auto-analysis when recording is complete and flag is set
+  useEffect(() => {
+    if (recordedVideo && shouldAutoAnalyze && !recording && !isAnalyzing) {
+      setShouldAutoAnalyze(false); // Reset flag
+      handleSubmitForAnalysis();
+    }
+  }, [recordedVideo, shouldAutoAnalyze, recording, isAnalyzing]);
+
   return (
-    <div className="h-full bg-gray-900 text-white">
+    <div className="h-screen bg-gray-900 text-white overflow-hidden">
       <div className="flex h-full">
         {/* Left Panel - Reference & Controls */}
         <div className="w-1/3 border-r border-gray-700 flex flex-col bg-gray-900 min-h-0">
@@ -277,14 +458,14 @@ export default function ProblemPage() {
           </div>
 
           {/* Reference Video - Vertical TikTok Style */}
-          <div className="p-6 flex justify-center items-center flex-1 min-h-0 overflow-hidden">
-            <div className="relative">
+          <div className="p-4 flex justify-center items-center flex-1 min-h-0 overflow-hidden">
+            <div className="relative w-full h-full flex justify-center items-center">
               <video
                 src={`/videos/${danceData.video}`}
                 controls
-                className="rounded-2xl shadow-2xl border border-gray-600/30 w-64"
-                style={{ height: "400px" }}
+                className="rounded-2xl shadow-2xl border border-gray-600/30 max-w-full max-h-full object-contain"
                 ref={referenceVideoRef}
+                onEnded={handleReferenceVideoEnd}
               />
             </div>
           </div>
@@ -340,40 +521,28 @@ export default function ProblemPage() {
               )}
 
               {recordedVideo && !recording && (
-                <div className="space-y-2">
-                  <Button
-                    onClick={() => {
-                      setRecordedVideo(null);
-                      setMediaStream(null);
-                    }}
-                    variant="outline"
-                    className="w-full h-10 border-gray-600 text-gray-200 hover:bg-gray-700 hover:border-gray-500 transition-all duration-200"
-                  >
-                    Try Again
-                  </Button>
-                  <Button
-                    onClick={handleSubmitForAnalysis}
-                    disabled={isAnalyzing}
-                    className="w-full h-12 font-semibold bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:t
-                    o-emerald-700 shadow-lg transform hover:scale-[1.02] transition-all duration-200"
-                    size="lg"
-                  >
-                    {isAnalyzing ? "🔄 Analyzing..." : "Submit for Analysis"}
-                  </Button>
-                </div>
+                <Button
+                  onClick={() => {
+                    window.location.reload();
+                  }}
+                  variant="outline"
+                  className="w-full h-10 border-gray-600 text-gray-200 hover:bg-gray-700 hover:border-gray-500 transition-all duration-200"
+                >
+                  Try Again
+                </Button>
               )}
             </div>
           </div>
         </div>
 
         {/* Right Panel */}
-        <div className="w-2/3 flex flex-col bg-black relative">
+        <div className="w-2/3 flex flex-col bg-black relative min-h-0 overflow-hidden">
           {/* Always-mounted video element */}
           <video
             ref={cameraVideoRef}
             autoPlay
             muted
-            className={`absolute inset-0 w-full h-full object-cover z-0 ${
+            className={`absolute inset-0 w-full h-full object-cover z-0 transform scale-x-[-1] ${
               recording ? "block" : "hidden"
             }`}
           />
@@ -391,13 +560,18 @@ export default function ProblemPage() {
           <div className="flex-1 flex items-center justify-center relative z-10">
             {processedVideoUrl && (
               <video
+                ref={processedVideoRef}
                 src={processedVideoUrl}
                 controls
                 className="w-full h-full object-cover"
+                onTimeUpdate={handleVideoTimeUpdate}
+                onLoadedMetadata={handleVideoLoadedMetadata}
+                onPlay={handleAnalyzedVideoPlay}
+                onPause={handleAnalyzedVideoPause}
               />
             )}
 
-            {!processedVideoUrl && !recording && !isCountingDown && (
+            {!processedVideoUrl && !recording && !isCountingDown && !isAnalyzing && (
               <div className="text-center text-gray-400">
                 <div className="text-8xl mb-6">📹</div>
                 <CardTitle className="text-3xl mb-4">Ready to Dance</CardTitle>
@@ -406,10 +580,40 @@ export default function ProblemPage() {
                 </p>
               </div>
             )}
+
+            {!processedVideoUrl && !recording && !isCountingDown && isAnalyzing && (
+              <div className="text-center text-gray-400 max-w-md mx-auto">
+                <div className="text-8xl mb-6 animate-pulse">🤖</div>
+                <CardTitle className="text-3xl mb-4">Analyzing Your Dance</CardTitle>
+                <p className="text-lg mb-6">
+                  AI is reviewing your performance...
+                </p>
+
+                {/* Progress Bar */}
+                <div className="w-full bg-gray-700 rounded-full h-3 mb-4">
+                  <div
+                    className="bg-gradient-to-r from-tiktok-red to-pink-500 h-3 rounded-full transition-all duration-500 ease-out"
+                    style={{ width: `${analysisProgress}%` }}
+                  ></div>
+                </div>
+
+                {/* Progress Text */}
+                <p className="text-sm text-gray-300 mb-4">
+                  {analysisStep || "Initializing..."}
+                </p>
+                <p className="text-xs text-gray-500">
+                  {analysisProgress}% Complete
+                </p>
+
+                <div className="mt-4">
+                  <div className="animate-spin w-8 h-8 border-2 border-gray-400 border-t-transparent rounded-full mx-auto"></div>
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Bottom Section - Compact Analysis */}
-          <div className="h-36 border-t border-gray-700 bg-gray-900/50 relative z-10 flex flex-col">
+          <div className="h-36 border-t border-gray-700 bg-gray-900/50 relative z-10 flex flex-col flex-shrink-0">
             {/* Sticky Header */}
             <div className="sticky top-0 px-4 py-3 bg-gradient-to-b from-gray-900/95 via-gray-900/80 to-transparent backdrop-blur-md flex items-center justify-between border-b border-gray-700 flex-shrink-0">
               <h3 className="text-sm font-semibold text-white">
@@ -421,8 +625,8 @@ export default function ProblemPage() {
                     <div className="w-2 h-2 bg-red-500 rounded-full"></div>
                     <span className="text-xs text-gray-300">
                       Score:{" "}
-                      {analysisData.parsed_data.dance_analysis.reduce(
-                        (sum: number, move: any) => sum + move.score,
+                      {getValidMoves().reduce(
+                        (sum: number, move: any) => sum + move.score + 30,
                         0
                       )}
                     </span>
@@ -430,13 +634,15 @@ export default function ProblemPage() {
                 )}
                 <div className="flex items-center space-x-1">
                   <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
-                  <span className="text-xs text-gray-300">10.0s</span>
+                  <span className="text-xs text-gray-300">
+                    {videoDuration > 0 ? `${videoDuration.toFixed(1)}s` : '0.0s'}
+                  </span>
                 </div>
               </div>
             </div>
 
             {/* Scrollable Content */}
-            <div className="flex-1 overflow-auto">
+            <div className="flex-1 overflow-auto min-h-0" ref={analysisContainerRef}>
               <div className="p-4 space-y-2">
                 {isAnalyzing && (
                   <div className="text-center text-gray-400 py-4">
@@ -455,8 +661,7 @@ export default function ProblemPage() {
 
                 {analysisData &&
                   analysisData.parsed_data?.dance_analysis &&
-                  analysisData.parsed_data.dance_analysis.map(
-                    (move: any, index: number) => {
+                  getValidMoves().map((move: any, index: number) => {
                       const isBlunder = move.score <= -4;
                       const isMistake = move.score === -3;
                       const isInaccuracy = move.score >= -2;
@@ -464,14 +669,20 @@ export default function ProblemPage() {
                       return (
                         <div
                           key={index}
-                          className="bg-gray-800/50 rounded border border-gray-700 hover:border-gray-600 transition-colors"
+                          data-move-index={index}
+                          className={`rounded border transition-all duration-300 cursor-pointer ${
+                            currentHighlightedMove === index
+                              ? 'bg-blue-900/60 border-blue-500 shadow-lg scale-[1.02]'
+                              : 'bg-gray-800/50 border-gray-700 hover:border-gray-600'
+                          }`}
+                          onClick={() => handleMoveClick(move.timestamp_of_outcome)}
                         >
                           <div className="p-2">
                             {/* Move Header */}
                             <div className="flex items-center justify-between mb-1">
                               <div className="flex items-center space-x-2">
-                                <span className="text-xs font-mono text-gray-400 bg-gray-900 px-1 py-0.5 rounded">
-                                  {move.timestamp_of_outcome}
+                                <span className="text-xs font-mono text-blue-400 bg-gray-900 px-1 py-0.5 rounded hover:bg-blue-900/50 transition-colors">
+                                  🎯 {move.timestamp_of_outcome}
                                 </span>
                                 <span className="text-white text-sm font-medium capitalize">
                                   {move.problem_type}

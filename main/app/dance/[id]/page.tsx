@@ -1,18 +1,20 @@
 "use client";
 import { useRef, useState, useEffect } from "react";
-import { useParams } from "next/navigation";
-import Link from "next/link";
-import { Button } from "@/app/components/ui/button";
+import { useParams, useRouter } from "next/navigation";
+import { FaChevronLeft, FaChevronRight, FaRandom } from "react-icons/fa";
+import { Button } from "@/shadcn-components/ui/button";
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
-} from "@/app/components/ui/card";
-import { Badge } from "@/app/components/ui/badge";
+} from "@/shadcn-components/ui/card";
+import { Badge } from "@/shadcn-components/ui/badge";
+import ProfileSection from "../../components/ProfileSection";
 
 export default function ProblemPage() {
   const params = useParams();
+  const router = useRouter();
   const problemId = params.id;
 
   // Camera recording state
@@ -228,8 +230,6 @@ export default function ProblemPage() {
         }
       };
 
-      // Reference video will be handled separately
-
       // Start countdown
       setIsCountingDown(true);
       setCountdown(5);
@@ -411,171 +411,210 @@ export default function ProblemPage() {
     }
   }, [recording, mediaStream]);
 
-  // Reset reference video when recording state changes
-  useEffect(() => {
-    const refVideo = referenceVideoRef.current;
-    if (!recording && refVideo && !refVideo.paused) {
-      refVideo.pause();
-      refVideo.currentTime = 0;
-    }
-  }, [recording]);
+  const navigateToDance = (direction: 'prev' | 'next' | 'random') => {
+    const currentId = parseInt(problemId as string);
+    const maxId = 21; // Total number of dances
 
-  // Auto-analysis when recording is complete and flag is set
-  useEffect(() => {
-    if (recordedVideo && shouldAutoAnalyze && !recording && !isAnalyzing) {
-      setShouldAutoAnalyze(false); // Reset flag
-      handleSubmitForAnalysis();
+    if (direction === 'prev') {
+      const prevId = currentId <= 1 ? maxId : currentId - 1;
+      router.push(`/dance/${prevId}`);
+    } else if (direction === 'next') {
+      const nextId = currentId >= maxId ? 1 : currentId + 1;
+      router.push(`/dance/${nextId}`);
+    } else if (direction === 'random') {
+      let randomId;
+      do {
+        randomId = Math.floor(Math.random() * maxId) + 1;
+      } while (randomId === currentId);
+      router.push(`/dance/${randomId}`);
     }
-  }, [recordedVideo, shouldAutoAnalyze, recording, isAnalyzing]);
+  };
 
   return (
-    <div className="h-screen bg-gray-900 text-white overflow-hidden">
-      <div className="flex h-full">
-        {/* Left Panel - Reference & Controls */}
-        <div className="w-1/3 border-r border-gray-700 flex flex-col bg-gray-900 min-h-0">
-          <div className="border-b border-gray-700 p-6 bg-gray-800/50">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-3">
-                <Link
-                  href="/dances"
-                  className="text-orange-400 hover:text-orange-300 transition-colors text-xl"
-                >
-                  ←
-                </Link>
-                <h2 className="text-xl font-semibold text-white">
-                  {problemData.title}
-                </h2>
-              </div>
-              <Badge
-                variant={
-                  problemData.difficulty === "Easy" ? "default" : "destructive"
-                }
-                className="text-sm px-3 py-1"
-              >
-                {problemData.difficulty}
-              </Badge>
-            </div>
+    <div className="h-screen bg-tiktok-black flex flex-col">
+      {/* Header */}
+      <nav className="bg-tiktok-white border-b border-tiktok-black/10 w-full">
+        <div className="flex items-center justify-between px-8 py-4 w-full">
+          {/* Left: Logo and navigation */}
+          <div className="flex items-center space-x-4">
+            <img src="/logo.png" alt="Logo" className="h-8 w-auto" />
+            <span className="text-tiktok-black font-medium">Dance List</span>
+            <button
+              onClick={() => navigateToDance('prev')}
+              className="text-tiktok-red hover:text-tiktok-red/80 transition-colors p-2 rounded-lg hover:bg-tiktok-black/5"
+            >
+              <FaChevronLeft className="w-5 h-5" />
+            </button>
+            <button
+              onClick={() => navigateToDance('next')}
+              className="text-tiktok-red hover:text-tiktok-red/80 transition-colors p-2 rounded-lg hover:bg-tiktok-black/5"
+            >
+              <FaChevronRight className="w-5 h-5" />
+            </button>
+            <button
+              onClick={() => navigateToDance('random')}
+              className="text-tiktok-red hover:text-tiktok-red/80 transition-colors p-2 rounded-lg hover:bg-tiktok-black/5"
+            >
+              <FaRandom className="w-5 h-5" />
+            </button>
           </div>
 
-          {/* Reference Video - Vertical TikTok Style */}
-          <div className="p-4 flex justify-center items-center flex-1 min-h-0 overflow-hidden">
-            <div className="relative w-full h-full flex justify-center items-center">
+          {/* Center: Start Dance Challenge Button */}
+          <div>
+            {!recording && !recordedVideo && !isCountingDown && (
+              <Button
+                onClick={startCountdownAndRecording}
+                className="bg-tiktok-red hover:bg-tiktok-red/80 text-tiktok-white font-bold px-8 py-3 text-lg rounded-full transition-colors"
+              >
+                🎵 Start Dance Challenge
+              </Button>
+            )}
+
+            {isCountingDown && (
+              <Button
+                disabled
+                className="bg-orange-500 text-tiktok-white font-bold px-8 py-3 text-lg rounded-full cursor-not-allowed"
+              >
+                Get Ready... {countdown}
+              </Button>
+            )}
+
+            {recording && (
+              <Button
+                onClick={handleStopRecording}
+                className="bg-tiktok-red hover:bg-tiktok-red/80 text-tiktok-white font-bold px-8 py-3 text-lg rounded-full animate-pulse"
+              >
+                ● Stop Recording
+              </Button>
+            )}
+
+            {recordedVideo && !recording && (
+              <div className="flex items-center space-x-3">
+                <Button
+                  onClick={() => {
+                    setRecordedVideo(null);
+                    setMediaStream(null);
+                  }}
+                  variant="outline"
+                  className="border-tiktok-black/20 text-tiktok-black hover:bg-tiktok-black/5"
+                >
+                  Try Again
+                </Button>
+                <Button
+                  onClick={handleSubmitForAnalysis}
+                  disabled={isAnalyzing}
+                  className="bg-tiktok-red hover:bg-tiktok-red/80 text-tiktok-white font-bold px-8 py-3 text-lg rounded-full"
+                >
+                  {isAnalyzing ? "🔄 Analyzing..." : "Submit for Analysis"}
+                </Button>
+              </div>
+            )}
+          </div>
+
+          {/* Right: Profile Section */}
+          <div>
+            <ProfileSection />
+          </div>
+        </div>
+      </nav>
+
+      {/* Main Content */}
+      <div className="flex flex-1 overflow-hidden">
+        {/* Left Column - Width based on video */}
+        <div className="flex-shrink-0 flex flex-col">
+          {/* Reference Video */}
+          <div className="flex-1 flex items-center justify-center p-4 bg-tiktok-black">
+            <div className="bg-tiktok-white rounded-xl p-3 shadow-lg">
               <video
                 src={`/videos/${danceData.video}`}
                 controls
-                className="rounded-2xl shadow-2xl border border-gray-600/30 max-w-full max-h-full object-contain"
+                className="rounded-xl w-80 h-[500px] object-cover"
                 ref={referenceVideoRef}
                 onEnded={handleReferenceVideoEnd}
               />
             </div>
           </div>
 
-          {/* Controls */}
-          <div className="p-4 space-y-4 bg-gray-800/20 flex-shrink-0">
-            <div className="space-y-3">
-              <p className="text-gray-200 text-sm leading-relaxed font-medium">
-                Follow the reference dance and record your performance
-              </p>
-              <div className="flex flex-wrap gap-2">
-                {problemData.tags.map((tag) => (
+          {/* Song Info Box */}
+          <div className="bg-tiktok-black p-3 flex-shrink-0">
+            <Card className="bg-tiktok-white border-tiktok-black/10">
+              <CardHeader className="pb-3">
+                <div className="flex items-center justify-between">
+                  <CardTitle className="text-lg text-tiktok-black">
+                    {problemData.title}
+                  </CardTitle>
                   <Badge
-                    key={tag}
-                    variant="secondary"
-                    className="text-xs px-3 py-1 bg-gray-700 text-gray-200 border-0"
+                    className={`text-xs ${
+                      problemData.difficulty === "Easy"
+                        ? "bg-green-100 text-green-800 border-green-200"
+                        : problemData.difficulty === "Medium"
+                        ? "bg-yellow-100 text-yellow-800 border-yellow-200"
+                        : "bg-red-100 text-red-800 border-red-200"
+                    }`}
                   >
-                    {tag}
+                    {problemData.difficulty}
                   </Badge>
-                ))}
-              </div>
-            </div>
-
-            <div className="space-y-3">
-              {!recording && !recordedVideo && !isCountingDown && (
-                <Button
-                  onClick={startCountdownAndRecording}
-                  className="w-full h-12 text-sm font-semibold bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 shadow-lg transform hover:scale-[1.02] transition-all duration-200"
-                  size="lg"
-                >
-                  🎵 Start Dance Challenge
-                </Button>
-              )}
-
-              {isCountingDown && (
-                <Button
-                  disabled
-                  className="w-full h-12 text-sm font-semibold bg-gradient-to-r from-orange-600 to-yellow-600 text-white cursor-not-allowed"
-                  size="lg"
-                >
-                  Get Ready... {countdown}
-                </Button>
-              )}
-
-              {recording && (
-                <Button
-                  onClick={handleStopRecording}
-                  className="w-full h-12 font-semibold bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white animate-pulse shadow-lg"
-                  size="lg"
-                >
-                  ● Stop Recording
-                </Button>
-              )}
-
-              {recordedVideo && !recording && (
-                <Button
-                  onClick={() => {
-                    window.location.reload();
-                  }}
-                  variant="outline"
-                  className="w-full h-10 border-gray-600 text-gray-200 hover:bg-gray-700 hover:border-gray-500 transition-all duration-200"
-                >
-                  Try Again
-                </Button>
-              )}
-            </div>
+                </div>
+              </CardHeader>
+              <CardContent className="pt-0">
+                <p className="text-tiktok-black/70 mb-3">
+                  Follow the reference dance and record your performance
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {problemData.tags.map((tag) => (
+                    <Badge
+                      key={tag}
+                      variant="secondary"
+                      className="bg-tiktok-black/5 text-tiktok-black border-tiktok-black/10"
+                    >
+                      {tag}
+                    </Badge>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
           </div>
         </div>
 
-        {/* Right Panel */}
-        <div className="w-2/3 flex flex-col bg-black relative min-h-0 overflow-hidden">
-          {/* Always-mounted video element */}
-          <video
-            ref={cameraVideoRef}
-            autoPlay
-            muted
-            className={`absolute inset-0 w-full h-full object-cover z-0 transform scale-x-[-1] ${
-              recording ? "block" : "hidden"
-            }`}
-          />
+        {/* Right Column - Fill remaining space */}
+        <div className="flex-1 flex flex-col border-l border-tiktok-white/10">
+          {/* Recording Video */}
+          <div className="flex-1 flex items-center justify-center p-8 bg-tiktok-black relative">
+            {/* Always-mounted video element */}
+            <video
+              ref={cameraVideoRef}
+              autoPlay
+              muted
+              className={`absolute inset-0 w-full h-full object-cover ${
+                recording ? "block" : "hidden"
+              }`}
+            />
 
-          {/* Countdown Overlay */}
-          {isCountingDown && countdown && (
-            <div className="absolute inset-0 bg-black/75 flex items-center justify-center z-20">
-              <div className="text-white text-9xl font-bold animate-pulse">
-                {countdown}
+            {/* Countdown Overlay */}
+            {isCountingDown && countdown && (
+              <div className="absolute inset-0 bg-tiktok-black/75 flex items-center justify-center">
+                <div className="text-tiktok-white text-9xl font-bold animate-pulse">
+                  {countdown}
+                </div>
               </div>
-            </div>
-          )}
+            )}
 
-          {/* Top Section - Processed Video */}
-          <div className="flex-1 flex items-center justify-center relative z-10">
-            {processedVideoUrl && (
+            {/* Processed Video */}
+            {processedVideoUrl && !recording && (
               <video
                 ref={processedVideoRef}
                 src={processedVideoUrl}
                 controls
-                className="w-full h-full object-cover"
-                onTimeUpdate={handleVideoTimeUpdate}
-                onLoadedMetadata={handleVideoLoadedMetadata}
-                onPlay={handleAnalyzedVideoPlay}
-                onPause={handleAnalyzedVideoPause}
+                className="w-full h-full object-cover rounded-xl"
               />
             )}
 
-            {!processedVideoUrl && !recording && !isCountingDown && !isAnalyzing && (
-              <div className="text-center text-gray-400">
+            {/* Ready State */}
+            {!processedVideoUrl && !recording && !isCountingDown && (
+              <div className="text-center text-tiktok-white">
                 <div className="text-8xl mb-6">📹</div>
-                <CardTitle className="text-3xl mb-4">Ready to Dance</CardTitle>
-                <p className="text-lg">
+                <h2 className="text-3xl font-bold mb-4">Ready to Dance</h2>
+                <p className="text-lg text-tiktok-white/70">
                   Start the challenge to begin recording
                 </p>
               </div>
@@ -612,50 +651,43 @@ export default function ProblemPage() {
             )}
           </div>
 
-          {/* Bottom Section - Compact Analysis */}
-          <div className="h-36 border-t border-gray-700 bg-gray-900/50 relative z-10 flex flex-col flex-shrink-0">
-            {/* Sticky Header */}
-            <div className="sticky top-0 px-4 py-3 bg-gradient-to-b from-gray-900/95 via-gray-900/80 to-transparent backdrop-blur-md flex items-center justify-between border-b border-gray-700 flex-shrink-0">
-              <h3 className="text-sm font-semibold text-white">
-                Dance Analysis
-              </h3>
-              <div className="flex items-center space-x-3">
-                {analysisData && analysisData.parsed_data?.dance_analysis && (
-                  <div className="flex items-center space-x-1">
-                    <div className="w-2 h-2 bg-red-500 rounded-full"></div>
-                    <span className="text-xs text-gray-300">
-                      Score:{" "}
-                      {getValidMoves().reduce(
-                        (sum: number, move: any) => sum + move.score + 30,
-                        0
-                      )}
-                    </span>
+          {/* Dance Analysis Box */}
+          <div className="bg-tiktok-black p-6">
+            <Card className="bg-tiktok-white border-tiktok-black/10">
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <CardTitle className="text-tiktok-black">Dance Analysis</CardTitle>
+                  <div className="flex items-center space-x-3">
+                    {analysisData && analysisData.parsed_data?.dance_analysis && (
+                      <div className="flex items-center space-x-1">
+                        <div className="w-2 h-2 bg-tiktok-red rounded-full"></div>
+                        <span className="text-xs text-tiktok-black/70">
+                          Score:{" "}
+                          {analysisData.parsed_data.dance_analysis.reduce(
+                            (sum: number, move: any) => sum + move.score,
+                            0
+                          )}
+                        </span>
+                      </div>
+                    )}
+                    <div className="flex items-center space-x-1">
+                      <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
+                      <span className="text-xs text-tiktok-black/70">10.0s</span>
+                    </div>
                   </div>
-                )}
-                <div className="flex items-center space-x-1">
-                  <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
-                  <span className="text-xs text-gray-300">
-                    {videoDuration > 0 ? `${videoDuration.toFixed(1)}s` : '0.0s'}
-                  </span>
                 </div>
-              </div>
-            </div>
-
-            {/* Scrollable Content */}
-            <div className="flex-1 overflow-auto min-h-0" ref={analysisContainerRef}>
-              <div className="p-4 space-y-2">
+              </CardHeader>
+              <CardContent className="max-h-48 overflow-auto">
                 {isAnalyzing && (
-                  <div className="text-center text-gray-400 py-4">
-                    <div className="animate-spin w-6 h-6 border-2 border-gray-400 border-t-transparent rounded-full mx-auto mb-2"></div>
+                  <div className="text-center text-tiktok-black/70 py-4">
+                    <div className="animate-spin w-6 h-6 border-2 border-tiktok-red border-t-transparent rounded-full mx-auto mb-2"></div>
                     <p className="text-sm">Analyzing your dance...</p>
                   </div>
                 )}
 
                 {analysisError && (
-                  <div className="bg-red-900/50 rounded border border-red-700 p-3">
-                    <p className="text-red-200 text-sm">
-                      Error: {analysisError}
-                    </p>
+                  <div className="bg-red-50 border border-red-200 rounded p-3">
+                    <p className="text-red-800 text-sm">Error: {analysisError}</p>
                   </div>
                 )}
 
@@ -669,45 +701,34 @@ export default function ProblemPage() {
                       return (
                         <div
                           key={index}
-                          data-move-index={index}
-                          className={`rounded border transition-all duration-300 cursor-pointer ${
-                            currentHighlightedMove === index
-                              ? 'bg-blue-900/60 border-blue-500 shadow-lg scale-[1.02]'
-                              : 'bg-gray-800/50 border-gray-700 hover:border-gray-600'
-                          }`}
-                          onClick={() => handleMoveClick(move.timestamp_of_outcome)}
+                          className="bg-tiktok-black/5 rounded border border-tiktok-black/10 p-3 mb-2"
                         >
-                          <div className="p-2">
-                            {/* Move Header */}
-                            <div className="flex items-center justify-between mb-1">
-                              <div className="flex items-center space-x-2">
-                                <span className="text-xs font-mono text-blue-400 bg-gray-900 px-1 py-0.5 rounded hover:bg-blue-900/50 transition-colors">
-                                  🎯 {move.timestamp_of_outcome}
-                                </span>
-                                <span className="text-white text-sm font-medium capitalize">
-                                  {move.problem_type}
-                                </span>
-                                {isBlunder && (
-                                  <div className="w-1.5 h-1.5 bg-red-500 rounded-full"></div>
-                                )}
-                                {isMistake && (
-                                  <div className="w-1.5 h-1.5 bg-orange-500 rounded-full"></div>
-                                )}
-                                {isInaccuracy && (
-                                  <div className="w-1.5 h-1.5 bg-yellow-500 rounded-full"></div>
-                                )}
-                              </div>
-                              <span className="text-xs text-gray-400">
-                                #{index + 1}
+                          <div className="flex items-center justify-between mb-2">
+                            <div className="flex items-center space-x-2">
+                              <span className="text-xs font-mono text-tiktok-black/70 bg-tiktok-black/10 px-2 py-1 rounded">
+                                {move.timestamp_of_outcome}
                               </span>
+                              <span className="text-tiktok-black text-sm font-medium capitalize">
+                                {move.problem_type}
+                              </span>
+                              {isBlunder && (
+                                <div className="w-2 h-2 bg-red-500 rounded-full"></div>
+                              )}
+                              {isMistake && (
+                                <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
+                              )}
+                              {isInaccuracy && (
+                                <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
+                              )}
                             </div>
-
-                            {/* Feedback - Compact */}
-                            <div className="bg-gray-900/50 rounded p-1.5 border-l-2 border-gray-600">
-                              <p className="text-gray-200 text-xs leading-relaxed line-clamp-2">
-                                {move.feedback}
-                              </p>
-                            </div>
+                            <span className="text-xs text-tiktok-black/50">
+                              #{index + 1}
+                            </span>
+                          </div>
+                          <div className="bg-tiktok-white rounded p-2 border-l-2 border-tiktok-red/30">
+                            <p className="text-tiktok-black/80 text-xs leading-relaxed">
+                              {move.feedback}
+                            </p>
                           </div>
                         </div>
                       );
@@ -715,14 +736,14 @@ export default function ProblemPage() {
                   )}
 
                 {!analysisData && !isAnalyzing && !analysisError && (
-                  <div className="text-center text-gray-400 py-4">
+                  <div className="text-center text-tiktok-black/70 py-4">
                     <p className="text-sm">
                       Record and submit your dance for analysis
                     </p>
                   </div>
                 )}
-              </div>
-            </div>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </div>

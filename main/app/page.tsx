@@ -1,8 +1,16 @@
 import Link from "next/link";
 import { Button } from "../shadcn-components/ui/button";
 import Header from "./components/Header";
+import VideoRectangles from "./components/VideoRectangles";
 
 export default function HomePage() {
+  // Pick 3 random videos
+  const featuredVideos = [
+    "Adderall.mp4",
+    "Blinding-Lights.mp4", 
+    "Renegade.mp4"
+  ];
+
   return (
     <div
       className="min-h-screen w-full bg-white"
@@ -61,15 +69,9 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Right Side - Rectangle Placeholder */}
+          {/* Right Side - Video Rectangles */}
           <div className="w-1/2 flex items-center justify-center">
-            <div className="w-full max-w-lg h-96 bg-gray-100 border-2 border-dashed border-gray-300 rounded-xl flex items-center justify-center">
-              <div className="text-center text-gray-500">
-                <div className="w-16 h-16 bg-gray-300 rounded-lg mx-auto mb-4"></div>
-                <p className="text-lg font-medium">Placeholder Content</p>
-                <p className="text-sm">Video/Image/Demo Goes Here</p>
-              </div>
-            </div>
+            <VideoRectangles videos={featuredVideos} />
           </div>
         </div>
       </main>

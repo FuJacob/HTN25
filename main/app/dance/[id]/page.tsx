@@ -81,6 +81,7 @@ export default function ProblemPage() {
     "19": { title: "Supalonely", video: "Supalonely.mp4" },
     "20": { title: "Vibe", video: "Vibe.mp4" },
     "21": { title: "Wednesday", video: "Wednesday.mp4" },
+    "22": { title: "Slide", video: "Slide.mp4" },
   }[problemId as string] || { title: "Unknown Dance", video: "Adderall.mp4" };
 
   const problemData = {

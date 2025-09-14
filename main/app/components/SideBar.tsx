@@ -9,12 +9,17 @@ import {
   FaHeart,
   FaPeace,
   FaBacon,
+  FaUpload,
 } from "react-icons/fa6";
 import React, { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
-export default function SideBar() {
+interface SideBarProps {
+  onUploadClick?: () => void;
+}
+
+export default function SideBar({ onUploadClick }: SideBarProps) {
   const [listsOpen, setListsOpen] = useState(true);
   const [lists, setLists] = useState<{ id: string; name: string }[]>([
     { id: "favorite", name: "Favorite" },
@@ -23,6 +28,7 @@ export default function SideBar() {
   const [adding, setAdding] = useState(false);
   const [newListName, setNewListName] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
 
   React.useEffect(() => {
@@ -50,6 +56,22 @@ export default function SideBar() {
     }
   }
 
+  function handleFileUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (file) {
+      // Handle file upload logic here
+      console.log("File selected:", file.name);
+      // Call the callback to show uploaded content
+      onUploadClick?.();
+      // You can add your file upload logic here
+      // For example, upload to your backend API
+    }
+  }
+
+  function triggerFileUpload() {
+    fileInputRef.current?.click();
+  }
+
   return (
     <nav className="flex flex-col h-full text-gray-900 bg-white">
       {/* Main Navigation */}
@@ -68,6 +90,20 @@ export default function SideBar() {
           <FaCalendarDays className="w-5 h-5" />
           Study Plan
         </Link>
+        <button
+          onClick={triggerFileUpload}
+          className="flex items-center gap-3 px-3 py-3 text-base font-medium text-gray-900 hover:bg-gray-100 rounded-md transition-colors w-full text-left"
+        >
+          <FaUpload className="w-5 h-5" />
+          Upload File
+        </button>
+        <input
+          ref={fileInputRef}
+          type="file"
+          onChange={handleFileUpload}
+          className="hidden"
+          accept="video/*,audio/*,.mp4,.mov,.avi,.mp3,.wav"
+        />
       </div>
 
       {/* My Lists Section */}

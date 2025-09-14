@@ -256,6 +256,17 @@ const problems = [
     premium: false,
     video: "Wednesday.mp4",
   },
+  {
+    id: "22",
+    number: 22,
+    title: "Slide",
+    difficulty: "TBD",
+    acceptance: "TBD",
+    status: "unsolved",
+    genre: "None",
+    premium: false,
+    video: "Slide.mp4",
+  },
 ];
 
 const topicFilters = [
@@ -270,6 +281,7 @@ export default function DanceProblemsPage() {
   const [search, setSearch] = useState("");
   const [activeFilter, setActiveFilter] = useState("All Dances");
   const [activeGenre, setActiveGenre] = useState("All Genres");
+  const [showUploadedOnly, setShowUploadedOnly] = useState(false);
 
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
@@ -313,6 +325,11 @@ export default function DanceProblemsPage() {
 
   // Filter logic
   const filteredProblems = problems.filter((problem) => {
+    // Hide "Slide" dance unless upload button was clicked
+    if (problem.title === "Slide" && !showUploadedOnly) {
+      return false;
+    }
+
     const matchesSearch = problem.title
       .toLowerCase()
       .includes(search.toLowerCase());
@@ -339,7 +356,7 @@ export default function DanceProblemsPage() {
 
       <div className="flex h-full">
         {/* Left Sidebar */}
-        <SideBar />
+        <SideBar onUploadClick={() => setShowUploadedOnly(true)} />
 
         {/* Main Content Area */}
         <div className="flex-1 flex flex-col">
@@ -354,7 +371,10 @@ export default function DanceProblemsPage() {
                       ? "text-tiktok-red font-semibold"
                       : "text-gray-900"
                   }`}
-                  onClick={() => setActiveGenre(topic.name)}
+                  onClick={() => {
+                    setActiveGenre(topic.name);
+                    setShowUploadedOnly(false); // Reset upload filter when changing genre
+                  }}
                 >
                   <span className="font-medium">{topic.name}</span>
                 </div>
@@ -378,7 +398,10 @@ export default function DanceProblemsPage() {
                       ? "bg-tiktok-red text-white hover:bg-tiktok-red/90"
                       : "text-gray-700 hover:bg-gray-100"
                   }`}
-                  onClick={() => setActiveFilter(filter.name)}
+                  onClick={() => {
+                    setActiveFilter(filter.name);
+                    setShowUploadedOnly(false); // Reset upload filter when changing difficulty filter
+                  }}
                 >
                   {filter.name}
                 </Button>

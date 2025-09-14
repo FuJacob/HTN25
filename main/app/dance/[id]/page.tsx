@@ -449,10 +449,10 @@ export default function ProblemPage() {
   };
 
   return (
-    <div className="h-screen bg-tiktok-black flex flex-col">
-      {/* Header */}
-      <nav className="bg-tiktok-white border-b border-tiktok-black/10 w-full">
-        <div className="flex items-center justify-between px-8 py-4 w-full">
+    <div className="h-screen bg-tiktok-black flex flex-col overflow-hidden">
+      {/* Header - Fixed height */}
+      <nav className="bg-tiktok-white border-b border-tiktok-black/10 w-full flex-shrink-0">
+        <div className="flex items-center justify-between px-8 py-3 w-full">
           {/* Left: Logo and navigation */}
           <div className="flex items-center space-x-4">
             <img
@@ -493,9 +493,9 @@ export default function ProblemPage() {
             {!recording && !recordedVideo && !isCountingDown && (
               <Button
                 onClick={startCountdownAndRecording}
-                className="bg-tiktok-red hover:bg-tiktok-red/80 text-tiktok-white font-bold px-8 py-3 text-lg rounded-full transition-colors flex items-center space-x-2"
+                className="bg-tiktok-red hover:bg-tiktok-red/80 text-tiktok-white font-bold px-6 py-2 text-sm rounded-full transition-colors flex items-center space-x-2"
               >
-                <FaUpload className="w-5 h-5" />
+                <FaUpload className="w-4 h-4" />
                 <span>Submit</span>
               </Button>
             )}
@@ -503,7 +503,7 @@ export default function ProblemPage() {
             {isCountingDown && (
               <Button
                 disabled
-                className="bg-orange-500 text-tiktok-white font-bold px-8 py-3 text-lg rounded-full cursor-not-allowed"
+                className="bg-orange-500 text-tiktok-white font-bold px-6 py-2 text-sm rounded-full cursor-not-allowed"
               >
                 Get Ready... {countdown}
               </Button>
@@ -512,20 +512,21 @@ export default function ProblemPage() {
             {recording && (
               <Button
                 onClick={handleStopRecording}
-                className="bg-tiktok-red hover:bg-tiktok-red/80 text-tiktok-white font-bold px-8 py-3 text-lg rounded-full animate-pulse"
+                className="bg-tiktok-red hover:bg-tiktok-red/80 text-tiktok-white font-bold px-6 py-2 text-sm rounded-full animate-pulse"
               >
                 ● Stop Recording
               </Button>
             )}
 
             {recordedVideo && !recording && (
-              <div className="flex items-center space-x-3">
+              <div className="flex items-center space-x-2">
                 <Button
                   onClick={() => {
                     setRecordedVideo(null);
                     setMediaStream(null);
                   }}
                   variant="outline"
+                  size="sm"
                   className="border-tiktok-black/20 text-tiktok-black hover:bg-tiktok-black/5"
                 >
                   Try Again
@@ -533,7 +534,8 @@ export default function ProblemPage() {
                 <Button
                   onClick={handleSubmitForAnalysis}
                   disabled={isAnalyzing}
-                  className="bg-tiktok-red hover:bg-tiktok-red/80 text-tiktok-white font-bold px-8 py-3 text-lg rounded-full"
+                  size="sm"
+                  className="bg-tiktok-red hover:bg-tiktok-red/80 text-tiktok-white font-bold rounded-full"
                 >
                   {isAnalyzing ? "🔄 Analyzing..." : "Submit for Analysis"}
                 </Button>
@@ -548,47 +550,27 @@ export default function ProblemPage() {
         </div>
       </nav>
 
-      {/* Main Content */}
-      <div className="flex flex-1 overflow-hidden">
-        {/* Left Column - Width based on video */}
-        <div className="flex-shrink-0 flex flex-col w-[400px]">
-          {/* Reference Video */}
-          <div className="flex-1 flex items-center justify-start p-6 bg-tiktok-black">
-            <div className="bg-tiktok-white rounded-xl p-4 shadow-lg flex flex-col">
-              {/* Header */}
-              <div className="bg-gradient-to-r from-gray-100 to-gray-200 px-4 py-3 rounded-t-xl border-b border-gray-200 -m-4 mb-4">
-                <h3 className="text-tiktok-black font-semibold text-lg flex items-center space-x-2">
-                  <FaVideo className="w-5 h-5" />
-                  <span>Dance Reference</span>
-                </h3>
-              </div>
-              <video
-                src={`/videos/${danceData.video}`}
-                controls
-                className="rounded-xl w-80 h-[500px] object-cover"
-                ref={referenceVideoRef}
-                onEnded={handleReferenceVideoEnd}
-              />
+      {/* Main Content Grid - Takes remaining height */}
+      <div className="flex-1 grid grid-cols-3 gap-4 p-4 overflow-hidden">
+        {/* Left Column - Description and Reference */}
+        <div className="flex flex-col gap-4 overflow-hidden">
+          {/* Description Box - Takes 15% of left column */}
+          <div className="flex-[0.15] bg-tiktok-white rounded-xl shadow-lg flex flex-col overflow-hidden">
+            {/* Header */}
+            <div className="bg-gradient-to-r from-gray-100 to-gray-200 px-4 py-2 border-b border-gray-200 flex-shrink-0">
+              <h3 className="text-tiktok-black font-semibold text-sm flex items-center space-x-2">
+                <FaInfoCircle className="w-4 h-4" />
+                <span>Description</span>
+              </h3>
             </div>
-          </div>
-
-          {/* Song Info Box */}
-          <div className="bg-tiktok-black p-6 flex-shrink-0">
-            <div className="bg-tiktok-white border-tiktok-black/10 rounded-xl shadow-lg">
-              {/* Header */}
-              <div className="bg-gradient-to-r from-gray-100 to-gray-200 px-4 py-3 rounded-t-xl border-b border-gray-200">
-                <h3 className="text-tiktok-black font-semibold text-lg flex items-center space-x-2">
-                  <FaInfoCircle className="w-5 h-5" />
-                  <span>Description</span>
-                </h3>
-              </div>
-              <CardHeader className="pb-3">
-                <div className="flex items-center justify-between">
-                  <CardTitle className="text-lg text-tiktok-black">
-                    {problemData.title}
-                  </CardTitle>
+            <div className="flex-1 p-4 overflow-auto">
+              <div className="flex items-center justify-between mb-2">
+                <h4 className="text-lg font-bold text-tiktok-black">
+                  {problemData.title}
+                </h4>
+                <div className="flex items-center gap-2">
                   <Badge
-                    className={`text-xs ${
+                    className={`text-xs font-medium px-2 py-1 ${
                       problemData.difficulty === "Easy"
                         ? "bg-green-100 text-green-800 border-green-200"
                         : problemData.difficulty === "Medium"
@@ -598,46 +580,74 @@ export default function ProblemPage() {
                   >
                     {problemData.difficulty}
                   </Badge>
-                </div>
-              </CardHeader>
-              <div className="p-6 pt-3">
-                <p className="text-tiktok-black/70 mb-3">
-                  Follow the reference dance and record your performance
-                </p>
-                <div className="flex flex-wrap gap-2">
                   {problemData.tags.map((tag) => (
                     <Badge
                       key={tag}
                       variant="secondary"
-                      className="bg-tiktok-black/5 text-tiktok-black border-tiktok-black/10"
+                      className="bg-tiktok-black/5 text-tiktok-black border-tiktok-black/10 px-2 py-1 text-xs"
                     >
                       {tag}
                     </Badge>
                   ))}
                 </div>
               </div>
+              <p className="text-tiktok-black/70 text-sm leading-relaxed">
+                Follow the reference dance and record your performance
+              </p>
+            </div>
+          </div>
+
+          {/* Reference Video - Takes 85% of left column */}
+          <div className="flex-[0.85] bg-tiktok-white rounded-xl shadow-lg flex flex-col overflow-hidden">
+            {/* Header */}
+            <div className="bg-gradient-to-r from-gray-100 to-gray-200 px-4 py-2 border-b border-gray-200 flex-shrink-0">
+              <h3 className="text-tiktok-black font-semibold text-sm flex items-center space-x-2">
+                <FaVideo className="w-4 h-4" />
+                <span>Dance Reference</span>
+              </h3>
+            </div>
+            <div className="flex-1 p-4 flex items-center justify-center">
+              <video
+                src={`/videos/${danceData.video}`}
+                controls
+                className="rounded-lg max-w-full max-h-full object-contain"
+                ref={referenceVideoRef}
+                onEnded={handleReferenceVideoEnd}
+              />
             </div>
           </div>
         </div>
 
-        {/* Right Column - Fill remaining space */}
-        <div className="flex-1 flex flex-col border-l border-tiktok-white/10">
-          {/* Recording Video */}
-          <div className="flex-1 flex items-center justify-center p-8 bg-tiktok-black relative">
+        {/* Right Column - Camera and Analysis */}
+        <div className="col-span-2 flex flex-col gap-4 overflow-hidden">
+          {/* Camera Section - Takes 70% of right column */}
+          <div className="flex-[0.7] bg-tiktok-white rounded-xl shadow-lg flex flex-col overflow-hidden relative">
+            {/* Header */}
+            <div className="bg-gradient-to-r from-gray-100 to-gray-200 px-4 py-2 border-b border-gray-200 flex-shrink-0">
+              <h3 className="text-tiktok-black font-semibold text-sm flex items-center space-x-2">
+                <FaCamera className="w-4 h-4" />
+                <span>Camera</span>
+              </h3>
+            </div>
+
             {/* Always-mounted video element */}
             <video
               ref={cameraVideoRef}
               autoPlay
               muted
-              className={`absolute inset-0 w-full h-full object-cover ${
+              className={`absolute inset-0 w-full h-full object-cover rounded-b-xl ${
                 recording ? "block" : "hidden"
               }`}
+              style={{ top: "40px" }} // Account for header height
             />
 
             {/* Countdown Overlay */}
             {isCountingDown && countdown && (
-              <div className="absolute inset-0 bg-tiktok-black/75 flex items-center justify-center">
-                <div className="text-tiktok-white text-9xl font-bold animate-pulse">
+              <div
+                className="absolute inset-0 bg-tiktok-black/75 flex items-center justify-center"
+                style={{ top: "40px" }}
+              >
+                <div className="text-tiktok-white text-6xl font-bold animate-pulse">
                   {countdown}
                 </div>
               </div>
@@ -645,19 +655,12 @@ export default function ProblemPage() {
 
             {/* Processed Video */}
             {processedVideoUrl && !recording && (
-              <div className="w-full h-full bg-tiktok-white rounded-xl flex flex-col shadow-lg">
-                {/* Header */}
-                <div className="bg-gradient-to-r from-gray-100 to-gray-200 px-4 py-3 rounded-t-xl border-b border-gray-200">
-                  <h3 className="text-tiktok-black font-semibold text-lg flex items-center space-x-2">
-                    <FaCamera className="w-5 h-5" />
-                    <span>Camera</span>
-                  </h3>
-                </div>
+              <div className="flex-1 p-4">
                 <video
                   ref={processedVideoRef}
                   src={processedVideoUrl}
                   controls
-                  className="flex-1 w-full object-cover rounded-b-xl"
+                  className="w-full h-full object-contain rounded-lg"
                 />
               </div>
             )}
@@ -667,61 +670,51 @@ export default function ProblemPage() {
               !recording &&
               !isCountingDown &&
               !isAnalyzing && (
-                <div className="w-full h-full bg-tiktok-white rounded-xl flex flex-col shadow-lg">
-                  {/* Header */}
-                  <div className="bg-gradient-to-r from-gray-100 to-gray-200 px-4 py-3 rounded-t-xl border-b border-gray-200">
-                    <h3 className="text-tiktok-black font-semibold text-lg flex items-center space-x-2">
-                      <FaCamera className="w-5 h-5" />
-                      <span>Camera</span>
-                    </h3>
-                  </div>
-                  <div className="flex-1 flex items-center justify-center">
-                    <div className="text-center">
-                      <div className="flex justify-center mb-6">
-                        <FaCamera className="text-8xl text-tiktok-black/30" />
-                      </div>
-                      <h2 className="text-3xl font-bold mb-4 text-tiktok-black">
-                        Ready to Dance
-                      </h2>
-                      <p className="text-lg text-tiktok-black/70">
-                        Start the challenge to begin recording
-                      </p>
+                <div className="flex-1 flex items-center justify-center p-4">
+                  <div className="text-center">
+                    <div className="flex justify-center mb-4">
+                      <FaCamera className="text-4xl text-tiktok-black/30" />
                     </div>
+                    <h2 className="text-xl font-bold mb-2 text-tiktok-black">
+                      Ready to Dance
+                    </h2>
+                    <p className="text-sm text-tiktok-black/70">
+                      Start the challenge to begin recording
+                    </p>
                   </div>
                 </div>
               )}
 
+            {/* Analyzing State */}
             {!processedVideoUrl &&
               !recording &&
               !isCountingDown &&
               isAnalyzing && (
-                <div className="text-center text-gray-400 max-w-md mx-auto">
-                  <div className="text-8xl mb-6 animate-pulse">🤖</div>
-                  <CardTitle className="text-3xl mb-4">
-                    Analyzing Your Dance
-                  </CardTitle>
-                  <p className="text-lg mb-6">
-                    AI is reviewing your performance...
-                  </p>
+                <div className="flex-1 flex items-center justify-center p-4">
+                  <div className="text-center">
+                    <div className="text-4xl mb-4 animate-pulse">🤖</div>
+                    <h3 className="text-lg font-bold mb-2 text-tiktok-black">
+                      Analyzing Your Dance
+                    </h3>
+                    <p className="text-sm mb-4 text-tiktok-black/70">
+                      AI is reviewing your performance...
+                    </p>
 
-                  {/* Progress Bar */}
-                  <div className="w-full bg-gray-700 rounded-full h-3 mb-4">
-                    <div
-                      className="bg-gradient-to-r from-tiktok-red to-pink-500 h-3 rounded-full transition-all duration-500 ease-out"
-                      style={{ width: `${analysisProgress}%` }}
-                    ></div>
-                  </div>
+                    {/* Progress Bar */}
+                    <div className="w-full bg-gray-200 rounded-full h-2 mb-2">
+                      <div
+                        className="bg-gradient-to-r from-tiktok-red to-pink-500 h-2 rounded-full transition-all duration-500 ease-out"
+                        style={{ width: `${analysisProgress}%` }}
+                      ></div>
+                    </div>
 
-                  {/* Progress Text */}
-                  <p className="text-sm text-gray-300 mb-4">
-                    {analysisStep || "Initializing..."}
-                  </p>
-                  <p className="text-xs text-gray-500">
-                    {analysisProgress}% Complete
-                  </p>
-
-                  <div className="mt-4">
-                    <div className="animate-spin w-8 h-8 border-2 border-gray-400 border-t-transparent rounded-full mx-auto"></div>
+                    {/* Progress Text */}
+                    <p className="text-xs text-tiktok-black/70 mb-2">
+                      {analysisStep || "Initializing..."}
+                    </p>
+                    <p className="text-xs text-tiktok-black/50">
+                      {analysisProgress}% Complete
+                    </p>
                   </div>
                 </div>
               )}
@@ -826,6 +819,78 @@ export default function ProblemPage() {
                   )}
                 </div>
               </div>
+
+              {isAnalyzing && (
+                <div className="text-center text-tiktok-black/70 py-4">
+                  <div className="animate-spin w-4 h-4 border-2 border-tiktok-red border-t-transparent rounded-full mx-auto mb-2"></div>
+                  <p className="text-xs">Analyzing your dance...</p>
+                </div>
+              )}
+
+              {analysisError && (
+                <div className="bg-red-50 border border-red-200 rounded p-2">
+                  <p className="text-red-800 text-xs">Error: {analysisError}</p>
+                </div>
+              )}
+
+              {analysisData &&
+                analysisData.parsed_data?.dance_analysis &&
+                getValidMoves().map((move: any, index: number) => {
+                  const isBlunder = move.score <= -4;
+                  const isMistake = move.score === -3;
+                  const isInaccuracy = move.score >= -2;
+
+                  return (
+                    <div
+                      key={index}
+                      className="bg-tiktok-black/5 rounded border border-tiktok-black/10 p-2 mb-2"
+                    >
+                      <div className="flex items-center justify-between mb-1">
+                        <div className="flex items-center space-x-1">
+                          <span className="text-xs font-mono text-tiktok-black/70 bg-tiktok-black/10 px-1 py-0.5 rounded">
+                            {move.timestamp_of_outcome}
+                          </span>
+                          <span className="text-tiktok-black text-xs font-medium capitalize">
+                            {move.problem_type}
+                          </span>
+                          {isBlunder && (
+                            <div className="w-1.5 h-1.5 bg-red-500 rounded-full"></div>
+                          )}
+                          {isMistake && (
+                            <div className="w-1.5 h-1.5 bg-orange-500 rounded-full"></div>
+                          )}
+                          {isInaccuracy && (
+                            <div className="w-1.5 h-1.5 bg-yellow-500 rounded-full"></div>
+                          )}
+                        </div>
+                        <span className="text-xs text-tiktok-black/50">
+                          #{index + 1}
+                        </span>
+                      </div>
+                      <div className="bg-tiktok-white rounded p-1.5 border-l-2 border-tiktok-red/30">
+                        <p className="text-tiktok-black/80 text-xs leading-relaxed">
+                          {move.feedback}
+                        </p>
+                      </div>
+                    </div>
+                  );
+                })}
+
+              {!analysisData && !isAnalyzing && !analysisError && (
+                <div className="flex-1 flex items-center justify-center">
+                  <div className="text-center">
+                    <div className="flex justify-center mb-3">
+                      <FaChartLine className="text-3xl text-tiktok-black/30" />
+                    </div>
+                    <h4 className="text-xl font-bold mb-2 text-tiktok-black">
+                      Ready to Analyze
+                    </h4>
+                    <p className="text-sm text-tiktok-black/70">
+                      Record and submit your dance for analysis
+                    </p>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>

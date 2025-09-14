@@ -1,18 +1,27 @@
 
 "use client";
-import { ChevronDown, ChevronRight, Plus } from "lucide-react";
+import { 
+  FaBook, 
+  FaCalendarDays, 
+  FaChevronDown, 
+  FaChevronRight, 
+  FaPlus,
+  FaLock,
+  FaHeart
+} from "react-icons/fa6";
 import React, { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 
 export default function SideBar() {
   const [listsOpen, setListsOpen] = useState(true);
-  const [lists, setLists] = useState<{ id: string; name: string }[]>([]);
+  const [lists, setLists] = useState<{ id: string; name: string }[]>([
+    { id: "favorite", name: "Favorite" },
+    { id: "arrays", name: "arrays n strings" }
+  ]);
   const [adding, setAdding] = useState(false);
   const [newListName, setNewListName] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
-
-  // Key for localStorage based on user ID
 
   React.useEffect(() => {
     if (adding && inputRef.current) {
@@ -40,51 +49,66 @@ export default function SideBar() {
   }
 
   return (
-    <nav className="flex flex-col h-full p-6 gap-4">
-      <div className="flex flex-col gap-2">
-        <a href="#" className="font-semibold text-lg hover:underline">Library</a>
-        <a href="#" className="font-semibold text-lg hover:underline">Study Plan</a>
+    <nav className="flex flex-col h-full text-foreground">
+      {/* Main Navigation */}
+      <div className="p-4 space-y-2">
+        <a href="/dance" className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-foreground hover:bg-accent hover:text-accent-foreground rounded-md transition-colors">
+          <FaBook className="w-4 h-4" />
+          Library
+        </a>
+        <a href="/dance/study-plan" className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-foreground hover:bg-accent hover:text-accent-foreground rounded-md transition-colors">
+          <FaCalendarDays className="w-4 h-4" />
+          Study Plan
+        </a>
       </div>
-      <hr className="my-4 border-gray-200" />
-      <div className="flex flex-col gap-2">
+
+      {/* My Lists Section */}
+      <div className="px-4 pb-4">
         <div
-          className="flex items-center justify-between cursor-pointer group"
+          className="flex items-center justify-between cursor-pointer group px-3 py-2 text-sm font-medium"
           onClick={() => setListsOpen((open) => !open)}
         >
-          <span className="font-semibold text-md">My Lists</span>
+          <span className="text-foreground">My Lists</span>
           <div className="flex items-center gap-1">
             {listsOpen ? (
-              <ChevronDown className="w-4 h-4 group-hover:text-primary transition" />
+              <FaChevronDown className="w-3 h-3 text-muted-foreground group-hover:text-foreground transition-colors" />
             ) : (
-              <ChevronRight className="w-4 h-4 group-hover:text-primary transition" />
+              <FaChevronRight className="w-3 h-3 text-muted-foreground group-hover:text-foreground transition-colors" />
             )}
-            <Plus
-              className="w-4 h-4 ml-2 hover:text-primary cursor-pointer"
+            <FaPlus
+              className="w-3 h-3 ml-2 text-muted-foreground hover:text-foreground cursor-pointer transition-colors"
               onClick={handleAddList}
             />
           </div>
         </div>
         {listsOpen && (
-          <div className="ml-4 mt-2 flex flex-col gap-1">
+          <div className="ml-6 mt-1 space-y-1">
             {lists.map((list) => (
               <a
                 key={list.id}
                 href={`/dance/list/${list.id}`}
-                className="text-sm text-gray-700 hover:underline"
+                className="flex items-center gap-3 px-3 py-1.5 text-sm text-muted-foreground hover:text-foreground rounded-md transition-colors group"
               >
-                {list.name}
+                {list.id === "favorite" ? (
+                  <FaHeart className="w-3 h-3" />
+                ) : (
+                  <FaLock className="w-3 h-3" />
+                )}
+                <span className="truncate">{list.name}</span>
               </a>
             ))}
             {adding && (
-              <input
-                ref={inputRef}
-                className="text-sm px-2 py-1 border rounded mt-1 outline-none"
-                value={newListName}
-                onChange={(e) => setNewListName(e.target.value)}
-                onKeyDown={handleInputKeyDown}
-                onClick={e => e.stopPropagation()}
-                placeholder="New list name"
-              />
+              <div className="px-3">
+                <input
+                  ref={inputRef}
+                  className="w-full text-sm px-2 py-1 bg-input border border-border rounded text-foreground placeholder:text-muted-foreground outline-none focus:ring-1 focus:ring-ring"
+                  value={newListName}
+                  onChange={(e) => setNewListName(e.target.value)}
+                  onKeyDown={handleInputKeyDown}
+                  onClick={e => e.stopPropagation()}
+                  placeholder="New list name"
+                />
+              </div>
             )}
           </div>
         )}

@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { Button } from "../shadcn-components/ui/button";
-import ProfileSection from "./components/ProfileSection";
 import {
   Card,
   CardContent,
@@ -10,231 +9,205 @@ import {
 
 export default function HomePage() {
   return (
-    <main className="min-h-screen bg-white">
+    <main className="min-h-screen bg-tiktok-black overflow-x-hidden">
       {/* Hero Section */}
-      <section className="bg-gray-800 text-white py-20 px-6">
-        <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
-          <div>
-            <h1 className="text-5xl font-bold mb-6">A New Way to Learn</h1>
-            <p className="text-xl text-gray-300 mb-8">
-              LeetCode is the best platform to help you enhance your skills,
-              expand your knowledge and prepare for technical interviews.
-            </p>
-            <Button className="bg-teal-500 hover:bg-teal-600 text-white px-8 py-3">
-              Create Account
-            </Button>
-          </div>
-          <div className="flex justify-center">
-            <div className="bg-white rounded-lg shadow-2xl p-8 w-full max-w-md">
-              <div className="flex space-x-2 mb-4">
-                <div className="w-12 h-8 bg-blue-400 rounded"></div>
-                <div className="w-12 h-8 bg-green-400 rounded"></div>
-                <div className="w-12 h-8 bg-yellow-400 rounded"></div>
-                <div className="w-12 h-8 bg-red-400 rounded"></div>
-                <div className="w-12 h-8 bg-blue-300 rounded-full"></div>
-              </div>
-              <div className="space-y-2 mb-4">
-                <div className="h-2 bg-gray-200 rounded"></div>
-                <div className="h-2 bg-gray-200 rounded w-4/5"></div>
-                <div className="h-2 bg-gray-200 rounded w-3/5"></div>
-              </div>
-              <div className="grid grid-cols-4 gap-1 mb-4">
-                {Array.from({ length: 16 }).map((_, i) => (
-                  <div key={i} className="h-3 bg-gray-100 rounded-sm"></div>
-                ))}
-              </div>
-            </div>
-          </div>
+      <section className="relative min-h-screen flex items-center justify-center px-4">
+        {/* Simple background elements */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute top-20 left-10 w-20 h-20 bg-tiktok-cyan rounded-full opacity-10"></div>
+          <div className="absolute top-40 right-20 w-16 h-16 bg-tiktok-red rounded-full opacity-15"></div>
+          <div className="absolute bottom-32 left-20 w-12 h-12 bg-tiktok-pink rounded-full opacity-10"></div>
+          <div className="absolute bottom-20 right-10 w-24 h-24 bg-tiktok-blue rounded-full opacity-10"></div>
         </div>
-      </section>
 
-      {/* Start Exploring Section */}
-      <section className="py-16 px-6">
-        <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
-          <div className="flex justify-center">
-            <div className="bg-teal-500 rounded-full p-8">
-              <div className="text-white text-4xl">→</div>
-            </div>
-          </div>
-          <div>
-            <h2 className="text-3xl font-bold text-gray-800 mb-6">
-              Start Exploring
-            </h2>
-            <p className="text-lg text-gray-600 mb-6">
-              Explore is a well-organized tool that helps you get the most out
-              of LeetCode by providing structure to guide your progress towards
-              the next step in your programming career.
-            </p>
-            <Button
-              variant="outline"
-              className="text-teal-600 border-teal-600 hover:bg-teal-50"
-            >
-              Get Started →
-            </Button>
-          </div>
-        </div>
-      </section>
+        <div className="text-center z-10 max-w-5xl mx-auto">
+          {/* Clean Headline */}
+          <h1 className="text-5xl md:text-7xl lg:text-8xl font-black leading-tight mb-12">
+            <span className="text-tiktok-white">LEETCODE</span>
+            <br />
+            <span className="text-tiktok-red">+</span>
+            <br />
+            <span className="text-tiktok-cyan">TIKTOK</span>
+            <br />
+            <span className="text-tiktok-white">DANCES</span>
+          </h1>
 
-      {/* Main Content Sections */}
-      <section className="py-16 px-6 bg-gray-50">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid md:grid-cols-2 gap-12">
-            {/* Questions & Community */}
-            <Card className="p-8">
-              <CardHeader className="p-0 mb-6">
-                <div className="flex items-center space-x-3 mb-4">
-                  <div className="bg-blue-500 rounded-full p-2">
-                    <div className="text-white text-xl">📊</div>
-                  </div>
-                  <div className="bg-green-500 rounded-full p-2">
-                    <div className="text-white text-xl">👥</div>
-                  </div>
-                  <div className="bg-yellow-500 rounded-full p-2">
-                    <div className="text-white text-xl">🏆</div>
-                  </div>
-                </div>
-                <CardTitle className="text-2xl font-bold text-blue-600">
-                  Questions, Community & Contests
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="p-0">
-                <p className="text-gray-600 mb-6">
-                  Over 3900 questions for you to practice. Come and join one of
-                  the largest tech communities with hundreds of thousands of
-                  active users and participate in our contests to challenge
-                  yourself and earn rewards.
-                </p>
-                <Button
-                  variant="outline"
-                  className="text-blue-600 border-blue-600 hover:bg-blue-50"
-                >
-                  View Questions →
-                </Button>
-              </CardContent>
-            </Card>
-
-            {/* Companies & Candidates */}
-            <Card className="p-8">
-              <CardHeader className="p-0 mb-6">
-                <div className="flex items-center space-x-3 mb-4">
-                  <div className="bg-orange-500 rounded-full p-2">
-                    <div className="text-white text-xl">🏢</div>
-                  </div>
-                  <div className="bg-gray-500 rounded-full p-2">
-                    <div className="text-white text-xl">👨‍💼</div>
-                  </div>
-                </div>
-                <CardTitle className="text-2xl font-bold text-orange-600">
-                  Companies & Candidates
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="p-0">
-                <p className="text-gray-600 mb-6">
-                  Not only does LeetCode prepare candidates for technical
-                  interviews, we also help companies identify top technical
-                  talent. From sponsoring contests to providing online
-                  assessments and training, we offer numerous services to
-                  businesses.
-                </p>
-                <Button
-                  variant="outline"
-                  className="text-orange-600 border-orange-600 hover:bg-orange-50"
-                >
-                  Business Opportunities →
-                </Button>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-      </section>
-
-      {/* Developer Section */}
-      <section className="py-16 px-6">
-        <div className="max-w-6xl mx-auto text-center">
-          <div className="bg-teal-500 rounded-full p-4 w-16 h-16 mx-auto mb-8">
-            <div className="text-white text-2xl">💻</div>
-          </div>
-          <h2 className="text-3xl font-bold text-teal-600 mb-8">Developer</h2>
-          <p className="text-lg text-gray-600 mb-12 max-w-4xl mx-auto">
-            We now support 14 popular coding languages. At our core, LeetCode is
-            about developers. Our powerful development tools such as Playground
-            help you test, debug and even write your own projects online.
+          {/* Simple subtitle */}
+          <p className="text-tiktok-white/80 text-xl md:text-2xl mb-12 font-medium">
+            Master algorithms while learning viral dances
           </p>
 
-          {/* Code Editor Preview */}
-          <div className="bg-gray-900 rounded-lg p-6 max-w-4xl mx-auto">
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex space-x-2">
-                <span className="bg-gray-700 text-white px-3 py-1 rounded text-sm">
-                  C++
-                </span>
-                <span className="bg-gray-700 text-gray-400 px-3 py-1 rounded text-sm">
-                  Java
-                </span>
-                <span className="bg-gray-700 text-gray-400 px-3 py-1 rounded text-sm">
-                  Python
-                </span>
-              </div>
-              <div className="flex space-x-2">
-                <Button size="sm" variant="outline" className="text-xs">
-                  📋 Copy
-                </Button>
-                <Button
-                  size="sm"
-                  className="bg-green-600 hover:bg-green-700 text-xs"
-                >
-                  ▶ Run
-                </Button>
-                <Button
-                  size="sm"
-                  className="bg-orange-600 hover:bg-orange-700 text-xs"
-                >
-                  🏃‍♂️ Playground
-                </Button>
+          {/* Clean CTA Button */}
+          <Button 
+            size="lg" 
+            className="bg-tiktok-red hover:bg-tiktok-pink text-tiktok-white text-xl px-12 py-6 rounded-full font-bold shadow-xl transition-all duration-300"
+          >
+            LET'S GET DANCING
+          </Button>
+        </div>
+
+        {/* Simple scroll indicator */}
+        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2">
+          <div className="w-6 h-10 border-2 border-tiktok-cyan rounded-full flex justify-center">
+            <div className="w-1 h-3 bg-tiktok-cyan rounded-full mt-2"></div>
+          </div>
+        </div>
+      </section>
+
+      {/* How It Works Section */}
+      <section className="py-20 px-4 bg-tiktok-black">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-4xl md:text-6xl font-black text-center mb-16 text-tiktok-white">
+            HOW IT WORKS
+          </h2>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            <Card className="bg-tiktok-white border-2 border-tiktok-red hover:scale-105 transition-transform duration-300">
+              <CardHeader>
+                <CardTitle className="text-2xl font-black text-tiktok-black">
+                  SOLVE PROBLEMS
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-tiktok-blue text-lg font-medium">
+                  Choose from hundreds of coding challenges and start solving like a pro
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card className="bg-tiktok-white border-2 border-tiktok-cyan hover:scale-105 transition-transform duration-300">
+              <CardHeader>
+                <CardTitle className="text-2xl font-black text-tiktok-black">
+                  LEARN DANCES
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-tiktok-blue text-lg font-medium">
+                  Watch viral TikTok dance tutorials matched to your coding progress
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card className="bg-tiktok-white border-2 border-tiktok-pink hover:scale-105 transition-transform duration-300">
+              <CardHeader>
+                <CardTitle className="text-2xl font-black text-tiktok-black">
+                  GET FEEDBACK
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-tiktok-blue text-lg font-medium">
+                  AI analyzes your moves and gives you real-time feedback to improve
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* Features Section */}
+      <section className="py-20 px-4 bg-tiktok-blue/5">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-4xl md:text-6xl font-black text-center mb-16 text-tiktok-white">
+            FEATURES
+          </h2>
+
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            <div>
+              <div className="space-y-8">
+                <div className="flex items-center space-x-6">
+                  <div className="w-12 h-12 bg-tiktok-red rounded-full"></div>
+                  <div>
+                    <h3 className="text-2xl font-bold text-tiktok-white">AI-Powered Analysis</h3>
+                    <p className="text-tiktok-white/70">Get instant feedback on your dance moves</p>
+                  </div>
+                </div>
+
+                <div className="flex items-center space-x-6">
+                  <div className="w-12 h-12 bg-tiktok-cyan rounded-full"></div>
+                  <div>
+                    <h3 className="text-2xl font-bold text-tiktok-white">Real-time Scoring</h3>
+                    <p className="text-tiktok-white/70">Track your progress with live scoring</p>
+                  </div>
+                </div>
+
+                <div className="flex items-center space-x-6">
+                  <div className="w-12 h-12 bg-tiktok-pink rounded-full"></div>
+                  <div>
+                    <h3 className="text-2xl font-bold text-tiktok-white">Viral Challenges</h3>
+                    <p className="text-tiktok-white/70">Learn the hottest dance trends</p>
+                  </div>
+                </div>
               </div>
             </div>
-            <div className="text-left bg-gray-800 rounded p-4 font-mono text-sm">
-              <div className="text-gray-400">1</div>
-              <div className="text-gray-400">
-                2 <span className="text-green-400">/**</span>
+
+            <div className="bg-tiktok-white rounded-3xl p-8 border-2 border-tiktok-cyan">
+              <div className="aspect-video bg-tiktok-red rounded-2xl flex items-center justify-center">
+                <p className="text-tiktok-white text-2xl font-bold">
+                  DANCE VIDEO PREVIEW
+                </p>
               </div>
-              <div className="text-gray-400">
-                3{" "}
-                <span className="text-green-400">
-                  * Definition for singly-linked list.
-                </span>
-              </div>
-              <div className="text-gray-400">
-                4{" "}
-                <span className="text-green-400">* struct ListNode {"{"}</span>
-              </div>
-              <div className="text-gray-400">
-                5 <span className="text-green-400">* int val;</span>
-              </div>
-              <div className="text-gray-400">
-                6 <span className="text-green-400">* ListNode *next;</span>
-              </div>
-              <div className="text-gray-400">
-                7{" "}
-                <span className="text-green-400">
-                  * ListNode(int x) : val(x), next(NULL) {"{}"}
-                </span>
-              </div>
-              <div className="text-gray-400">
-                8 <span className="text-green-400">* {"};"}</span>
-              </div>
-              <div className="text-gray-400">
-                9 <span className="text-green-400">*/</span>
-              </div>
-            </div>
-            <div className="mt-4 text-right">
-              <Button className="bg-teal-600 hover:bg-teal-700">
-                Create Playground →
-              </Button>
             </div>
           </div>
         </div>
       </section>
+
+      {/* Stats Section */}
+      <section className="py-20 px-4 bg-tiktok-black">
+        <div className="max-w-6xl mx-auto">
+          <div className="grid md:grid-cols-4 gap-8 text-center">
+            <div>
+              <div className="text-5xl font-black text-tiktok-red mb-4">10K+</div>
+              <p className="text-tiktok-white/80 text-lg font-medium">Problems Solved</p>
+            </div>
+            <div>
+              <div className="text-5xl font-black text-tiktok-cyan mb-4">500+</div>
+              <p className="text-tiktok-white/80 text-lg font-medium">Dance Moves</p>
+            </div>
+            <div>
+              <div className="text-5xl font-black text-tiktok-pink mb-4">1M+</div>
+              <p className="text-tiktok-white/80 text-lg font-medium">Users Dancing</p>
+            </div>
+            <div>
+              <div className="text-5xl font-black text-tiktok-blue mb-4">99%</div>
+              <p className="text-tiktok-white/80 text-lg font-medium">Fun Guaranteed</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-20 px-4 bg-tiktok-red">
+        <div className="max-w-4xl mx-auto text-center">
+          <h2 className="text-4xl md:text-6xl font-black text-tiktok-white mb-8">
+            READY TO CODE & DANCE?
+          </h2>
+          <p className="text-tiktok-white/80 text-xl mb-12 font-medium">
+            Join thousands of developers who are already vibing
+          </p>
+          
+          <div className="space-y-6">
+            <Button 
+              size="lg" 
+              className="bg-tiktok-black hover:bg-tiktok-blue text-tiktok-white text-xl px-16 py-6 rounded-full font-bold shadow-xl transition-all duration-300"
+            >
+              START MY JOURNEY
+            </Button>
+            
+            <p className="text-tiktok-white/60 text-lg">
+              No credit card required • Free forever • Cancel anytime
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="py-12 px-4 bg-tiktok-black border-t-2 border-tiktok-cyan">
+        <div className="max-w-6xl mx-auto text-center">
+          <p className="text-tiktok-white/60 text-lg">
+            Made with love for developers who love to dance
+          </p>
+        </div>
+      </footer>
     </main>
   );
 }

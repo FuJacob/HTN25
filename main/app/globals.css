@@ -41,57 +41,51 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
-  
-  /* TikTok Brand Colors */
+
+  /* TikTok Brand Colors - ONLY BLACK, RED, WHITE */
   --color-tiktok-white: var(--tiktok-white);
   --color-tiktok-black: var(--tiktok-black);
-  --color-tiktok-pink: var(--tiktok-pink);
   --color-tiktok-red: var(--tiktok-red);
-  --color-tiktok-cyan: var(--tiktok-cyan);
-  --color-tiktok-blue: var(--tiktok-blue);
 }
 
 :root {
   --radius: 0.625rem;
-  --background: var(--tiktok-black); /* Use TikTok black as default background */
-  --foreground: var(--tiktok-white); /* Use TikTok white as default text */
-  --card: var(--tiktok-black);
-  --card-foreground: var(--tiktok-white);
-  --popover: var(--tiktok-black);
-  --popover-foreground: var(--tiktok-white);
-  --primary: var(--tiktok-red);
-  --primary-foreground: var(--tiktok-white);
-  --secondary: var(--tiktok-blue);
-  --secondary-foreground: var(--tiktok-white);
-  --muted: oklch(0.1 0 0); /* Slightly lighter than tiktok-black */
-  --muted-foreground: oklch(0.6 0 0); /* Gray text */
-  --accent: var(--tiktok-cyan);
-  --accent-foreground: var(--tiktok-black);
+  --background: #ffffff; /* White background for light theme */
+  --foreground: #000000; /* Black text for light theme */
+  --card: #ffffff;
+  --card-foreground: #000000;
+  --popover: #ffffff;
+  --popover-foreground: #000000;
+  --primary: var(--tiktok-red); /* Use red as primary */
+  --primary-foreground: #ffffff;
+  --secondary: var(--tiktok-black);
+  --secondary-foreground: #ffffff;
+  --muted: oklch(0.96 0 0); /* Very light gray */
+  --muted-foreground: oklch(0.45 0 0); /* Medium gray text */
+  --accent: var(--tiktok-red); /* Use red for accent */
+  --accent-foreground: #ffffff;
   --destructive: var(--tiktok-red);
-  --border: oklch(0.2 0 0); /* Dark border */
-  --input: oklch(0.15 0 0); /* Dark input background */
-  --ring: var(--tiktok-cyan);
+  --border: oklch(0.9 0 0); /* Light gray border */
+  --input: #ffffff; /* White input background */
+  --ring: var(--tiktok-red); /* Red ring */
   --chart-1: var(--tiktok-red);
-  --chart-2: var(--tiktok-cyan);
-  --chart-3: var(--tiktok-pink);
-  --chart-4: var(--tiktok-blue);
-  --chart-5: oklch(0.7 0.1 280); /* Purple accent */
-  --sidebar: var(--tiktok-black);
-  --sidebar-foreground: var(--tiktok-white);
+  --chart-2: var(--tiktok-black);
+  --chart-3: var(--tiktok-red);
+  --chart-4: var(--tiktok-black);
+  --chart-5: var(--tiktok-red);
+  --sidebar: #ffffff; /* White sidebar */
+  --sidebar-foreground: #000000; /* Black sidebar text */
   --sidebar-primary: var(--tiktok-red);
-  --sidebar-primary-foreground: var(--tiktok-white);
-  --sidebar-accent: var(--tiktok-blue);
-  --sidebar-accent-foreground: var(--tiktok-white);
-  --sidebar-border: oklch(0.2 0 0);
-  --sidebar-ring: var(--tiktok-cyan);
-  
-  /* TikTok Brand Colors */
-  --tiktok-white: oklch(0.964 0.003 254.392); /* #fafafa */
-  --tiktok-black: oklch(0.025 0 0); /* #040404 */
-  --tiktok-pink: oklch(0.685 0.12 347.8); /* #de8c9d */
-  --tiktok-red: oklch(0.588 0.258 12.57); /* #fe2858 */
-  --tiktok-cyan: oklch(0.858 0.179 194.77); /* #2af0ea */
-  --tiktok-blue: oklch(0.494 0.063 221.9); /* #397684 */
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: var(--tiktok-black);
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: oklch(0.9 0 0); /* Light border */
+  --sidebar-ring: var(--tiktok-red);
+
+  /* TikTok Brand Colors - ONLY BLACK, RED, WHITE */
+  --tiktok-white: #ededed; /* Pure white */
+  --tiktok-black: #141414; /* Pure black */
+  --tiktok-red: #fe2858; /* TikTok red */
 }
 
 .dark {
@@ -134,6 +128,6 @@
   }
   body {
     @apply bg-background text-foreground;
-    font-family: var(--font-tik-tok-sans);
+    font-family: var(--font-montserrat);
   }
 }

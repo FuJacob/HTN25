@@ -526,7 +526,7 @@ export default function ProblemPage() {
                     window.location.reload();
                   }}
                   variant="outline"
-                  className="w-full h-10 border-gray-600 text-gray-200 hover:bg-gray-700 hover:border-gray-500 transition-all duration-200"
+                  className="w-full h-10 bg-gray-300 border-gray-500 text-gray-200 hover:bg-gray-700 hover:border-gray-500 transition-all duration-200"
                 >
                   Try Again
                 </Button>
@@ -626,7 +626,11 @@ export default function ProblemPage() {
                     <span className="text-xs text-gray-300">
                       Score:{" "}
                       {getValidMoves().reduce(
-                        (sum: number, move: any) => sum + move.score + 30,
+                        (sum: number, move: any) => {
+                          const baseScore = 100;
+                          const penalty = Math.max(0, -move.score * 5);
+                          return Math.max(0, baseScore - penalty);
+                        },
                         0
                       )}
                     </span>
@@ -662,9 +666,9 @@ export default function ProblemPage() {
                 {analysisData &&
                   analysisData.parsed_data?.dance_analysis &&
                   getValidMoves().map((move: any, index: number) => {
-                      const isBlunder = move.score <= -4;
-                      const isMistake = move.score === -3;
-                      const isInaccuracy = move.score >= -2;
+                      const isBlunder = move.score <= -15;
+                      const isMistake = move.score === -8;
+                      const isInaccuracy = move.score >= -4;
 
                       return (
                         <div

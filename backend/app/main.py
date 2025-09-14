@@ -344,6 +344,11 @@ def create_app() -> FastAPI:
 
             print(f"Process video properties: {process_width}x{process_height} @ {process_fps}fps")
             print(f"Display video properties: {display_width}x{display_height} @ {display_fps}fps")
+            
+            # Calculate and log dynamic font sizing info
+            base_scale = min(display_width, display_height) / 1200
+            calculated_font_scale = max(0.3, min(0.8, base_scale))
+            print(f"Dynamic font sizing: base_scale={base_scale:.3f}, final_scale={calculated_font_scale:.3f}")
 
             # DEBUG: Check if FPS is reasonable, fix if not
             if process_fps > 100 or process_fps <= 0:
@@ -557,29 +562,39 @@ def create_app() -> FastAPI:
                 # Display moment-specific feedback at bottom
                 if current_feedback and current_moment:
                     feedback_font = cv2.FONT_HERSHEY_SIMPLEX
-                    feedback_scale = 0.7  # ~20px font size for most videos
+                    # Dynamic font scaling based on video resolution
+                    base_scale = min(display_width, display_height) / 1200  # Scale based on smaller dimension
+                    feedback_scale = max(0.3, min(0.8, base_scale))  # Clamp between 0.3 and 0.8
                     feedback_color = (255, 255, 255)
                     feedback_border = (0, 0, 0)
-                    feedback_thickness = 2
-                    feedback_border_thickness = 4
-                    feedback_spacing = 28
+                    feedback_thickness = max(1, int(feedback_scale * 3))  # Scale thickness too
+                    feedback_border_thickness = feedback_thickness + 2
+                    feedback_spacing = max(20, int(feedback_scale * 40))  # Scale spacing
 
                     # Add moment header to feedback
                     moment_header = f"Moment {current_moment_number}: {current_moment['move_type']}"
                     full_feedback_text = f"{moment_header} - {current_feedback}"
 
-                    max_width = int(display_width * 0.9)
+                    # Use more conservative text width to prevent overflow
+                    max_width = int(display_width * 0.85)  # Reduced from 0.9 to 0.85
                     wrapped_lines = wrap_text(full_feedback_text, feedback_font, feedback_scale,
                                             feedback_thickness, max_width)
 
                     total_height = len(wrapped_lines) * feedback_spacing
-                    # Position feedback at the very bottom of the video
-                    start_y = display_height - total_height - 20
+                    # Position feedback at the bottom, but ensure it doesn't go off-screen
+                    min_start_y = max(50, int(display_height * 0.1))  # At least 10% from top
+                    ideal_start_y = display_height - total_height - 30
+                    start_y = max(min_start_y, ideal_start_y)
 
                     for i, line in enumerate(wrapped_lines):
                         text_size = cv2.getTextSize(line, feedback_font, feedback_scale, feedback_thickness)[0]
                         feedback_x = (display_width - text_size[0]) // 2
                         feedback_y = start_y + (i * feedback_spacing)
+                        
+                        # Skip lines that would go off the bottom of the video
+                        if feedback_y + feedback_spacing > display_height:
+                            break
+                            
                         # Draw border
                         cv2.putText(display_frame, line, (feedback_x, feedback_y), feedback_font, feedback_scale,
                                    feedback_border, feedback_border_thickness, cv2.LINE_AA)

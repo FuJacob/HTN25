@@ -11,6 +11,9 @@ import {
   FaInfoCircle,
   FaChartLine,
   FaList,
+  FaRobot,
+  FaRedo,
+  FaPlaneDeparture,
 } from "react-icons/fa";
 import { Button } from "@/shadcn-components/ui/button";
 import {
@@ -78,6 +81,7 @@ export default function ProblemPage() {
     "19": { title: "Supalonely", video: "Supalonely.mp4" },
     "20": { title: "Vibe", video: "Vibe.mp4" },
     "21": { title: "Wednesday", video: "Wednesday.mp4" },
+    "22": { title: "Slide", video: "Slide.mp4" },
   }[problemId as string] || { title: "Unknown Dance", video: "Adderall.mp4" };
 
   const problemData = {
@@ -494,11 +498,11 @@ export default function ProblemPage() {
                 <Button
                   onClick={startCountdownAndRecording}
                 className="bg-tiktok-red hover:bg-tiktok-red/80 text-tiktok-white font-bold px-6 py-2 text-sm rounded-full transition-colors flex items-center space-x-2"
-                >
-                <FaUpload className="w-4 h-4" />
-                <span>Submit</span>
-                </Button>
-              )}
+              >
+                <FaCamera className="w-4 h-4" />
+                <span>Record</span>
+              </Button>
+            )}
 
               {isCountingDown && (
                 <Button
@@ -527,20 +531,31 @@ export default function ProblemPage() {
                     }}
                     variant="outline"
                   size="sm"
-                  className="border-tiktok-black/20 text-tiktok-black hover:bg-tiktok-black/5"
-                  >
-                    Try Again
-                  </Button>
-                  <Button
-                    onClick={handleSubmitForAnalysis}
-                    disabled={isAnalyzing}
+                  className="border-tiktok-black/20 text-tiktok-black hover:bg-tiktok-black/5 flex items-center space-x-1"
+                >
+                  <FaRedo className="w-3 h-3" />
+                  <span>Try Again</span>
+                </Button>
+                <Button
+                  onClick={handleSubmitForAnalysis}
+                  disabled={isAnalyzing}
                   size="sm"
-                  className="bg-tiktok-red hover:bg-tiktok-red/80 text-tiktok-white font-bold rounded-full"
-                  >
-                    {isAnalyzing ? "🔄 Analyzing..." : "Submit for Analysis"}
-                  </Button>
-                </div>
-              )}
+                  className="bg-tiktok-red hover:bg-tiktok-red/80 text-tiktok-white font-bold rounded-full flex items-center space-x-1"
+                >
+                  {isAnalyzing ? (
+                    <>
+                      <FaRobot className="w-3 h-3 animate-pulse" />
+                      <span>Analyzing...</span>
+                    </>
+                  ) : (
+                    <>
+                      <FaPlaneDeparture className="w-3 h-3" />
+                      <span>Submit Dance Attempt</span>
+                    </>
+                  )}
+                </Button>
+              </div>
+            )}
           </div>
 
           {/* Right: Profile Section */}
@@ -554,8 +569,8 @@ export default function ProblemPage() {
       <div className="flex-1 grid grid-cols-3 gap-4 p-4 overflow-hidden">
         {/* Left Column - Description and Reference */}
         <div className="flex flex-col gap-4 overflow-hidden">
-          {/* Description Box - Takes 15% of left column */}
-          <div className="flex-[0.15] bg-tiktok-white rounded-xl shadow-lg flex flex-col overflow-hidden">
+          {/* Description Box - Takes 20% of left column */}
+          <div className="flex-[0.2] bg-tiktok-white rounded-xl shadow-lg flex flex-col overflow-hidden">
             {/* Header */}
             <div className="bg-gradient-to-r from-gray-100 to-gray-200 px-4 py-2 border-b border-gray-200 flex-shrink-0">
               <h3 className="text-tiktok-black font-semibold text-sm flex items-center space-x-2">
@@ -597,8 +612,8 @@ export default function ProblemPage() {
             </div>
           </div>
 
-          {/* Reference Video - Takes 85% of left column */}
-          <div className="flex-[0.85] bg-tiktok-white rounded-xl shadow-lg flex flex-col overflow-hidden">
+          {/* Reference Video - Takes 80% of left column */}
+          <div className="flex-1 bg-tiktok-white rounded-xl shadow-lg flex flex-col overflow-hidden">
             {/* Header */}
             <div className="bg-gradient-to-r from-gray-100 to-gray-200 px-4 py-2 border-b border-gray-200 flex-shrink-0">
               <h3 className="text-tiktok-black font-semibold text-sm flex items-center space-x-2">
@@ -610,7 +625,7 @@ export default function ProblemPage() {
               <video
                 src={`/videos/${danceData.video}`}
                 controls
-                className="rounded-lg max-w-full max-h-full object-contain"
+                className="rounded-lg h-fit w-90 object-cover"
                 ref={referenceVideoRef}
                 onEnded={handleReferenceVideoEnd}
               />
@@ -621,7 +636,7 @@ export default function ProblemPage() {
         {/* Right Column - Camera and Analysis */}
         <div className="col-span-2 flex flex-col gap-4 overflow-hidden">
           {/* Camera Section - Takes 70% of right column */}
-          <div className="flex-[0.7] bg-tiktok-white rounded-xl shadow-lg flex flex-col overflow-hidden relative">
+          <div className="flex-1 bg-tiktok-white rounded-xl shadow-lg flex flex-col overflow-hidden relative">
             {/* Header */}
             <div className="bg-gradient-to-r from-gray-100 to-gray-200 px-4 py-2 border-b border-gray-200 flex-shrink-0">
               <h3 className="text-tiktok-black font-semibold text-sm flex items-center space-x-2">
@@ -630,16 +645,18 @@ export default function ProblemPage() {
               </h3>
             </div>
 
-          {/* Always-mounted video element */}
-          <video
-            ref={cameraVideoRef}
-            autoPlay
-            muted
-              className={`absolute inset-0 w-full h-full object-cover rounded-b-xl ${
-              recording ? "block" : "hidden"
-            }`}
-              style={{ top: "40px" }} // Account for header height
-          />
+            {/* Always-mounted video element */}
+            {/* Right Panel */}
+
+            {/* Always-mounted video element */}
+            <video
+              ref={cameraVideoRef}
+              autoPlay
+              muted
+              className={`absolute inset-0 w-full h-full object-cover z-0 transform scale-x-[-1] ${
+                recording ? "block" : "hidden"
+              }`}
+            />
 
           {/* Countdown Overlay */}
           {isCountingDown && countdown && (
@@ -655,12 +672,12 @@ export default function ProblemPage() {
 
             {/* Processed Video */}
             {processedVideoUrl && !recording && (
-              <div className="flex-1 p-4">
-              <video
+              <div className="flex-1 p-2 flex items-center justify-center">
+                <video
                   ref={processedVideoRef}
-                src={processedVideoUrl}
-                controls
-                  className="w-full h-full object-contain rounded-lg"
+                  src={processedVideoUrl}
+                  controls
+                  className="w-[750px] h-fit object-cover rounded-lg"
                 />
               </div>
             )}
@@ -692,13 +709,12 @@ export default function ProblemPage() {
               isAnalyzing && (
                 <div className="flex-1 flex items-center justify-center p-4">
                   <div className="text-center">
-                    <div className="text-4xl mb-4 animate-pulse">🤖</div>
+                    <div className="flex justify-center mb-4">
+                      <FaRobot className="text-4xl text-tiktok-black/30 animate-pulse" />
+                    </div>
                     <h3 className="text-lg font-bold mb-2 text-tiktok-black">
-                      Analyzing Your Dance
+                      Analyzing
                     </h3>
-                    <p className="text-sm mb-4 text-tiktok-black/70">
-                      AI is reviewing your performance...
-                    </p>
 
                     {/* Progress Bar */}
                     <div className="w-full bg-gray-200 rounded-full h-2 mb-2">
@@ -709,9 +725,6 @@ export default function ProblemPage() {
                     </div>
 
                     {/* Progress Text */}
-                    <p className="text-xs text-tiktok-black/70 mb-2">
-                      {analysisStep || "Initializing..."}
-                    </p>
                     <p className="text-xs text-tiktok-black/50">
                       {analysisProgress}% Complete
                     </p>

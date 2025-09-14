@@ -20,11 +20,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${tikTokSans.variable} antialiased`}>
+    <html lang="en" className="overflow-hidden">
+      <body className={`${tikTokSans.variable} antialiased overflow-hidden`}>
         <Auth0Provider>
           <Header />
-          <main className="min-h-screen">{children}</main>
+          <main className="h-[calc(100vh-4rem)] overflow-hidden">{children}</main>
         </Auth0Provider>
       </body>
     </html>

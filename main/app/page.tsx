@@ -31,12 +31,12 @@ export default function HomePage() {
           <div className="w-1/2 pr-12">
             {/* Main Headline */}
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-black leading-tight mb-8 text-tiktok-black">
-              <div className="flex flex-col space-y-4">
-                <div className="flex items-center space-x-3">
+              <div className="flex flex-col space-y-2">
+                <div className="flex items-center space-x-3 ">
                   <img
                     src="/leetcode.png"
                     alt="LeetCode"
-                    className="h-12 md:h-16 lg:h-20 mb-6"
+                    className="h-12 md:h-16 lg:h-20 mb-5"
                   />
                   <span>but for</span>
                 </div>
@@ -44,7 +44,7 @@ export default function HomePage() {
                   <img
                     src="/tiktok.png"
                     alt="TikTok"
-                    className="h-12 md:h-16 lg:h-20 mb-4"
+                    className="h-12 md:h-16 lg:h-20 mb-2"
                   />
                   <span>Dances</span>
                 </div>

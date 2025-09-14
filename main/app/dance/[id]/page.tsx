@@ -1,7 +1,17 @@
 "use client";
 import { useRef, useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { FaChevronLeft, FaChevronRight, FaRandom } from "react-icons/fa";
+import {
+  FaChevronLeft,
+  FaChevronRight,
+  FaRandom,
+  FaUpload,
+  FaVideo,
+  FaCamera,
+  FaInfoCircle,
+  FaChartLine,
+  FaList,
+} from "react-icons/fa";
 import { Button } from "@/shadcn-components/ui/button";
 import {
   Card,
@@ -88,12 +98,14 @@ export default function ProblemPage() {
   // Auto-scroll functionality
   const processedVideoRef = useRef<HTMLVideoElement>(null);
   const analysisContainerRef = useRef<HTMLDivElement>(null);
-  const [currentHighlightedMove, setCurrentHighlightedMove] = useState<number | null>(null);
+  const [currentHighlightedMove, setCurrentHighlightedMove] = useState<
+    number | null
+  >(null);
   const [videoDuration, setVideoDuration] = useState<number>(0);
 
   // Parse timestamp to seconds
   const parseTimestamp = (timestamp: string): number => {
-    const parts = timestamp.split(':');
+    const parts = timestamp.split(":");
     if (parts.length === 2) {
       const [minutes, seconds] = parts.map(parseFloat);
       return minutes * 60 + seconds;
@@ -109,7 +121,8 @@ export default function ProblemPage() {
     const container = analysisContainerRef.current;
     const refVideo = referenceVideoRef.current;
 
-    if (!video || !container || !analysisData?.parsed_data?.dance_analysis) return;
+    if (!video || !container || !analysisData?.parsed_data?.dance_analysis)
+      return;
 
     const currentTime = video.currentTime;
 
@@ -131,15 +144,20 @@ export default function ProblemPage() {
     }
 
     // Update highlighted move and scroll if necessary
-    if (currentMoveIndex !== -1 && currentMoveIndex !== currentHighlightedMove) {
+    if (
+      currentMoveIndex !== -1 &&
+      currentMoveIndex !== currentHighlightedMove
+    ) {
       setCurrentHighlightedMove(currentMoveIndex);
 
       // Scroll to the highlighted move
-      const moveElement = container.querySelector(`[data-move-index="${currentMoveIndex}"]`);
+      const moveElement = container.querySelector(
+        `[data-move-index="${currentMoveIndex}"]`
+      );
       if (moveElement) {
         moveElement.scrollIntoView({
-          behavior: 'auto',
-          block: 'center'
+          behavior: "auto",
+          block: "center",
         });
       }
     } else if (currentMoveIndex === -1) {
@@ -411,17 +429,17 @@ export default function ProblemPage() {
     }
   }, [recording, mediaStream]);
 
-  const navigateToDance = (direction: 'prev' | 'next' | 'random') => {
+  const navigateToDance = (direction: "prev" | "next" | "random") => {
     const currentId = parseInt(problemId as string);
     const maxId = 21; // Total number of dances
 
-    if (direction === 'prev') {
+    if (direction === "prev") {
       const prevId = currentId <= 1 ? maxId : currentId - 1;
       router.push(`/dance/${prevId}`);
-    } else if (direction === 'next') {
+    } else if (direction === "next") {
       const nextId = currentId >= maxId ? 1 : currentId + 1;
       router.push(`/dance/${nextId}`);
-    } else if (direction === 'random') {
+    } else if (direction === "random") {
       let randomId;
       do {
         randomId = Math.floor(Math.random() * maxId) + 1;
@@ -437,36 +455,48 @@ export default function ProblemPage() {
         <div className="flex items-center justify-between px-8 py-4 w-full">
           {/* Left: Logo and navigation */}
           <div className="flex items-center space-x-4">
-            <img src="/logo.png" alt="Logo" className="h-8 w-auto" />
-            <span className="text-tiktok-black font-medium">Dance List</span>
+            <img
+              src="/logo.png"
+              alt="Logo"
+              className="h-8 w-auto cursor-pointer hover:opacity-80 transition-opacity"
+              onClick={() => router.push('/')}
+            />
+            <span
+              className="text-tiktok-black font-medium flex items-center space-x-2 cursor-pointer hover:text-tiktok-red transition-colors"
+              onClick={() => router.push('/dances')}
+            >
+              <FaList className="w-4 h-4" />
+              <span>Dance List</span>
+            </span>
             <button
-              onClick={() => navigateToDance('prev')}
+              onClick={() => navigateToDance("prev")}
               className="text-tiktok-red hover:text-tiktok-red/80 transition-colors p-2 rounded-lg hover:bg-tiktok-black/5"
             >
               <FaChevronLeft className="w-5 h-5" />
             </button>
             <button
-              onClick={() => navigateToDance('next')}
+              onClick={() => navigateToDance("next")}
               className="text-tiktok-red hover:text-tiktok-red/80 transition-colors p-2 rounded-lg hover:bg-tiktok-black/5"
             >
               <FaChevronRight className="w-5 h-5" />
             </button>
             <button
-              onClick={() => navigateToDance('random')}
+              onClick={() => navigateToDance("random")}
               className="text-tiktok-red hover:text-tiktok-red/80 transition-colors p-2 rounded-lg hover:bg-tiktok-black/5"
             >
               <FaRandom className="w-5 h-5" />
             </button>
           </div>
 
-          {/* Center: Start Dance Challenge Button */}
+          {/* Center: Submit Button */}
           <div>
             {!recording && !recordedVideo && !isCountingDown && (
               <Button
                 onClick={startCountdownAndRecording}
-                className="bg-tiktok-red hover:bg-tiktok-red/80 text-tiktok-white font-bold px-8 py-3 text-lg rounded-full transition-colors"
+                className="bg-tiktok-red hover:bg-tiktok-red/80 text-tiktok-white font-bold px-8 py-3 text-lg rounded-full transition-colors flex items-center space-x-2"
               >
-                🎵 Start Dance Challenge
+                <FaUpload className="w-5 h-5" />
+                <span>Submit</span>
               </Button>
             )}
 
@@ -521,10 +551,17 @@ export default function ProblemPage() {
       {/* Main Content */}
       <div className="flex flex-1 overflow-hidden">
         {/* Left Column - Width based on video */}
-        <div className="flex-shrink-0 flex flex-col">
+        <div className="flex-shrink-0 flex flex-col w-fit gap-6">
           {/* Reference Video */}
-          <div className="flex-1 flex items-center justify-center p-4 bg-tiktok-black">
-            <div className="bg-tiktok-white rounded-xl p-3 shadow-lg">
+          <div className="flex-1 flex items-center justify-start p-6 bg-tiktok-black">
+            <div className="bg-tiktok-white rounded-xl p-4 shadow-lg flex flex-col">
+              {/* Header */}
+              <div className="bg-gradient-to-r from-gray-100 to-gray-200 px-4 py-3 rounded-t-xl border-b border-gray-200 -m-4 mb-4">
+                <h3 className="text-tiktok-black font-semibold text-lg flex items-center space-x-2">
+                  <FaVideo className="w-5 h-5" />
+                  <span>Dance Reference</span>
+                </h3>
+              </div>
               <video
                 src={`/videos/${danceData.video}`}
                 controls
@@ -536,8 +573,15 @@ export default function ProblemPage() {
           </div>
 
           {/* Song Info Box */}
-          <div className="bg-tiktok-black p-3 flex-shrink-0">
-            <Card className="bg-tiktok-white border-tiktok-black/10">
+          <div className="bg-tiktok-black p-6 flex-shrink-0">
+            <div className="bg-tiktok-white border-tiktok-black/10 rounded-xl shadow-lg">
+              {/* Header */}
+              <div className="bg-gradient-to-r from-gray-100 to-gray-200 px-4 py-3 rounded-t-xl border-b border-gray-200">
+                <h3 className="text-tiktok-black font-semibold text-lg flex items-center space-x-2">
+                  <FaInfoCircle className="w-5 h-5" />
+                  <span>Description</span>
+                </h3>
+              </div>
               <CardHeader className="pb-3">
                 <div className="flex items-center justify-between">
                   <CardTitle className="text-lg text-tiktok-black">
@@ -556,7 +600,7 @@ export default function ProblemPage() {
                   </Badge>
                 </div>
               </CardHeader>
-              <CardContent className="pt-0">
+              <div className="p-6 pt-3">
                 <p className="text-tiktok-black/70 mb-3">
                   Follow the reference dance and record your performance
                 </p>
@@ -571,8 +615,8 @@ export default function ProblemPage() {
                     </Badge>
                   ))}
                 </div>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -601,83 +645,126 @@ export default function ProblemPage() {
 
             {/* Processed Video */}
             {processedVideoUrl && !recording && (
-              <video
-                ref={processedVideoRef}
-                src={processedVideoUrl}
-                controls
-                className="w-full h-full object-cover rounded-xl"
-              />
+              <div className="w-full h-full bg-tiktok-white rounded-xl flex flex-col shadow-lg">
+                {/* Header */}
+                <div className="bg-gradient-to-r from-gray-100 to-gray-200 px-4 py-3 rounded-t-xl border-b border-gray-200">
+                  <h3 className="text-tiktok-black font-semibold text-lg flex items-center space-x-2">
+                    <FaCamera className="w-5 h-5" />
+                    <span>Camera</span>
+                  </h3>
+                </div>
+                <video
+                  ref={processedVideoRef}
+                  src={processedVideoUrl}
+                  controls
+                  className="flex-1 w-full object-cover rounded-b-xl"
+                />
+              </div>
             )}
 
             {/* Ready State */}
-            {!processedVideoUrl && !recording && !isCountingDown && (
-              <div className="text-center text-tiktok-white">
-                <div className="text-8xl mb-6">📹</div>
-                <h2 className="text-3xl font-bold mb-4">Ready to Dance</h2>
-                <p className="text-lg text-tiktok-white/70">
-                  Start the challenge to begin recording
-                </p>
-              </div>
-            )}
-
-            {!processedVideoUrl && !recording && !isCountingDown && isAnalyzing && (
-              <div className="text-center text-gray-400 max-w-md mx-auto">
-                <div className="text-8xl mb-6 animate-pulse">🤖</div>
-                <CardTitle className="text-3xl mb-4">Analyzing Your Dance</CardTitle>
-                <p className="text-lg mb-6">
-                  AI is reviewing your performance...
-                </p>
-
-                {/* Progress Bar */}
-                <div className="w-full bg-gray-700 rounded-full h-3 mb-4">
-                  <div
-                    className="bg-gradient-to-r from-tiktok-red to-pink-500 h-3 rounded-full transition-all duration-500 ease-out"
-                    style={{ width: `${analysisProgress}%` }}
-                  ></div>
+            {!processedVideoUrl &&
+              !recording &&
+              !isCountingDown &&
+              !isAnalyzing && (
+                <div className="w-full h-full bg-tiktok-white rounded-xl flex flex-col shadow-lg">
+                  {/* Header */}
+                  <div className="bg-gradient-to-r from-gray-100 to-gray-200 px-4 py-3 rounded-t-xl border-b border-gray-200">
+                    <h3 className="text-tiktok-black font-semibold text-lg flex items-center space-x-2">
+                      <FaCamera className="w-5 h-5" />
+                      <span>Camera</span>
+                    </h3>
+                  </div>
+                  <div className="flex-1 flex items-center justify-center">
+                    <div className="text-center">
+                      <div className="flex justify-center mb-6">
+                        <FaCamera className="text-8xl text-tiktok-black/30" />
+                      </div>
+                      <h2 className="text-3xl font-bold mb-4 text-tiktok-black">
+                        Ready to Dance
+                      </h2>
+                      <p className="text-lg text-tiktok-black/70">
+                        Start the challenge to begin recording
+                      </p>
+                    </div>
+                  </div>
                 </div>
+              )}
 
-                {/* Progress Text */}
-                <p className="text-sm text-gray-300 mb-4">
-                  {analysisStep || "Initializing..."}
-                </p>
-                <p className="text-xs text-gray-500">
-                  {analysisProgress}% Complete
-                </p>
+            {!processedVideoUrl &&
+              !recording &&
+              !isCountingDown &&
+              isAnalyzing && (
+                <div className="text-center text-gray-400 max-w-md mx-auto">
+                  <div className="text-8xl mb-6 animate-pulse">🤖</div>
+                  <CardTitle className="text-3xl mb-4">
+                    Analyzing Your Dance
+                  </CardTitle>
+                  <p className="text-lg mb-6">
+                    AI is reviewing your performance...
+                  </p>
 
-                <div className="mt-4">
-                  <div className="animate-spin w-8 h-8 border-2 border-gray-400 border-t-transparent rounded-full mx-auto"></div>
+                  {/* Progress Bar */}
+                  <div className="w-full bg-gray-700 rounded-full h-3 mb-4">
+                    <div
+                      className="bg-gradient-to-r from-tiktok-red to-pink-500 h-3 rounded-full transition-all duration-500 ease-out"
+                      style={{ width: `${analysisProgress}%` }}
+                    ></div>
+                  </div>
+
+                  {/* Progress Text */}
+                  <p className="text-sm text-gray-300 mb-4">
+                    {analysisStep || "Initializing..."}
+                  </p>
+                  <p className="text-xs text-gray-500">
+                    {analysisProgress}% Complete
+                  </p>
+
+                  <div className="mt-4">
+                    <div className="animate-spin w-8 h-8 border-2 border-gray-400 border-t-transparent rounded-full mx-auto"></div>
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
           </div>
 
           {/* Dance Analysis Box */}
           <div className="bg-tiktok-black p-6">
-            <Card className="bg-tiktok-white border-tiktok-black/10">
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <CardTitle className="text-tiktok-black">Dance Analysis</CardTitle>
+            <div className="bg-tiktok-white border-tiktok-black/10 rounded-xl shadow-lg">
+              {/* Header */}
+              <div className="bg-gradient-to-r from-gray-100 to-gray-200 px-4 py-3 rounded-t-xl border-b border-gray-200">
+                <h3 className="text-tiktok-black font-semibold text-lg flex items-center space-x-2">
+                  <FaChartLine className="w-5 h-5" />
+                  <span>Analysis Cases</span>
+                </h3>
+              </div>
+              <div className="p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <h4 className="text-tiktok-black font-semibold">
+                    Dance Analysis
+                  </h4>
                   <div className="flex items-center space-x-3">
-                    {analysisData && analysisData.parsed_data?.dance_analysis && (
-                      <div className="flex items-center space-x-1">
-                        <div className="w-2 h-2 bg-tiktok-red rounded-full"></div>
-                        <span className="text-xs text-tiktok-black/70">
-                          Score:{" "}
-                          {analysisData.parsed_data.dance_analysis.reduce(
-                            (sum: number, move: any) => sum + move.score,
-                            0
-                          )}
-                        </span>
-                      </div>
-                    )}
+                    {analysisData &&
+                      analysisData.parsed_data?.dance_analysis && (
+                        <div className="flex items-center space-x-1">
+                          <div className="w-2 h-2 bg-tiktok-red rounded-full"></div>
+                          <span className="text-xs text-tiktok-black/70">
+                            Score:{" "}
+                            {analysisData.parsed_data.dance_analysis.reduce(
+                              (sum: number, move: any) => sum + move.score,
+                              0
+                            )}
+                          </span>
+                        </div>
+                      )}
                     <div className="flex items-center space-x-1">
                       <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
-                      <span className="text-xs text-tiktok-black/70">10.0s</span>
+                      <span className="text-xs text-tiktok-black/70">
+                        10.0s
+                      </span>
                     </div>
                   </div>
                 </div>
-              </CardHeader>
-              <CardContent className="max-h-48 overflow-auto">
+                <div className="max-h-48 overflow-auto">
                 {isAnalyzing && (
                   <div className="text-center text-tiktok-black/70 py-4">
                     <div className="animate-spin w-6 h-6 border-2 border-tiktok-red border-t-transparent rounded-full mx-auto mb-2"></div>
@@ -687,53 +774,54 @@ export default function ProblemPage() {
 
                 {analysisError && (
                   <div className="bg-red-50 border border-red-200 rounded p-3">
-                    <p className="text-red-800 text-sm">Error: {analysisError}</p>
+                    <p className="text-red-800 text-sm">
+                      Error: {analysisError}
+                    </p>
                   </div>
                 )}
 
                 {analysisData &&
                   analysisData.parsed_data?.dance_analysis &&
                   getValidMoves().map((move: any, index: number) => {
-                      const isBlunder = move.score <= -4;
-                      const isMistake = move.score === -3;
-                      const isInaccuracy = move.score >= -2;
+                    const isBlunder = move.score <= -4;
+                    const isMistake = move.score === -3;
+                    const isInaccuracy = move.score >= -2;
 
-                      return (
-                        <div
-                          key={index}
-                          className="bg-tiktok-black/5 rounded border border-tiktok-black/10 p-3 mb-2"
-                        >
-                          <div className="flex items-center justify-between mb-2">
-                            <div className="flex items-center space-x-2">
-                              <span className="text-xs font-mono text-tiktok-black/70 bg-tiktok-black/10 px-2 py-1 rounded">
-                                {move.timestamp_of_outcome}
-                              </span>
-                              <span className="text-tiktok-black text-sm font-medium capitalize">
-                                {move.problem_type}
-                              </span>
-                              {isBlunder && (
-                                <div className="w-2 h-2 bg-red-500 rounded-full"></div>
-                              )}
-                              {isMistake && (
-                                <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
-                              )}
-                              {isInaccuracy && (
-                                <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
-                              )}
-                            </div>
-                            <span className="text-xs text-tiktok-black/50">
-                              #{index + 1}
+                    return (
+                      <div
+                        key={index}
+                        className="bg-tiktok-black/5 rounded border border-tiktok-black/10 p-3 mb-2"
+                      >
+                        <div className="flex items-center justify-between mb-2">
+                          <div className="flex items-center space-x-2">
+                            <span className="text-xs font-mono text-tiktok-black/70 bg-tiktok-black/10 px-2 py-1 rounded">
+                              {move.timestamp_of_outcome}
                             </span>
+                            <span className="text-tiktok-black text-sm font-medium capitalize">
+                              {move.problem_type}
+                            </span>
+                            {isBlunder && (
+                              <div className="w-2 h-2 bg-red-500 rounded-full"></div>
+                            )}
+                            {isMistake && (
+                              <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
+                            )}
+                            {isInaccuracy && (
+                              <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
+                            )}
                           </div>
-                          <div className="bg-tiktok-white rounded p-2 border-l-2 border-tiktok-red/30">
-                            <p className="text-tiktok-black/80 text-xs leading-relaxed">
-                              {move.feedback}
-                            </p>
-                          </div>
+                          <span className="text-xs text-tiktok-black/50">
+                            #{index + 1}
+                          </span>
                         </div>
-                      );
-                    }
-                  )}
+                        <div className="bg-tiktok-white rounded p-2 border-l-2 border-tiktok-red/30">
+                          <p className="text-tiktok-black/80 text-xs leading-relaxed">
+                            {move.feedback}
+                          </p>
+                        </div>
+                      </div>
+                    );
+                  })}
 
                 {!analysisData && !isAnalyzing && !analysisError && (
                   <div className="text-center text-tiktok-black/70 py-4">
@@ -742,8 +830,9 @@ export default function ProblemPage() {
                     </p>
                   </div>
                 )}
-              </CardContent>
-            </Card>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

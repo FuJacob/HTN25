@@ -727,50 +727,44 @@ export default function ProblemPage() {
               )}
           </div>
 
-          {/* Dance Analysis Box */}
-          <div className="bg-tiktok-black p-6">
-            <div className="bg-tiktok-white border-tiktok-black/10 rounded-xl shadow-lg">
-              {/* Header */}
-              <div className="bg-gradient-to-r from-gray-100 to-gray-200 px-4 py-3 rounded-t-xl border-b border-gray-200">
-                <h3 className="text-tiktok-black font-semibold text-lg flex items-center space-x-2">
-                  <FaChartLine className="w-5 h-5" />
-                  <span>Analysis Cases</span>
-                </h3>
-              </div>
-              <div className="p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <h4 className="text-tiktok-black font-semibold">
-                    Dance Analysis
-                  </h4>
-                  <div className="flex items-center space-x-3">
-                    {analysisData &&
-                      analysisData.parsed_data?.dance_analysis && (
-                        <div className="flex items-center space-x-1">
-                          <div className="w-2 h-2 bg-tiktok-red rounded-full"></div>
-                          <span className="text-xs text-tiktok-black/70">
-                            Score:{" "}
-                            {analysisData.parsed_data.dance_analysis.reduce(
-                              (sum: number, move: any) => sum + move.score,
-                              0
-                            )}
-                          </span>
-                        </div>
+          {/* Bottom Section - Compact Analysis */}
+          <div className="h-36 border-t border-gray-700 bg-gray-900/50 relative z-10 flex flex-col flex-shrink-0">
+            {/* Sticky Header */}
+            <div className="sticky top-0 px-4 py-3 bg-gradient-to-b from-gray-900/95 via-gray-900/80 to-transparent backdrop-blur-md flex items-center justify-between border-b border-gray-700 flex-shrink-0">
+              <h3 className="text-sm font-semibold text-white">
+                Dance Analysis
+              </h3>
+              <div className="flex items-center space-x-3">
+                {analysisData && analysisData.parsed_data?.dance_analysis && (
+                  <div className="flex items-center space-x-1">
+                    <div className="w-2 h-2 bg-red-500 rounded-full"></div>
+                    <span className="text-xs text-gray-300">
+                      Score:{" "}
+                      {getValidMoves().reduce(
+                        (sum: number, move: any) => sum + move.score + 30,
+                        0
                       )}
-                    <div className="flex items-center space-x-1">
-                      <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
-                      <span className="text-xs text-tiktok-black/70">
-                        10.0s
-                      </span>
-                    </div>
+                    </span>
                   </div>
+                )}
+                <div className="flex items-center space-x-1">
+                  <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
+                  <span className="text-xs text-gray-300">
+                    {videoDuration > 0 ? `${videoDuration.toFixed(1)}s` : '0.0s'}
+                  </span>
                 </div>
-                <div className="max-h-48 overflow-auto">
-                  {isAnalyzing && (
-                    <div className="text-center text-tiktok-black/70 py-4">
-                      <div className="animate-spin w-6 h-6 border-2 border-tiktok-red border-t-transparent rounded-full mx-auto mb-2"></div>
-                      <p className="text-sm">Analyzing your dance...</p>
-                    </div>
-                  )}
+              </div>
+            </div>
+
+            {/* Scrollable Content */}
+            <div className="flex-1 overflow-auto min-h-0" ref={analysisContainerRef}>
+              <div className="p-4 space-y-2">
+                {isAnalyzing && (
+                  <div className="text-center text-gray-400 py-4">
+                    <div className="animate-spin w-6 h-6 border-2 border-gray-400 border-t-transparent rounded-full mx-auto mb-2"></div>
+                    <p className="text-sm">Analyzing your dance...</p>
+                  </div>
+                )}
 
                   {analysisError && (
                     <div className="bg-red-50 border border-red-200 rounded p-3">
@@ -780,9 +774,9 @@ export default function ProblemPage() {
                     </div>
                   )}
 
-                  {analysisData &&
-                    analysisData.parsed_data?.dance_analysis &&
-                    getValidMoves().map((move: any, index: number) => {
+                {analysisData &&
+                  analysisData.parsed_data?.dance_analysis &&
+                  getValidMoves().map((move: any, index: number) => {
                       const isBlunder = move.score <= -4;
                       const isMistake = move.score === -3;
                       const isInaccuracy = move.score >= -2;
@@ -836,6 +830,5 @@ export default function ProblemPage() {
           </div>
         </div>
       </div>
-    </div>
   );
 }

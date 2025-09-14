@@ -174,7 +174,7 @@ const problems = [
     title: "Man Child",
     difficulty: "Easy",
     acceptance: "88%",
-    status: "unsolved",
+    status: "solved",
     genre: "Freestyle",
     premium: false,
     video: "Man-Child.mp4",
@@ -333,16 +333,74 @@ export default function DanceProblemsPage() {
   const totalCount = problems.length;
 
   return (
-    <div>
+    <div className="h-full flex flex-col">
       {/* Header */}
       <Header />
 
-      <div className="flex h-full">
+      <div className="flex flex-1 min-h-0">
         {/* Left Sidebar */}
         <SideBar />
 
         {/* Main Content Area */}
         <div className="flex-1 flex flex-col">
+          {/* Top Cards Section */}
+          <div className="p-10 bg-white border-b border-gray-200">
+            <div className="grid grid-cols-3 gap-6 max-w-7xl">
+              {/* Dance Premium Card */}
+              <div
+                className="bg-gradient-to-br from-orange-100 to-orange-200 p-6 rounded-xl border border-orange-200 cursor-pointer hover:shadow-lg transition-shadow"
+                onClick={handlePremiumClick}
+              >
+                <div className="flex items-start justify-between">
+                  <div>
+                    <h3 className="font-semibold text-xl mb-2 text-gray-900">
+                      Dance Time
+                    </h3>
+                    <p className="text-lg text-orange-700 mb-3">
+                      Premium Moves
+                    </p>
+                    <p className="text-2xl font-bold text-gray-900">
+                      $119<span className="text-lg font-normal">/yr $179</span>
+                    </p>
+                  </div>
+                  <div className="text-right text-sm text-gray-600">
+                    <p>FEB 23</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Dance Masterclass */}
+              <div
+                className="bg-gradient-to-br from-green-100 to-green-200 p-6 rounded-xl border border-green-200 cursor-pointer hover:shadow-lg transition-shadow"
+                onClick={handleMasterclassClick}
+              >
+                <h3 className="font-semibold text-xl mb-2 text-gray-900">
+                  TikTok&apos;s Masterclass
+                </h3>
+                <p className="text-lg font-semibold text-green-700 mb-2">
+                  Crash Course
+                </p>
+                <p className="text-lg text-gray-600 mb-3">Viral Choreography</p>
+                <p className="text-xl font-bold text-gray-900">FREE</p>
+              </div>
+
+              {/* Dance Plans Card */}
+              <div
+                className="bg-gradient-to-br from-blue-100 to-blue-200 p-6 rounded-xl border border-blue-200 cursor-pointer hover:shadow-lg transition-shadow"
+                onClick={handleDancePlansClick}
+              >
+                <h3 className="font-semibold text-xl mb-2 text-gray-900">
+                  Dance Plans
+                </h3>
+                <div className="space-y-2">
+                  <div className="text-lg text-blue-700">Top 100 Moves</div>
+                  <div className="text-lg text-blue-700">Trending Routines</div>
+                  <div className="text-lg text-blue-700">Choreography</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
           {/* Topics Bar */}
           <div className="px-8 py-8 bg-white border-b border-gray-200">
             <div className="flex items-center gap-8 mb-8">
@@ -408,79 +466,36 @@ export default function DanceProblemsPage() {
 
           {/* Problems List */}
           <div className="flex-1 overflow-auto bg-white">
-            {/* Table Headers */}
-            <div className="px-8 py-4 bg-gray-50 border-b border-gray-200 sticky top-0 z-10">
-              <div className="flex items-center">
-                {/* Number Header */}
-                <div className="w-8 text-center mr-4">
-                  <span className="text-sm font-semibold text-gray-700 uppercase tracking-wide">
-                    #
-                  </span>
-                </div>
-
-                {/* Preview Header */}
-                <div className="w-12 text-center mr-4">
-                  <span className="text-sm font-semibold text-gray-700 uppercase tracking-wide"></span>
-                </div>
-
-                {/* Title Header */}
-                <div className="flex-1 min-w-0 mr-6">
-                  <span className="text-sm font-semibold text-gray-700 uppercase tracking-wide"></span>
-                </div>
-
-                {/* Status Header */}
-                <div className="w-16 text-center mr-2">
-                  <span className="text-sm font-semibold text-gray-700 uppercase tracking-wide">
-                    Status
-                  </span>
-                </div>
-
-                {/* Pass % Header */}
-                <div className="w-20 text-right mr-2">
-                  <span className="text-sm font-semibold text-gray-700 uppercase tracking-wide">
-                    Pass %
-                  </span>
-                </div>
-
-                {/* Difficulty Header */}
-                <div className="w-28 text-right">
-                  <span className="text-sm font-semibold text-gray-700 uppercase tracking-wide">
-                    Difficulty
-                  </span>
-                </div>
-              </div>
-            </div>
-
             <div className="divide-y divide-gray-200">
-              {filteredProblems.map((problem, index) => (
-                <Link key={problem.id} href={`/dance/${problem.id}`}>
-                  <div className="px-8 py-6 hover:bg-gray-50 cursor-pointer transition-colors">
-                    <div className="flex items-center">
-                      {/* Problem Number */}
-                      <div className="w-8 text-center mr-4">
-                        <span className="text-lg text-gray-600 font-medium">
-                          {problem.number}
-                        </span>
-                      </div>
+            {problems.map((problem, index) => (
+              <Link key={problem.id} href={`/dance/${problem.id}`}>
+                <div className="px-8 py-6 hover:bg-gray-50 cursor-pointer transition-colors">
+                  <div className="flex items-center gap-8">
+                    {/* Status */}
+                    <div className="w-10 text-center">
+                      <span
+                        className={`text-2xl font-bold ${getStatusColor(
+                          problem.status
+                        )}`}
+                      >
+                        {getStatusIcon(problem.status)}
+                      </span>
+                    </div>
 
-                      {/* Dance Preview GIF */}
-                      <div className="w-12 h-12 rounded-lg overflow-hidden bg-gray-100 flex-shrink-0 mr-4">
-                        <img
-                          src={`/gifs/${problem.video.replace(".mp4", ".gif")}`}
-                          alt={`${problem.title} preview`}
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-
-                      {/* Title */}
-                      <div className="flex-1 min-w-0 mr-6">
-                        <span className="font-medium text-gray-900 text-lg truncate">
-                          {problem.title}
-                        </span>
+                      {/* Problem Number and Title */}
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-3">
+                          <span className="text-lg text-gray-600 font-medium">
+                            {problem.number}.
+                          </span>
+                          <span className="font-medium text-gray-900 text-lg truncate">
+                            {problem.title}
+                          </span>
+                        </div>
                       </div>
 
                       {/* Status */}
-                      <div className="w-16 text-center mr-2">
+                      <div className="w-16 text-center">
                         <span
                           className={`text-xl font-bold ${getStatusColor(
                             problem.status
@@ -491,7 +506,7 @@ export default function DanceProblemsPage() {
                       </div>
 
                       {/* Pass % */}
-                      <div className="w-20 text-right mr-2">
+                      <div className="w-20 text-right">
                         <span className="text-lg text-gray-600">
                           {problem.acceptance}
                         </span>
@@ -505,7 +520,7 @@ export default function DanceProblemsPage() {
                           )}`}
                         >
                           {problem.difficulty === "Medium"
-                            ? "Medium"
+                            ? "Med."
                             : problem.difficulty}
                         </span>
                       </div>
@@ -518,7 +533,7 @@ export default function DanceProblemsPage() {
         </div>
 
         {/* Right Sidebar - Calendar */}
-        <div className="w-80 h-full bg-white border-l border-gray-200">
+        <div className="w-80 bg-white border-l border-gray-200">
           <div className="p-6">
             <CalendarBox />
 
@@ -535,6 +550,11 @@ export default function DanceProblemsPage() {
                       className="flex items-center justify-center p-3 bg-gray-100 rounded-full cursor-pointer hover:bg-gray-200 transition-colors"
                       onClick={() => {
                         setSearch(artist);
+                        // Set genre based on the dance
+                        const dance = problems.find((p) => p.title === artist);
+                        if (dance) {
+                          setActiveGenre(dance.genre);
+                        }
                       }}
                     >
                       <span className="text-base font-medium text-gray-900 text-center">

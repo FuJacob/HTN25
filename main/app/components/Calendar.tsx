@@ -20,8 +20,18 @@ export function CalendarBox() {
   const firstDayOfMonth = new Date(currentYear, currentMonth, 1).getDay();
 
   const monthNames = [
-    "January", "February", "March", "April", "May", "June",
-    "July", "August", "September", "October", "November", "December"
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
   ];
 
   const handleDateSelect = (day: number) => {
@@ -50,7 +60,7 @@ export function CalendarBox() {
             {monthNames[currentMonth]} {currentYear}
           </div>
           <div className="grid grid-cols-7 gap-1 text-center text-sm">
-            {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
+            {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
               <div key={day} className="p-2 font-medium text-gray-500">
                 {day}
               </div>
@@ -68,7 +78,8 @@ export function CalendarBox() {
                   onClick={() => handleDateSelect(day)}
                   className={cn(
                     "p-2 rounded hover:bg-gray-100 transition-colors",
-                    isToday && "bg-tiktok-red text-white hover:bg-tiktok-red/90",
+                    isToday &&
+                      "bg-tiktok-red text-white hover:bg-tiktok-red/90",
                     isSelected && !isToday && "bg-gray-200"
                   )}
                 >

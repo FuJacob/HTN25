@@ -565,12 +565,12 @@ def create_app() -> FastAPI:
                 if pose_results.pose_landmarks:
                     # Use custom drawing specs for better compatibility
                     landmark_drawing_spec = mp_drawing.DrawingSpec(
-                        color=(0, 255, 0),  # Green joints
+                        color=(255, 255, 255),  # White joints
                         thickness=2,
                         circle_radius=3
                     )
                     connection_drawing_spec = mp_drawing.DrawingSpec(
-                        color=(255, 0, 0),  # Red connections
+                        color=(255, 255, 255),  # White connections
                         thickness=2
                     )
 

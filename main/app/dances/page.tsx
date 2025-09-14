@@ -396,7 +396,7 @@ export default function DanceProblemsPage() {
                   className={`flex items-center gap-2 px-5 py-3 text-lg cursor-pointer ${
                     activeFilter === filter.name
                       ? "bg-tiktok-red text-white hover:bg-tiktok-red/90"
-                      : "text-gray-700 hover:bg-gray-100"
+                      : "text-gray-700 hover:bg-gray-100 hover:text-gray-700"
                   }`}
                   onClick={() => {
                     setActiveFilter(filter.name);

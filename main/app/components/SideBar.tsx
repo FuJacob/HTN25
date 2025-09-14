@@ -92,7 +92,7 @@ export default function SideBar({ onUploadClick }: SideBarProps) {
         </Link>
         <button
           onClick={triggerFileUpload}
-          className="flex items-center gap-3 px-3 py-3 text-base font-medium text-gray-900 hover:bg-gray-100 rounded-md transition-colors w-full text-left"
+          className="flex items-center gap-3 px-3 py-3 text-base font-medium text-gray-900 hover:bg-gray-100 rounded-md transition-colors w-full text-left cursor-pointer"
         >
           <FaUpload className="w-5 h-5" />
           Upload File

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import { Space_Grotesk } from "next/font/google";
-const spaceGrotesk = Space_Grotesk({ subsets: ["latin"], weight: ["300", "400", "500", "600", "700"] });
+import { Balsamiq_Sans } from "next/font/google";
+const balsamiqSans = Balsamiq_Sans({ subsets: ["latin"], weight: ["400", "700"], style: ["normal", "italic"] });
 import "./globals.css";
 import { Auth0Provider } from "@auth0/nextjs-auth0";
 
@@ -16,7 +16,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${spaceGrotesk.className} antialiased`}>
+      <body className={`${balsamiqSans.className} antialiased`}>
         <Auth0Provider>
           <main className="h-[calc(100vh-4.5rem)]">{children}</main>
         </Auth0Provider>

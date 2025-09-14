@@ -7,12 +7,12 @@ export default function DanceLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="min-h-screen bg-white">
-      <div className="flex">
-        <aside className="w-72 h-[calc(100vh-4rem)] bg-white border-r border-gray-200 sticky top-16">
+    <div className="h-[calc(100vh-4.5rem)] bg-white">
+      <div className="flex h-full">
+        <aside className="w-72 h-full bg-white border-r border-gray-200 sticky top-16">
           <SideBar />
         </aside>
-        <main className="flex-1 h-[calc(100vh-4rem)] overflow-auto">
+        <main className="flex-1 h-full overflow-auto">
           {children}
         </main>
       </div>

@@ -20,7 +20,7 @@ export default function RootLayout({
       <body className={`${montserrat.className} antialiased`}>
         <Auth0Provider>
           <Header />
-          <main className="h-[calc(100vh-4rem)]">
+          <main className="h-[calc(100vh-4.5rem)]">
             {children}
           </main>
         </Auth0Provider>

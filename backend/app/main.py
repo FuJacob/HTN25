@@ -352,6 +352,8 @@ def create_app() -> FastAPI:
         try:
             # Initialize MediaPipe Pose
             mp_pose = mp.solutions.pose
+            mp_drawing = mp.solutions.drawing_utils
+            mp_drawing_styles = mp.solutions.drawing_styles
             pose = mp_pose.Pose(
                 min_detection_confidence=0.5, min_tracking_confidence=0.5
             )
@@ -555,6 +557,32 @@ def create_app() -> FastAPI:
 
                 frame_count += 1
 
+                # Process pose detection on display frame
+                rgb_frame = cv2.cvtColor(display_frame, cv2.COLOR_BGR2RGB)
+                pose_results = pose.process(rgb_frame)
+
+                # Draw pose landmarks and connections
+                if pose_results.pose_landmarks:
+                    # Use custom drawing specs for better compatibility
+                    landmark_drawing_spec = mp_drawing.DrawingSpec(
+                        color=(0, 255, 0),  # Green joints
+                        thickness=2,
+                        circle_radius=3
+                    )
+                    connection_drawing_spec = mp_drawing.DrawingSpec(
+                        color=(255, 0, 0),  # Red connections
+                        thickness=2
+                    )
+
+                    # Draw landmarks (joints)
+                    mp_drawing.draw_landmarks(
+                        display_frame,
+                        pose_results.pose_landmarks,
+                        mp_pose.POSE_CONNECTIONS,
+                        landmark_drawing_spec=landmark_drawing_spec,
+                        connection_drawing_spec=connection_drawing_spec
+                    )
+
                 # Check for dance events and display moment-based feedback
                 total_moments = len(dance_events)
                 current_moment = None
@@ -686,11 +714,12 @@ def create_app() -> FastAPI:
             # Release resources like working example
             process_cap.release()
             display_cap.release()
+            pose.close()
 
             print("Creating final video with web-compatible codec...")
 
-            # First create with mp4v like working example
-            fourcc = cv2.VideoWriter_fourcc(*"mp4v")
+            # Try H.264 codec first for better browser compatibility
+            fourcc = cv2.VideoWriter_fourcc(*"avc1")  # H.264 codec
             out = cv2.VideoWriter(
                 temp_output_video_path,
                 fourcc,
@@ -698,8 +727,19 @@ def create_app() -> FastAPI:
                 (display_width, display_height),
             )
 
+            # Fallback to mp4v if H.264 isn't available
             if not out.isOpened():
-                raise Exception("Could not create output video writer with mp4v codec")
+                print("H.264 codec not available, trying mp4v...")
+                fourcc = cv2.VideoWriter_fourcc(*"mp4v")
+                out = cv2.VideoWriter(
+                    temp_output_video_path,
+                    fourcc,
+                    display_fps,
+                    (display_width, display_height),
+                )
+
+                if not out.isOpened():
+                    raise Exception("Could not create output video writer with any codec")
 
             # Write all frames to the final video like working example
             for frame in processed_frames:
@@ -719,58 +759,69 @@ def create_app() -> FastAPI:
             if file_size == 0:
                 raise Exception("Output video file is empty")
 
-            # Try to convert to H.264 for better browser compatibility using FFmpeg
-            temp_h264_video_path = temp_output_video_path.replace(".mp4", "_h264.mp4")
+            # Only use FFmpeg if we created with mp4v codec (which isn't web-compatible)
+            codec_name = "avc1" if fourcc == cv2.VideoWriter_fourcc(*"avc1") else "mp4v"
 
-            try:
-                import subprocess
+            if codec_name == "mp4v":
+                # Try to convert to H.264 for better browser compatibility using FFmpeg
+                temp_h264_video_path = temp_output_video_path.replace(".mp4", "_h264.mp4")
 
-                print("Converting video to H.264 for better browser compatibility...")
+                try:
+                    import subprocess
 
-                # Use FFmpeg to convert to H.264 with web-optimized settings
-                ffmpeg_cmd = [
-                    "ffmpeg",
-                    "-y",
-                    "-i",
-                    temp_output_video_path,
-                    "-c:v",
-                    "libx264",
-                    "-preset",
-                    "fast",
-                    "-crf",
-                    "23",
-                    "-movflags",
-                    "+faststart",  # Optimize for web streaming
-                    "-pix_fmt",
-                    "yuv420p",  # Ensure compatibility
-                    temp_h264_video_path,
-                ]
+                    print("Converting video to H.264 for better browser compatibility...")
 
-                result = subprocess.run(
-                    ffmpeg_cmd, capture_output=True, text=True, timeout=60
-                )
+                    # Use FFmpeg to convert to H.264 with web-optimized settings
+                    ffmpeg_cmd = [
+                        "ffmpeg",
+                        "-y",
+                        "-i",
+                        temp_output_video_path,
+                        "-c:v",
+                        "libx264",
+                        "-preset",
+                        "fast",
+                        "-crf",
+                        "23",
+                        "-movflags",
+                        "+faststart",  # Optimize for web streaming
+                        "-pix_fmt",
+                        "yuv420p",  # Ensure compatibility
+                        "-profile:v",
+                        "baseline",  # Maximum compatibility
+                        "-level",
+                        "3.0",  # Maximum compatibility
+                        temp_h264_video_path,
+                    ]
 
-                if result.returncode == 0 and os.path.exists(temp_h264_video_path):
-                    h264_size = os.path.getsize(temp_h264_video_path)
-                    if h264_size > 0:
-                        print(f"H.264 conversion successful. Size: {h264_size} bytes")
-                        # Clean up original file and use H.264 version
-                        os.unlink(temp_output_video_path)
-                        temp_output_video_path = temp_h264_video_path
+                    result = subprocess.run(
+                        ffmpeg_cmd, capture_output=True, text=True, timeout=120
+                    )
+
+                    if result.returncode == 0 and os.path.exists(temp_h264_video_path):
+                        h264_size = os.path.getsize(temp_h264_video_path)
+                        if h264_size > 0:
+                            print(f"H.264 conversion successful. Size: {h264_size} bytes")
+                            # Clean up original file and use H.264 version
+                            os.unlink(temp_output_video_path)
+                            temp_output_video_path = temp_h264_video_path
+                            codec_name = "libx264"
+                        else:
+                            print("H.264 conversion resulted in empty file, using original")
                     else:
-                        print("H.264 conversion resulted in empty file, using original")
-                else:
-                    print(f"H.264 conversion failed: {result.stderr}")
-                    print("Using original mp4v video")
+                        print(f"H.264 conversion failed: {result.stderr}")
+                        print("Using original mp4v video")
 
-            except Exception as conv_error:
-                print(f"FFmpeg conversion failed: {conv_error}, using original video")
-                # Clean up failed conversion file if it exists
-                if os.path.exists(temp_h264_video_path):
-                    os.unlink(temp_h264_video_path)
+                except Exception as conv_error:
+                    print(f"FFmpeg conversion failed: {conv_error}, using original video")
+                    # Clean up failed conversion file if it exists
+                    if os.path.exists(temp_h264_video_path):
+                        os.unlink(temp_h264_video_path)
+            else:
+                print("Video already created with H.264 codec, no conversion needed")
 
             print("Dance video processing complete.")
-            print(f"Output video codec: mp4v")
+            print(f"Output video codec: {codec_name}")
             print(f"Output video size: {display_width}x{display_height}")
             print(f"Output video FPS: {display_fps}")
             print(f"Output file size: {os.path.getsize(temp_output_video_path)} bytes")
@@ -800,7 +851,7 @@ def create_app() -> FastAPI:
                     "error": "Output video validation failed - video may be corrupted"
                 }
 
-            # Return the processed video file
+            # Return the processed video file with appropriate headers
             return FileResponse(
                 temp_output_video_path,
                 media_type="video/mp4",
@@ -809,6 +860,7 @@ def create_app() -> FastAPI:
                     "Accept-Ranges": "bytes",
                     "Content-Type": "video/mp4",
                     "Cache-Control": "no-cache",
+                    "X-Video-Codec": codec_name,
                 },
             )
 

@@ -325,7 +325,6 @@ export default function DanceProblemsPage() {
 
   // Filter logic
   const filteredProblems = problems.filter((problem) => {
-    // Hide "Slide" dance unless upload button was clicked
     if (problem.title === "Slide" && !showUploadedOnly) {
       return false;
     }
@@ -345,9 +344,17 @@ export default function DanceProblemsPage() {
     return matchesSearch && matchesGenre && matchesSkillLevel;
   });
 
-  // Calculate mastered count
-  const masteredCount = problems.filter((p) => p.status === "solved").length;
-  const totalCount = problems.length;
+  const availableProblems = problems.filter((problem) => {
+    if (problem.title === "Slide" && !showUploadedOnly) {
+      return false;
+    }
+    return true;
+  });
+
+  const masteredCount = availableProblems.filter(
+    (p) => p.status === "solved"
+  ).length;
+  const totalCount = availableProblems.length;
 
   return (
     <div>
@@ -356,12 +363,14 @@ export default function DanceProblemsPage() {
 
       <div className="flex h-full">
         {/* Left Sidebar */}
-        <SideBar onUploadClick={() => setShowUploadedOnly(true)} />
+        <div className="pr-4">
+          <SideBar onUploadClick={() => setShowUploadedOnly(true)} />
+        </div>
 
         {/* Main Content Area */}
         <div className="flex-1 flex flex-col">
           {/* Topics Bar */}
-          <div className="px-8 py-8 bg-white border-b border-gray-200">
+          <div className="px-8 py-8 bg-white">
             <div className="flex items-center gap-8 mb-8">
               {topicCategories.map((topic) => (
                 <div
@@ -430,7 +439,7 @@ export default function DanceProblemsPage() {
           </div>
 
           {/* Problems List */}
-          <div className="flex-1 overflow-auto bg-white">
+          <div className="flex-1 overflow-auto bg-white border-l border-r border-gray-200">
             {/* Table Headers */}
             <div className="px-8 py-4 bg-gray-50 border-b border-gray-200 sticky top-0 z-10">
               <div className="flex items-center">
@@ -541,7 +550,7 @@ export default function DanceProblemsPage() {
         </div>
 
         {/* Right Sidebar - Calendar */}
-        <div className="w-80 h-full bg-white border-l border-gray-200">
+        <div className="w-80 h-full ">
           <div className="p-6">
             <CalendarBox />
 

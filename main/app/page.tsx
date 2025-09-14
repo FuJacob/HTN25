@@ -8,8 +8,8 @@ export default function HomePage() {
   // Pick 3 random videos
   const featuredVideos = [
     "Adderall.mp4",
-    "Blinding-Lights.mp4", 
-    "Renegade.mp4"
+    "Blinding-Lights.mp4",
+    "Renegade.mp4",
   ];
 
   return (
@@ -31,12 +31,12 @@ export default function HomePage() {
           <div className="w-1/2 pr-12">
             {/* Main Headline */}
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-black leading-tight mb-8 text-tiktok-black">
-              <div className="flex flex-col space-y-4">
-                <div className="flex items-center space-x-3">
+              <div className="flex flex-col space-y-2">
+                <div className="flex items-center space-x-3 ">
                   <img
                     src="/leetcode.png"
                     alt="LeetCode"
-                    className="h-12 md:h-16 lg:h-20"
+                    className="h-12 md:h-16 lg:h-20 mb-5"
                   />
                   <span>but for</span>
                 </div>
@@ -44,7 +44,7 @@ export default function HomePage() {
                   <img
                     src="/tiktok.png"
                     alt="TikTok"
-                    className="h-12 md:h-16 lg:h-20"
+                    className="h-12 md:h-16 lg:h-20 mb-2"
                   />
                   <span>Dances</span>
                 </div>
@@ -53,19 +53,19 @@ export default function HomePage() {
 
             {/* Subtitle */}
             <p className="text-tiktok-black/80 text-xl md:text-2xl mb-12 font-medium">
-              Master algorithms while learning viral dances
+              Perfect for CS students who love TikTok dances.
             </p>
 
             {/* CTA Buttons */}
             <div className="flex flex-col lg:flex-row gap-4">
               <Link href="/dances">
-                <div className="bg-tiktok-white border-2 border-tiktok-red rounded-xl px-8 py-2.5 shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer">
-                  <div className="flex items-center justify-center space-x-3">
+                <div className="bg-tiktok-white border-2 border-tiktok-red rounded-full px-8 py-2.5 shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer flex justify-center items-center">
+                  <div className="flex items-center justify-center space-x-1">
                     {[...Array(5)].map((_, i) => (
                       <FaStar key={i} className="text-yellow-400 text-xl" />
                     ))}
-                    <span className="text-tiktok-black font-bold text-lg">
-                      250k+
+                    <span className="ml-1 text-tiktok-black font-bold text-lg">
+                      4+ users
                     </span>
                   </div>
                 </div>

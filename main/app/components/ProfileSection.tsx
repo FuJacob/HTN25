@@ -34,7 +34,7 @@ export default function ProfileSection() {
   }
   return (
     <Link href="/auth/login">
-      <Button className="bg-tiktok-red hover:bg-tiktok-red/80 text-tiktok-white font-bold px-8 py-3 text-lg rounded-full transition-colors">
+      <Button className="bg-tiktok-red hover:bg-tiktok-red/80 text-tiktok-white font-bold px-8 py-3 text-lg rounded-full transition-colors cursor-pointer">
         Sign in
       </Button>
     </Link>

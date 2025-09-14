@@ -325,7 +325,6 @@ export default function DanceProblemsPage() {
 
   // Filter logic
   const filteredProblems = problems.filter((problem) => {
-    // Hide "Slide" dance unless upload button was clicked
     if (problem.title === "Slide" && !showUploadedOnly) {
       return false;
     }
@@ -345,9 +344,17 @@ export default function DanceProblemsPage() {
     return matchesSearch && matchesGenre && matchesSkillLevel;
   });
 
-  // Calculate mastered count
-  const masteredCount = problems.filter((p) => p.status === "solved").length;
-  const totalCount = problems.length;
+  const availableProblems = problems.filter((problem) => {
+    if (problem.title === "Slide" && !showUploadedOnly) {
+      return false;
+    }
+    return true;
+  });
+
+  const masteredCount = availableProblems.filter(
+    (p) => p.status === "solved"
+  ).length;
+  const totalCount = availableProblems.length;
 
   return (
     <div>

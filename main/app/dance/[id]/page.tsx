@@ -760,7 +760,7 @@ export default function ProblemPage() {
                         (sum: number, move: any) => {
                           const baseScore = 100;
                           const penalty = Math.max(0, -move.score * 5);
-                          return sum + Math.max(0, baseScore - penalty);
+                          return Math.max(0, baseScore - penalty);
                         },
                         0
                       )}

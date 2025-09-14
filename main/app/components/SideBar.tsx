@@ -1,12 +1,12 @@
 "use client";
-import { 
-  FaBook, 
-  FaCalendarDays, 
-  FaChevronDown, 
-  FaChevronRight, 
+import {
+  FaBook,
+  FaCalendarDays,
+  FaChevronDown,
+  FaChevronRight,
   FaPlus,
   FaLock,
-  FaHeart
+  FaHeart,
 } from "react-icons/fa6";
 import React, { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
@@ -15,7 +15,7 @@ export default function SideBar() {
   const [listsOpen, setListsOpen] = useState(true);
   const [lists, setLists] = useState<{ id: string; name: string }[]>([
     { id: "favorite", name: "Favorite" },
-    { id: "arrays", name: "arrays n strings" }
+    { id: "arrays", name: "arrays n strings" },
   ]);
   const [adding, setAdding] = useState(false);
   const [newListName, setNewListName] = useState("");
@@ -48,15 +48,21 @@ export default function SideBar() {
   }
 
   return (
-    <nav className="flex flex-col h-full text-foreground">
+    <nav className="flex flex-col h-full text-gray-900 bg-white">
       {/* Main Navigation */}
       <div className="p-4 space-y-2">
-        <a href="/dance" className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-foreground hover:bg-accent hover:text-accent-foreground rounded-md transition-colors">
-          <FaBook className="w-4 h-4" />
+        <a
+          href="/dance"
+          className="flex items-center gap-3 px-3 py-3 text-base font-medium text-gray-900 hover:bg-gray-100 rounded-md transition-colors"
+        >
+          <FaBook className="w-5 h-5" />
           Library
         </a>
-        <a href="/dance/study-plan" className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-foreground hover:bg-accent hover:text-accent-foreground rounded-md transition-colors">
-          <FaCalendarDays className="w-4 h-4" />
+        <a
+          href="/dance/study-plan"
+          className="flex items-center gap-3 px-3 py-3 text-base font-medium text-gray-900 hover:bg-gray-100 rounded-md transition-colors"
+        >
+          <FaCalendarDays className="w-5 h-5" />
           Study Plan
         </a>
       </div>
@@ -64,18 +70,18 @@ export default function SideBar() {
       {/* My Lists Section */}
       <div className="px-4 pb-4">
         <div
-          className="flex items-center justify-between cursor-pointer group px-3 py-2 text-sm font-medium"
+          className="flex items-center justify-between cursor-pointer group px-3 py-3 text-base font-medium"
           onClick={() => setListsOpen((open) => !open)}
         >
-          <span className="text-foreground">My Lists</span>
+          <span className="text-gray-900">My Lists</span>
           <div className="flex items-center gap-1">
             {listsOpen ? (
-              <FaChevronDown className="w-3 h-3 text-muted-foreground group-hover:text-foreground transition-colors" />
+              <FaChevronDown className="w-4 h-4 text-gray-600 group-hover:text-gray-900 transition-colors" />
             ) : (
-              <FaChevronRight className="w-3 h-3 text-muted-foreground group-hover:text-foreground transition-colors" />
+              <FaChevronRight className="w-4 h-4 text-gray-600 group-hover:text-gray-900 transition-colors" />
             )}
             <FaPlus
-              className="w-3 h-3 ml-2 text-muted-foreground hover:text-foreground cursor-pointer transition-colors"
+              className="w-4 h-4 ml-2 text-gray-600 hover:text-gray-900 cursor-pointer transition-colors"
               onClick={handleAddList}
             />
           </div>
@@ -86,12 +92,12 @@ export default function SideBar() {
               <a
                 key={list.id}
                 href={`/dance/list/${list.id}`}
-                className="flex items-center gap-3 px-3 py-1.5 text-sm text-muted-foreground hover:text-foreground rounded-md transition-colors group"
+                className="flex items-center gap-3 px-3 py-2 text-base text-gray-600 hover:text-gray-900 rounded-md transition-colors group"
               >
                 {list.id === "favorite" ? (
-                  <FaHeart className="w-3 h-3" />
+                  <FaHeart className="w-4 h-4" />
                 ) : (
-                  <FaLock className="w-3 h-3" />
+                  <FaLock className="w-4 h-4" />
                 )}
                 <span className="truncate">{list.name}</span>
               </a>
@@ -100,11 +106,11 @@ export default function SideBar() {
               <div className="px-3">
                 <input
                   ref={inputRef}
-                  className="w-full text-sm px-2 py-1 bg-input border border-border rounded text-foreground placeholder:text-muted-foreground outline-none focus:ring-1 focus:ring-ring"
+                  className="w-full text-base px-3 py-2 bg-white border border-gray-300 rounded text-gray-900 placeholder:text-gray-500 outline-none focus:ring-1 focus:ring-tiktok-red focus:border-tiktok-red"
                   value={newListName}
                   onChange={(e) => setNewListName(e.target.value)}
                   onKeyDown={handleInputKeyDown}
-                  onClick={e => e.stopPropagation()}
+                  onClick={(e) => e.stopPropagation()}
                   placeholder="New list name"
                 />
               </div>
